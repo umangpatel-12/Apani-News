@@ -1,0 +1,175 @@
+import re
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from ApaniNewz.models import Registration
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'id': 'email',
+            'name': 'email',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter your email'
+        }),
+        max_length=254,
+        required=True
+    )
+    
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'id': 'password',
+            'name': 'password',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Password'
+        }),
+        required=True,
+        min_length=6
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError("User with this email does not exist.")
+        return email
+
+class RegistrationForm(forms.ModelForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'username',
+            'name': 'username',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Username'
+        }),
+        max_length=150,
+        required=True
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'id': 'email',
+            'name': 'email',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter your email'
+        }),
+        max_length=254,
+        required=True
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'id': 'password',
+            'name': 'password',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Password'
+        }),
+        required=True,
+        min_length=6
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'id': 'confirm_password',
+            'name': 'confirm_password',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Confirm Password'
+        }),
+        required=True
+    )
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'first_name',
+            'name': 'first_name',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'First Name'
+        }),
+        max_length=50,
+        required=True
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'last_name',
+            'name': 'last_name',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Last Name'
+        }),
+        max_length=50,
+        required=True
+    )
+    phone = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'phone',
+            'name': 'phone',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Phone Number'
+        }),
+        max_length=10,  # Adjust as needed for phone number length
+        required=True
+    )
+    profile_image = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={
+            'id': 'profile_image',
+            'name': 'profile_image',
+            'class': 'form-control form-control-lg'
+        }),
+        required=False  # Set to `True` if profile image is mandatory
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'phone', 'profile_image']
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Username is already taken.")
+        if not re.match(r'^[a-zA-Z]+$', username):
+            raise forms.ValidationError("Username should contain only alphabetic characters.")
+        if re.search(r'[^\w]', username):  # Checks for non-alphanumeric characters
+            raise forms.ValidationError("Username should not contain special characters except underscore or hyphen.")
+        return username
+
+    def clean_first_name(self):
+        widget =forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your first name'}),
+        first_name = self.cleaned_data.get('first_name')
+        if not first_name.isalpha():
+            raise forms.ValidationError("First name should only contain letters.")
+        if len(first_name) < 3:
+            raise forms.ValidationError("First name must be at least 2 characters long.")
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not last_name.isalpha():
+            raise forms.ValidationError("Last name should only contain letters.")
+        if len(last_name) < 2:
+            raise forms.ValidationError("Last name must be at least 2 characters long.")
+        return last_name
+
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already registered.")
+        if not email.endswith('@gmail.com'):
+            raise forms.ValidationError("Please use a valid email address")
+        return email
+    
+     # Phone number validation
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        
+        # Ensure the phone number contains only digits
+        if not phone.isdigit():
+            raise forms.ValidationError("Phone number should contain only digits.")
+        
+        # Ensure the phone number length is exactly 10 digits (adjust if needed)
+        if len(phone) != 10:
+            raise forms.ValidationError("Phone number must be exactly 10 digits long.")
+        
+        return phone
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password != confirm_password:
+            raise forms.ValidationError("Passwords do not match.")

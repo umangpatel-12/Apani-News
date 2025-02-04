@@ -1,0 +1,95 @@
+{% extends 'Home/main.html' %}
+{% load static %}
+
+{% block main %}
+  <section class="vh">
+    <div class="container py-4">
+      <div class="row d-flex justify-content-center align-items-center h-50">
+        <div class="col col-xl-6">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="col-md-12 d-flex align-items-center">
+              <div class="card-body p-3 p-lg-5 text-black">
+                {% include 'Alert/alert.html' %}
+                <form method="post" action="{% url 'registration' %}" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    {% comment %} <i class="fas fa-user-plus fa-2x me-3" style="color: #ff6219;"></i> {% endcomment %}
+                    <span class="h1 fw-bold mb-0 align-items-center" style="left: 10px;">Registration</span>
+                  </div>
+
+                  <!-- First Name and Last Name Row -->
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-outline mb-4">
+                        {{ form.first_name.label_tag }}
+                        {{ form.first_name }}
+                        <div class="text-danger">{{ form.first_name.errors }}</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-outline mb-4">
+                        {{ form.last_name.label_tag }}
+                        {{ form.last_name }}
+                        <div class="text-danger">{{ form.last_name.errors }}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                    <div class="text-danger">{{ form.username.errors }}</div>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    <div class="text-danger">{{ form.email.errors }}</div>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    {{ form.phone.label_tag }}
+                    {{ form.phone }}
+                    <div class="text-danger">{{ form.phone.errors }}</div>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    {{ form.profile_image.label_tag }}
+                    {{ form.profile_image }}
+                    {% if errors.profile_image %}
+                      <small class="text-danger">{{ errors.profile_image }}</small>
+                    {% endif %}
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-outline mb-4">
+                        {{ form.password.label_tag }}
+                        {{ form.password }}
+                        <div class="text-danger">{{ form.password.errors }}</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-outline mb-4">
+                        {{ form.confirm_password.label_tag }}
+                        {{ form.confirm_password }}
+                        <div class="text-danger">{{ form.confirm_password.errors }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pt-1 mb-4">
+                    <button class="btn btn-dark btn-lg btn-block" name="submit" id="submit" type="submit">Register</button>
+                  </div>
+
+                  <p class="mb" style="color: rgb(0, 0, 0);">
+                    Already have an account? <a href="{% url 'login' %}" style="color: #393f81;">Login here</a>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,3 +1,135 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password, check_password
+
+from ApaniNewz.forms import LoginForm, RegistrationForm
+from .models import Registration
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 # Create your views here.
+
+def home(request):
+    return render(request, 'Home/index.html')
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+    
+    # form = LoginForm()
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                messages.error(request, 'User does not exist')
+                return redirect('login')
+            if user.check_password(password):
+                login(request, user)
+                messages.success(request, f"You are now logged in as {email}.")
+                return redirect('index')
+            else:
+                messages.error(request, 'Invalid Password')
+                return redirect('login')
+        else:
+            messages.error(request, 'Invalid Email')
+            return redirect('login')
+    else:
+        form = LoginForm()
+
+    return render(request,"Home/login.html",{'form':form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
+
+def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+
+    if request.method == 'POST':
+        # get_OTP = request.POST.get('OTP')
+        form = RegistrationForm(request.POST)
+
+        # if get_OTP:
+        #     get_user = request.POST.get('user')
+        #     user = User.objects.get(email=get_user)
+            
+        #     if int(get_OTP) == UserOTP.objects.filter(user=user).last().OTP:
+        #         user.is_active = True
+        #         login(request, user)
+        #         user.save()
+        #         messages.success(request, "Your account was successfully created.")
+        #         # return redirect('login')
+        #         return render(request, 'Home/login.html', {'form': form})
+        #     else:
+        #         messages.error(request, "You entered a wrong OTP.")
+        #         return render(request, "registration.html", {'OTP': True, 'user': user})
+         
+        # form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.is_active = True
+            user.save()
+            # user_OTP = random.randint(100000, 999999)
+            # UserOTP.objects.create(user=user, OTP=user_OTP)
+            # subject = 'Your OTP Verification Code'
+            # message = f'Hello {user.first_name},\n\nYour OTP code is {user_OTP}. Please use this code to verify your email address.\nDo not share OTP with anyone.\n\nThanks!'
+            # send_mail(
+            #     subject,
+            #     message,
+            #     settings.EMAIL_HOST_USER,
+            #     [user.email],
+            #     fail_silently=False
+            # )
+            return render(request, "Home/Registration.html", {'form': form, 'user': user})
+
+    else:
+        form = RegistrationForm()
+    return render(request,"Home/Registration.html",{'form':form})
+
+def News_Detail(request):
+    return render(request, "Home/News_Details.html")
+
+def Contact(request):
+    return render(request, "Home/Contact.html")
+
+def About(request):
+    return render(request, "Home/About.html")
+
+def Categories(request):
+    return render(request, "Home/Category.html")
+    
+def LatestNewz(request):
+    return render(request, "Home/LatestNewz.html")
+
+def ProfilePage(request):
+    return render(request, "Account/Profile.html")
+
+
+
+# Admin Dashbord's
+def dashboard(request):
+    return render(request,"Admin/Dashboard.html")
+
+def AddNews(request):
+    return render(request,"Admin/AddNews.html")
+
+def AddCategory(request):
+    return render(request,"Admin/AddCategory.html")
+
+def Comments(request):
+    return render(request,"Admin/ManageComment.html")
+
+def ManageUsers(request):
+    return render(request,"Admin/ManageUsers.html")
+
+def ManageContact(request):
+    return render(request,"Admin/ManageContact.html")

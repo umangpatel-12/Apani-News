@@ -1,0 +1,52 @@
+{% extends 'Home/main.html' %}
+{% load static %}
+
+{% block main %}
+  <section class="vh">
+    <div class="container py-4">
+      <div class="row d-flex justify-content-center align-items-center h-50">
+        <div class="col col-xl-6">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="col-md-12 d-flex align-items-center">
+              <div class="card-body p-3 p-lg-5 text-black">
+                {% for message in messages %}
+                  <p style="color: red;">{{ message }}</p>
+                {% endfor %}
+                <form method="post" action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <i class="fas fa-sign-in fa-2x me-3" style="color: #ff6219;"></i>
+                    <span class="h1 fw-bold mb-0">Login</span>
+                  </div>
+
+                  {% comment %} <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5> {% endcomment %}
+
+                  <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form2Example17" style="font-weight: 500;">Email address</label>
+                    {{ form.email }}
+                    <div class="text-danger">{{ form.email.errors }}</div>
+                  </div>
+
+                  <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form2Example27" style="font-weight: 500;">Password</label>
+                    {{ form.password }}
+                    <div class="text-danger">{{ form.password.errors }}</div>
+                  </div>
+
+                  <div class="pt-1 mb-4">
+                    <button class="btn btn-dark btn-lg btn-block" name="submit" id="submit" type="submit">Login</button>
+                  </div>
+
+                  <a class="small text-muted" href="#!">Forgot password?</a>
+                  <p class="mb" style="color: rgb(0, 0, 0);">
+                    Don't have an account? <a href="{% url 'registration' %}" style="color: #393f81;">Register here</a>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
