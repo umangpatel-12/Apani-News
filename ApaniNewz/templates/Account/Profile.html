@@ -39,7 +39,7 @@
                     <p>No profile image uploaded.</p>
                 {% endif %}
                 
-                <p class="profile-name">John Doe</p> <!-- Replace with email if needed -->
+                <p class="profile-name">{{request.user.first_name}} {{request.user.last_name}}</p> <!-- Replace with email if needed -->
                 <p style="font-size: large;font-family:Arial, Helvetica, sans-serif;">{{ request.user.email }}</p> <!-- Replace with email if needed -->
               </div>
             </aside>

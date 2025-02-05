@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
-from ApaniNewz.forms import LoginForm, RegistrationForm
+from ApaniNewz.forms import LoginForm, NewsForm, RegistrationForm
 from .models import Registration
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -120,7 +120,8 @@ def dashboard(request):
     return render(request,"Admin/Dashboard.html")
 
 def AddNews(request):
-    return render(request,"Admin/AddNews.html")
+    form = NewsForm()
+    return render(request,"Admin/AddNews.html",{'form':form})
 
 def AddCategory(request):
     return render(request,"Admin/AddCategory.html")

@@ -32,9 +32,10 @@ class News(models.Model):
     sub_title = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     author = models.CharField(max_length=50)
-    content = RichTextField()
+    content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS,max_length=255)
     image = models.ImageField(upload_to='media/NewsImage/')
+    likes = models.ManyToManyField(User, related_name='News_blogs')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     

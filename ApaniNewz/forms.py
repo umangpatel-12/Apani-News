@@ -2,7 +2,8 @@ import re
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from ApaniNewz.models import Registration
+from ApaniNewz.models import Registration,News
+from ckeditor.widgets import CKEditorWidget
 
 class LoginForm(forms.Form):
     email = forms.EmailField(
@@ -173,3 +174,77 @@ class RegistrationForm(forms.ModelForm):
 
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
+        
+
+class NewsForm(forms.ModelForm):
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'title',
+            'name': 'title',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter News Title'
+        }),
+        max_length=255,
+        required=True
+    )
+
+    sub_title = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'sub_title',
+            'name': 'sub_title',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter Sub Title'
+        }),
+        max_length=255,
+        required=True
+    )
+
+    author = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'author',
+            'name': 'author',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Author Name'
+        }),
+        max_length=50,
+        required=True
+    )
+
+    content = forms.CharField(
+        widget=CKEditorWidget(attrs={
+            'id': 'content',
+            'name': 'content',
+            'class': 'form-control',
+            'placeholder': 'Write your news content here...'
+        }),
+        required=False
+    )
+
+    status = forms.ChoiceField(
+        choices=News.STATUS,
+        widget=forms.Select(attrs={
+            'id': 'status',
+            'name': 'status',
+            'class': 'form-select form-select-lg'
+        })
+    )
+
+    image = forms.ImageField(
+        widget=forms.FileInput(attrs={
+            'id': 'image',
+            'name': 'image',
+            'class': 'form-control'
+        }),
+        required=False
+    )
+
+    class Meta:
+        model = News
+        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'image']
+        widgets = {
+            'category': forms.Select(attrs={
+                'id': 'category',
+                'name': 'category',
+                'class': 'form-select form-select-lg'
+            })
+        }
