@@ -13,48 +13,67 @@
             <div class="card-body p-4">
               <h5 class="card-title fw-semibold mb-4">Add News/Article</h5>
               <div class="table-responsive">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.media | safe }}  {# Loads CKEditor scripts #}
-                    
-                    <div class="mb-3">
-                        <label class="form-label" for="form2Example27" style="font-weight: 500;">Title</label>
-                        {{ form.title }}
-                    </div>
-                
-                    <div class="mb-3">
-                        {{ form.sub_title.label_tag }}
-                        {{ form.sub_title }}
-                    </div>
-                
-                    <div class="mb-3">
-                        {{ form.category.label_tag }}
-                        {{ form.category }}
-                    </div>
-                
-                    <div class="mb-3">
-                        {{ form.author.label_tag }}
-                        {{ form.author }}
-                    </div>
-                
-                    <div class="mb-3">
-                        {{ form.content.label_tag }}
-                        {{ form.content }}
-                    </div>
-                
-                    <div class="mb-3">
-                        {{ form.status.label }}
-                        {{ form.status }}
-                    </div>
-                
-                    <div class="mb-3">
-                        {{ form.image.label }}
-                        {{ form.image }}
-                    </div>
-                
-                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                </form>
-                
+                <form method="post" action="" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {{ form.media | safe }}  {# Loads CKEditor scripts #}
+              
+                  <div class="mb-3 row align-items-center">
+                      <label class="col-md-1 col-form-label">{{ form.title.label_tag }}</label>
+                      <div class="col-md-10">
+                          {{ form.title }}
+                      </div>
+                  </div>
+              
+                  <div class="mb-3 row align-items-center">
+                      <label class="col-md-1 col-form-label">{{ form.sub_title.label_tag }}</label>
+                      <div class="col-md-10">
+                          {{ form.sub_title }}
+                      </div>
+                  </div>
+              
+                  <div class="mb-3 row align-items-center">
+                      <label class="col-md-1 col-form-label">{{ form.category.label_tag }}</label>
+                      <div class="col-md-10">
+                          {{ form.category }}
+                      </div>
+                  </div>
+              
+                  <div class="mb-3 row align-items-center">
+                      <label class="col-md-1 col-form-label">{{ form.author.label_tag }}</label>
+                      <div class="col-md-10">
+                          {{ form.author }}
+                      </div>
+                  </div>
+              
+                  <div class="mb-3 row align-items-center">
+                      <label class="col-md-1 col-form-label">{{ form.content.label_tag }}</label>
+                      <div class="col-md-10">
+                          {{ form.content }}
+                      </div>
+                  </div>
+              
+                  <div class="mb-3 row align-items-center">
+                      <label class="col-md-1 col-form-label">{{ form.status.label_tag }}</label>
+                      <div class="col-md-10">
+                          {{ form.status}}
+                      </div>
+                  </div>
+              
+                  <div class="mb-3 row align-items-center">
+                      <label class="col-md-1 col-form-label">{{ form.image.label_tag }}</label>
+                      <div class="col-md-10">
+                          {{ form.image }}
+                      </div>
+                  </div>
+              
+                  <div class="row">
+                      <div class="col-md-5 offset-md-1">
+                          <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                      </div>
+                  </div>
+              </form>
+              
+              
                 {% comment %} <table class="table text-nowrap mb-0 align-middle">
                   <thead class="text-dark fs-4">
                     <tr>
