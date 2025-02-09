@@ -2,7 +2,7 @@ import re
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from ApaniNewz.models import Registration,News
+from ApaniNewz.models import Registration,News,Category
 from ckeditor.widgets import CKEditorWidget
 
 class LoginForm(forms.Form):
@@ -248,3 +248,28 @@ class NewsForm(forms.ModelForm):
                 'class': 'form-select form-select-lg'
             })
         }
+
+
+class CategoryForm(forms.ModelForm):
+    categoryname = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'category',
+            'name': 'Category Name',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter Category Name'
+        }),
+        max_length=255,
+        required=True
+    )
+
+    class Meta:
+        model = Category
+        fields = ['categoryname']
+
+    def clean_categoryname(self):
+        categoryname = self.cleaned_data.get('Category Name')
+        if Category.objects.filter(categoryname=categoryname).exists():
+            raise forms.ValidationError("Category with this name already exists.")
+        return categoryname
+    
+

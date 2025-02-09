@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
-from ApaniNewz.forms import LoginForm, NewsForm, RegistrationForm
-from .models import Registration
+from ApaniNewz.forms import CategoryForm, LoginForm, NewsForm, RegistrationForm
+from .models import Category, News, Registration
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -120,11 +120,34 @@ def dashboard(request):
     return render(request,"Admin/Dashboard.html")
 
 def AddNews(request):
-    form = NewsForm()
-    return render(request,"Admin/AddNews.html",{'form':form})
+    article = News.objects.all()
+    if request.method == "POST":
+        form = NewsForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                # Save the form data to the News model
+                form.save()
+                messages.success(request, "News added successfully!")
+                # Redirect to a page (for example, a news list view)
+                return redirect("addnews")
+            except Exception as e:
+                # Catch any exception during saving and display an error message
+                messages.error(request, f"An error occurred while saving the news: {e}")
+        else:
+            # If the form is not valid, send an error message
+            messages.error(request, "There were errors in your form. Please correct them below.")
+    else:
+        form = NewsForm()  # Display an empty form for GET requests
+    return render(request,"Admin/AddNews.html",{'form':form, 'article':article})
 
 def AddCategory(request):
-    return render(request,"Admin/AddCategory.html")
+    form = CategoryForm()
+    categories = Category.objects.filter()
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        form.save()
+        return redirect("admin_category")
+    return render(request,"Admin/AddCategory.html",{'form':form ,'categories':categories})
 
 def Comments(request):
     return render(request,"Admin/ManageComment.html")

@@ -1,7 +1,89 @@
-{% extends "Admin/main.html" %}
-{% block users_active %}selected{% endblock users_active %}
+{% extends 'Admin/main.html' %}
+{% block users_active %}
+  selected
+{% endblock %}
 {% load static %}
 
 {% block admin %}
-
-{% endblock admin %}
+  <div class="body-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body p-4">
+              <h5 class="card-title fw-semibold mb-4">User's</h5>
+              <div class="table-responsive">
+                <table class="table text-nowrap mb-0 align-middle">
+                  <thead class="text-dark fs-4">
+                    <tr>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">ID</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Profile</h6>
+                      </th> 
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Username</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Email ID</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Phone No.</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Active</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">3</h6>
+                      </td>
+                      <td><img src="#" style="height: 50px;width: 50px;" alt=""> </td>
+                      <td class="border-bottom-0">
+                        <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
+                      </td>
+                      <td class="border-bottom-0">
+                        <p class="mb-0 fw-normal">acc@gmail.com</p>
+                      </td>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
+                      </td>
+                      <td class="border-bottom-0">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="badge bg-danger rounded-3 fw-semibold">High</span>
+                        </div>
+                      </td>
+                    </tr>
+                    {% comment %} <tr>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">4</h6>
+                      </td>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
+                        <span class="fw-normal">Frontend Engineer</span>
+                      </td>
+                      <td class="border-bottom-0">
+                        <p class="mb-0 fw-normal">Hosting Press HTML</p>
+                      </td>
+                      <td class="border-bottom-0">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="badge bg-success rounded-3 fw-semibold">Critical</span>
+                        </div>
+                      </td>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
+                      </td>
+                    </tr> {% endcomment %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
