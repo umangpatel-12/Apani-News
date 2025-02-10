@@ -156,9 +156,9 @@
                       <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Status</h6>
                       </th>
-                      <th class="border-bottom-0">
+                      {% comment %} <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Active</h6>
-                      </th>
+                      </th> {% endcomment %}
                     </tr>
                   </thead>
                   <tbody>
@@ -169,25 +169,25 @@
                             <h6 class="fw-semibold mb-0">{{a.id}}</h6>
                           </td>
                           <td>
-                            <img src="/media/{{a.news}}" style="height: 50px;width: 50px;" alt="" />
+                            <img src="{{ a.newsimage }}" style="height: 50px;width: 50px;" alt="{{a.newsimage}}" />
                           </td>
                           <td class="border-bottom-0">
                             <p class="fw-semibold mb-0 fs-4">{{a.title | truncatechars:25}}</p>
                           </td>
                           <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">Category</p>
+                            <p class="mb-0 fw-normal">{{a.category}}</p>
                           </td>
                           <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">Umang</h6>
+                            <h6 class="fw-semibold mb-0 fs-4">{{a.author}}</h6>
                           </td>
                           <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
+                            <h6 class="fw-semibold mb-0 fs-4">{{a.status}}</h6>
                           </td>
-                          <td class="border-bottom-0">
+                          {% comment %} <td class="border-bottom-0">
                             <div class="d-flex align-items-center gap-2">
                               <span class="badge bg-danger rounded-3 fw-semibold">High</span>
                             </div>
-                          </td>
+                          </td> {% endcomment %}
                         </tr>
                       {% endfor %}
                     {% endif %}

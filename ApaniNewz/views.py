@@ -123,6 +123,11 @@ def AddNews(request):
     article = News.objects.all()
     if request.method == "POST":
         form = NewsForm(request.POST, request.FILES)
+        if 'newsimage' in request.FILES:
+            newsimage = request.FILES['newsimage']
+        else:
+            newsimage = None  # Handle as needed, maybe a default image
+
         if form.is_valid():
             try:
                 # Save the form data to the News model
