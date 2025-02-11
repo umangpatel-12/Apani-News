@@ -34,7 +34,7 @@ class News(models.Model):
     author = models.CharField(max_length=50)
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS,max_length=255)
-    newsimage = models.ImageField(upload_to='media/newsimage/')
+    news_image = models.ImageField(upload_to="media/news/")
     likes = models.ManyToManyField(User, related_name='News_blogs')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

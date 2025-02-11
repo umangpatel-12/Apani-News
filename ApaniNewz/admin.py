@@ -17,7 +17,7 @@ class CategoryModelAdmin(admin.ModelAdmin):
 # Register your models here.
 @admin.register(News)
 class NewsModelAdmin(admin.ModelAdmin):
-    list_display = ('id','title','sub_title','category','author','content','status','newsimage','created','updated')
+    list_display = ('id','title','sub_title','category','author','content','status','news_image','created','updated')
 
 @admin.register(Profile)
 class ProfileModelAdmin(admin.ModelAdmin):

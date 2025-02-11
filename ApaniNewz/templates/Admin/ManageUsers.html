@@ -37,26 +37,31 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">3</h6>
-                      </td>
-                      <td><img src="#" style="height: 50px;width: 50px;" alt=""> </td>
-                      <td class="border-bottom-0">
-                        <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
-                      </td>
-                      <td class="border-bottom-0">
-                        <p class="mb-0 fw-normal">acc@gmail.com</p>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                      </td>
-                      <td class="border-bottom-0">
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                        </div>
-                      </td>
-                    </tr>
+                    {% if user_data %}
+                      {% for user in user_data %}
+                      <tr>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">{{user.id}}</h6>
+                        </td>
+                        <td><img src="media/profile/{{ user.profile.profile_image.url }}" style="height: 50px;width: 50px;" alt="{{user.profile.profile_image.url }}"> </td>
+                        <td class="border-bottom-0">
+                          <p class="mb-0 fw-normal">{{user.username}}</p>
+                        </td>
+                        <td class="border-bottom-0">
+                          <p class="mb-0 fw-normal">{{user.email}}</p>
+                        </td>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0 fs-4">{{user.profile.phone}}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                          <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-danger rounded-3 fw-semibold">High</span>
+                          </div>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    {% endif %}
+                   
                     {% comment %} <tr>
                       <td class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">4</h6>

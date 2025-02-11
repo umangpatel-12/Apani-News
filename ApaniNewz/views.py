@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
 from ApaniNewz.forms import CategoryForm, LoginForm, NewsForm, RegistrationForm
-from .models import Category, News, Registration
+from .models import Category, News, Registration, Profile
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -123,10 +123,15 @@ def AddNews(request):
     article = News.objects.all()
     if request.method == "POST":
         form = NewsForm(request.POST, request.FILES)
-        if 'newsimage' in request.FILES:
-            newsimage = request.FILES['newsimage']
+        if 'news_image' in request.FILES:
+            news_image = request.FILES['news_image']
         else:
-            newsimage = None  # Handle as needed, maybe a default image
+            news_image = None  # Handle as needed, maybe a default image
+
+        const = News(
+            news_image = news_image
+        )
+        const.save()
 
         if form.is_valid():
             try:
@@ -158,7 +163,9 @@ def Comments(request):
     return render(request,"Admin/ManageComment.html")
 
 def ManageUsers(request):
-    return render(request,"Admin/ManageUsers.html")
+    user_data = User.objects.all()
+    user_profile = Profile.objects.all()
+    return render(request,"Admin/ManageUsers.html",{'user_data':user_data,'user_profile':user_profile})
 
 def ManageContact(request):
     return render(request,"Admin/ManageContact.html")
