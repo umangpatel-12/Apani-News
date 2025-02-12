@@ -105,7 +105,14 @@ def About(request):
     return render(request, "Home/About.html")
 
 def Categories(request):
-    return render(request, "Home/Category.html")
+    categories = Category.objects.filter()
+    nws = None
+    CATID = request.GET.get('category')
+    if CATID:
+        nws = News.get_all_product_byID(CATID)
+    else:
+        nws = News.objects.filter(status='PUBLISH')
+    return render(request, "Home/Category.html",{'categories':categories,'nws':nws})
     
 def LatestNewz(request):
     return render(request, "Home/LatestNewz.html")
@@ -121,34 +128,51 @@ def dashboard(request):
 
 def AddNews(request):
     article = News.objects.all()
-    if request.method == "POST":
-        form = NewsForm(request.POST, request.FILES)
-        if 'news_image' in request.FILES:
-            news_image = request.FILES['news_image']
-        else:
-            news_image = None  # Handle as needed, maybe a default image
+    categories = Category.objects.all()
 
-        const = News(
-            news_image = news_image
-        )
-        const.save()
+    if request.method == 'POST':
+        form = NewsForm(request.POST)  # Bind form for content field
 
-        if form.is_valid():
-            try:
-                # Save the form data to the News model
-                form.save()
-                messages.success(request, "News added successfully!")
-                # Redirect to a page (for example, a news list view)
-                return redirect("addnews")
-            except Exception as e:
-                # Catch any exception during saving and display an error message
-                messages.error(request, f"An error occurred while saving the news: {e}")
+        if form.is_valid():  # ✅ Validate form before accessing cleaned_data
+            content = form.cleaned_data.get("content")  # ✅ Correct way to access cleaned data
+
+            # Manually retrieve other fields
+            title = request.POST.get("title")
+            sub_title = request.POST.get("sub_title")
+            cat = request.POST.get("category")
+            catOBJ = Category.objects.get(id=cat)  # Fetch category object
+            author = request.POST.get("author")
+            status = request.POST.get("status")
+            if 'news_image' in request.FILES:
+                news_image = request.FILES['news_image']
+            else:
+                news_image = None   # Handle file uploads safely
+
+            # Create and save the news entry
+            news = News(
+                title=title,
+                sub_title=sub_title,
+                category=catOBJ,
+                author=author,
+                content=content,  # ✅ Corrected content retrieval
+                status=status,
+                news_image=news_image,
+            )
+            news.save()
+
+            messages.success(request, "News/Article added successfully!")
+            return redirect("addnews")
         else:
-            # If the form is not valid, send an error message
-            messages.error(request, "There were errors in your form. Please correct them below.")
+            messages.error(request, "Form validation failed. Please check your input.")
+
     else:
-        form = NewsForm()  # Display an empty form for GET requests
-    return render(request,"Admin/AddNews.html",{'form':form, 'article':article})
+        form = NewsForm()
+
+    return render(request, "Admin/AddNews.html", {
+        "article": article,
+        "categories": categories,
+        "form": form,
+    })
 
 def AddCategory(request):
     form = CategoryForm()
@@ -156,7 +180,7 @@ def AddCategory(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         form.save()
-        return redirect("admin_category")
+        return redirect("addcategory")
     return render(request,"Admin/AddCategory.html",{'form':form ,'categories':categories})
 
 def Comments(request):

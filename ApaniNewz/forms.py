@@ -251,7 +251,7 @@ class NewsForm(forms.ModelForm):
 
 
 class CategoryForm(forms.ModelForm):
-    categoryname = forms.CharField(
+    category_name = forms.CharField(
         widget=forms.TextInput(attrs={
             'id': 'category',
             'name': 'Category Name',
@@ -264,12 +264,12 @@ class CategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        fields = ['categoryname']
+        fields = ['category_name']
 
     def clean_categoryname(self):
-        categoryname = self.cleaned_data.get('Category Name')
-        if Category.objects.filter(categoryname=categoryname).exists():
+        category_name = self.cleaned_data.get('Category Name')
+        if Category.objects.filter(category_name=category_name).exists():
             raise forms.ValidationError("Category with this name already exists.")
-        return categoryname
+        return category_name
     
 

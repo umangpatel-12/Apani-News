@@ -16,41 +16,62 @@
               <div class="table-responsive">
                 <form method="POST" action="{% url 'addnews' %}" enctype="multipart/form-data">
                   {% csrf_token %}
-                  {{ form.media|safe }} {# Loads CKEditor scripts #}
+                  {{ form.media|safe }}
 
                   <div class="mb-3 row align-items-center">
-                    <label class="col-md-1 col-form-label">{{ form.title.label_tag }}</label>
-                    <div class="col-md-10">{{ form.title }}</div>
+                    <label for="title" class="col-md-1 col-form-label">Title</label>
+                    <div class="col-md-10">
+                      <input type="text" id="title" name="title" class="form-control form-control-lg" placeholder="Enter News Title" maxlength="255" required />
+                    </div>
                   </div>
 
                   <div class="mb-3 row align-items-center">
-                    <label class="col-md-1 col-form-label">{{ form.sub_title.label_tag }}</label>
-                    <div class="col-md-10">{{ form.sub_title }}</div>
+                    <label for="sub_title" class="col-md-1 col-form-label">Sub-Title</label>
+                    <div class="col-md-10">
+                      <input type="text" id="sub_title" name="sub_title" class="form-control form-control-lg" placeholder="Enter Sub Title" maxlength="255" required />
+                    </div>
                   </div>
 
                   <div class="mb-3 row align-items-center">
-                    <label class="col-md-1 col-form-label">{{ form.category.label_tag }}</label>
-                    <div class="col-md-10">{{ form.category }}</div>
+                    <label for="category" class="col-md-1 col-form-label">Category</label>
+                    <div class="col-md-10">
+                      <select name="category" class="form-control" required>
+                        <option value="">Choose Category</option>
+                        {% for c in categories %}
+                          <option value="{{ c.id }}">{{ c.category_name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
                   </div>
 
                   <div class="mb-3 row align-items-center">
-                    <label class="col-md-1 col-form-label">{{ form.author.label_tag }}</label>
-                    <div class="col-md-10">{{ form.author }}</div>
+                    <label for="author" class="col-md-1 col-form-label">Author</label>
+                    <div class="col-md-10">
+                      <input type="text" id="author" name="author" class="form-control form-control-lg" placeholder="Author Name" maxlength="50" required />
+                    </div>
                   </div>
 
                   <div class="mb-3 row align-items-center">
-                    <label class="col-md-1 col-form-label">{{ form.content.label_tag }}</label>
+                    <label for="content" class="col-md-1 col-form-label">Content</label>
                     <div class="col-md-10">{{ form.content }}</div>
                   </div>
 
                   <div class="mb-3 row align-items-center">
-                    <label class="col-md-1 col-form-label">{{ form.status.label_tag }}</label>
-                    <div class="col-md-10">{{ form.status }}</div>
+                    <label for="status" class="col-md-1 col-form-label">Status</label>
+                    <div class="col-md-10">
+                      <select name="status" class="form-control" required>
+                        <option value="">Choose Status</option>
+                        <option value="PUBLISH">Publish</option>
+                        <option value="DRAFT">Draft</option>
+                      </select>
+                    </div>
                   </div>
 
                   <div class="mb-3 row align-items-center">
-                    <label class="col-md-1 col-form-label">{{ form.image.label_tag }}</label>
-                    <div class="col-md-10">{{ form.image }}</div>
+                    <label for="image" class="col-md-1 col-form-label">Upload Image</label>
+                    <div class="col-md-10">
+                      <input type="file" id="image" name="image" class="form-control" />
+                    </div>
                   </div>
 
                   <div class="row">
@@ -59,76 +80,13 @@
                     </div>
                   </div>
                 </form>
-
-                {% comment %} <table class="table text-nowrap mb-0 align-middle">
-                  <thead class="text-dark fs-4">
-                    <tr>
-                      <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Id</h6>
-                      </th>
-                      <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Assigned</h6>
-                      </th>
-                      <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Name</h6>
-                      </th>
-                      <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Active</h6>
-                      </th>
-                      <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Budget</h6>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">3</h6>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                        <span class="fw-normal">Project Manager</span>
-                      </td>
-                      <td class="border-bottom-0">
-                        <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
-                      </td>
-                      <td class="border-bottom-0">
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                        </div>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">4</h6>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
-                        <span class="fw-normal">Frontend Engineer</span>
-                      </td>
-                      <td class="border-bottom-0">
-                        <p class="mb-0 fw-normal">Hosting Press HTML</p>
-                      </td>
-                      <td class="border-bottom-0">
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="badge bg-success rounded-3 fw-semibold">Critical</span>
-                        </div>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table> {% endcomment %}
               </div>
             </div>
           </div>
         </div>
       </div>
 
+      {% comment %}Showw News{% endcomment %}
       <div class="row">
         <div class="col-lg-12 d-flex align-items-stretch">
           <div class="card w-100">
@@ -166,22 +124,22 @@
                       {% for a in article %}
                         <tr>
                           <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">{{a.id}}</h6>
+                            <h6 class="fw-semibold mb-0">{{ a.id }}</h6>
                           </td>
                           <td>
-                            <img src="media/{{ a.news.newsimage }}" style="height: 50px;width: 50px;" alt="{{a.news.newsimage}}" />
+                            <img src="media/{{ a.news.newsimage }}" style="height: 50px;width: 50px;" alt="{{ a.news.newsimage }}" />
                           </td>
                           <td class="border-bottom-0">
-                            <p class="fw-semibold mb-0 fs-4">{{a.title | truncatechars:25}}</p>
+                            <p class="fw-semibold mb-0 fs-4">{{ a.title|truncatechars:25 }}</p>
                           </td>
                           <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">{{a.category}}</p>
+                            <p class="mb-0 fw-normal">{{ a.category }}</p>
                           </td>
                           <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">{{a.author}}</h6>
+                            <h6 class="fw-semibold mb-0 fs-4">{{ a.author }}</h6>
                           </td>
                           <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">{{a.status}}</h6>
+                            <h6 class="fw-semibold mb-0 fs-4">{{ a.status }}</h6>
                           </td>
                           {% comment %} <td class="border-bottom-0">
                             <div class="d-flex align-items-center gap-2">
