@@ -47,30 +47,45 @@
               <div class="table-responsive">
                 <table class="table text-nowrap mb-0 align-middle">
                   <thead class="text-dark fs-4">
-                    <tr>
-                      <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">ID</h6>
-                      </th>
-                      <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Category Name</h6>
-                      </th>
-                    </tr>
+                      <tr>
+                          <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">ID</h6>
+                          </th>
+                          <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">Category Name</h6>
+                          </th>
+                          <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">Action</h6>
+                          </th>
+                      </tr>
                   </thead>
                   <tbody>
-                    {% if categories %}
-                        {% for category in categories %}
-                            <tr>
-                            <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0">{{ category.id }}</h6>
-                            </td>
-                            <td class="border-bottom-0">
-                                <p class="mb-0 fw-normal">{{ category.category_name }}</p>
-                            </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
+                      {% if categories %}
+                          {% for category in categories %}
+                              <tr>
+                                  <td class="border-bottom-0">
+                                      <h6 class="fw-semibold mb-0">{{ category.id }}</h6>
+                                  </td>
+                                  <td class="border-bottom-0">
+                                      <p class="mb-0 fw-normal">{{ category.category_name }}</p>
+                                  </td>
+                                  <td>
+                                      <a href="" class="text-dark me-3">
+                                          <i class="far fa-edit" style="font-size:20px"></i>
+                                      </a>
+                                      <a href="" class="text-dark">
+                                          <i class="far fa-trash-alt" style="font-size:20px"></i>
+                                      </a>
+                                  </td>
+                              </tr>
+                          {% endfor %}
+                      {% endif %}
                   </tbody>
-                </table>
+              </table>
+              
+              <!-- Font Awesome for icons -->
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+              
               </div>
             </div>
           </div>
