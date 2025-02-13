@@ -9,7 +9,7 @@
      <section class="whats-news-area pt-50 pb-20">
          <div class="container">
              <div class="row">
-             <div class="col-lg-8">
+             <div class="col-lg-12">
                  <div class="row d-flex justify-content-between">
                      <div class="col-lg-3 col-md-3">
                          <div class="section-tittle mb-30">
@@ -46,10 +46,10 @@
                                      <div class="row">
                                         {% if nws %}
                                             {% for n in nws %}
-                                            <div class="col-lg-6 col-md-6 {{news.category}}">
+                                            <div class="col-lg-6 col-md-6 {{n.category}}">
                                                 <div class="single-what-news mb-100">
                                                     <div class="what-img">
-                                                        <img src="{% static 'assets/img/news/whatNews1.jpg' %}" alt="">
+                                                        <img src="{{n.news_image.url}}" height="350px" width="250px" alt="{{n.news_image.url}}">
                                                     </div>
                                                     <div class="what-cap">
                                                         <span class="color1">{{n.category}}</span>
