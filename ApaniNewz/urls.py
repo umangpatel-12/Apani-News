@@ -15,7 +15,12 @@ urlpatterns = [
     path('About', views.About, name= 'about'),
     path('Category', views.Categories, name= 'category'),
     path('Latest-News', views.LatestNewz, name= 'latestnews'),
+
+    # Account's
     path('Profile', views.ProfilePage, name= 'profile'),
+    # path('Edit-Profile', views.EditProfile, name= 'edit_profile'),
+    path('Post-Article', views.PostArticle, name= 'post_article'),
+    path('Posts', views.Posts, name= 'posts'),
 
 
 
@@ -26,6 +31,8 @@ urlpatterns = [
     path('Comments',views.Comments,name='comments'),
     path('Manage-Contacts',views.ManageContact,name='contacts'),
     path('Manage-Users',views.ManageUsers,name='users'),
+
+
 
 ]
 

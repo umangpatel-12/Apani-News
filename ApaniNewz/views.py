@@ -117,8 +117,7 @@ def Categories(request):
 def LatestNewz(request):
     return render(request, "Home/LatestNewz.html")
 
-def ProfilePage(request):
-    return render(request, "Account/Profile.html")
+
 
 
 
@@ -193,3 +192,21 @@ def ManageUsers(request):
 
 def ManageContact(request):
     return render(request,"Admin/ManageContact.html")
+
+# Account's Details
+
+
+
+def ProfilePage(request):
+    return render(request, "Account/Profile.html")
+
+def PostArticle(request):
+    categories = Category.objects.all()
+    form = NewsForm()
+    return render(request,"Account/PostArticle.html",{"categories":categories,'form':form})
+
+def Posts(request):
+    return render(request,"Account/Posts.html")
+
+
+
