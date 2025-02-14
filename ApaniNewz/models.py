@@ -1,19 +1,25 @@
+from django import forms
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
+from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
 
 # Create your models here.
-
-# Create your models here.
-class Registration(models.Model):
+class Registration(AbstractUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    username = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=10, null=True)
     profile_image = models.ImageField(upload_to='media/profile/')
+    enrollment_number = models.CharField(max_length=12, unique=True)  # Add unique enrollment number
     password = models.CharField(max_length=128)
     confirm_password = models.CharField(max_length=128)
+
+    groups = models.ManyToManyField(Group, related_name='registration_groups', blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name='registration_user_permissions', blank=True)
 
     def __str__(self):
         return self.email

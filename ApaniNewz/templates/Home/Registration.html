@@ -47,10 +47,21 @@
                     <div class="text-danger">{{ form.email.errors }}</div>
                   </div>
 
-                  <div class="form-outline mb-4">
-                    {{ form.phone.label_tag }}
-                    {{ form.phone }}
-                    <div class="text-danger">{{ form.phone.errors }}</div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-outline mb-4">
+                        {{ form.phone.label_tag }}
+                        {{ form.phone }}
+                        <div class="text-danger">{{ form.phone.errors }}</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-outline mb-4">
+                        {{ form.enrollment_number.label_tag }}
+                        {{ form.enrollment_number }}
+                        <div class="text-danger">{{ form.enrollment_number.errors }}</div>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="form-outline mb-4">

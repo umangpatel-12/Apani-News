@@ -181,10 +181,10 @@
                 </div>
                 <div class="col-xl-2 col-lg-2 col-md-4" style="left: 110px;">
                   <div class="main-menu d-none d-md-block" id="navbar-menu">
-                    {% if user.is_authenticated %}
-                      <ul id="navigation">
+                    <ul id="navigation">
+                      {% if user.is_authenticated %}
                         <li>
-                          <a href="#" class="trending-animated" style="color: #ff6219;font-size: 18px;">Hi, {{ user.first_name|default:'User' }}</a>
+                          <a href="#" class="trending-animated" style="color: #ff6219; font-size: 18px;">Hi, {{ user.first_name|default:'User' }}</a>
                           <ul class="submenu">
                             <li>
                               <a href="{% url 'profile' %}">Profile</a>
@@ -194,9 +194,7 @@
                             </li>
                           </ul>
                         </li>
-                      </ul>
-                    {% else %}
-                      <ul id="navigation">
+                      {% else %}
                         <li>
                           <i class="fas fa-search special-tag"></i>
                         </li>
@@ -204,15 +202,15 @@
                           <a href="#"><i class="fas fa-user" style="color: black;"></i></a>
                           <ul class="submenu">
                             <li>
-                              <a href="elements.html">Guest</a>
+                              <a href="#">Guest</a>
                             </li>
                             <li>
                               <a href="{% url 'login' %}">Login</a>
                             </li>
                           </ul>
                         </li>
-                      </ul>
-                    {% endif %}
+                      {% endif %}
+                    </ul>
                   </div>
                 </div>
 

@@ -2,6 +2,7 @@ import re
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+import requests
 from ApaniNewz.models import Registration,News,Category
 from ckeditor.widgets import CKEditorWidget
 
@@ -35,6 +36,16 @@ class LoginForm(forms.Form):
         return email
 
 class RegistrationForm(forms.ModelForm):
+    enrollment_number = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'enrollment_number',
+            'name': 'enrollment_number',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enrollment Number'
+        }),
+        max_length=12,
+        required=True
+    )
     username = forms.CharField(
         widget=forms.TextInput(attrs={
             'id': 'username',
@@ -115,7 +126,7 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'phone', 'profile_image']
+        fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 'phone', 'profile_image', 'enrollment_number']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -166,6 +177,15 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Phone number must be exactly 10 digits long.")
         
         return phone
+        
+    def clean_enrollment_number(self):
+        enrollment_number = self.cleaned_data.get('enrollment_number')
+
+        # Check if the enrollment number already exists in the Registration model
+        if Registration.objects.filter(enrollment_number=enrollment_number).exists():
+            raise forms.ValidationError("This enrollment number is already registered.")
+
+        return enrollment_number
 
     def clean(self):
         cleaned_data = super().clean()
@@ -174,7 +194,6 @@ class RegistrationForm(forms.ModelForm):
 
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
-        
 
 class NewsForm(forms.ModelForm):
     title = forms.CharField(
@@ -249,7 +268,6 @@ class NewsForm(forms.ModelForm):
             })
         }
 
-
 class CategoryForm(forms.ModelForm):
     category_name = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -271,5 +289,5 @@ class CategoryForm(forms.ModelForm):
         if Category.objects.filter(category_name=category_name).exists():
             raise forms.ValidationError("Category with this name already exists.")
         return category_name
-    
+   
 

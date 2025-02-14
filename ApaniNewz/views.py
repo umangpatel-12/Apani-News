@@ -19,7 +19,6 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('index')
     
-    # form = LoginForm()
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -48,6 +47,26 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+# def register_view(request):
+#     if request.user.is_authenticated:
+#         return redirect('index')
+
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST, request.FILES)  # Handle file uploads
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             user.set_password(form.cleaned_data['password'])  # Hash the password
+#             user.is_active = True
+#             user.save()
+
+#             messages.success(request, "Your account was successfully created.")
+#             login(request, user)  # Log the user in after registration
+#             return redirect('login')  # Redirect to home page after successful registration
+
+#     else:
+#         form = RegistrationForm()
+#     return render(request,"Home/Registration.html",{'form':form})
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -95,6 +114,7 @@ def register_view(request):
         form = RegistrationForm()
     return render(request,"Home/Registration.html",{'form':form})
 
+
 def News_Detail(request):
     return render(request, "Home/News_Details.html")
 
@@ -116,10 +136,6 @@ def Categories(request):
     
 def LatestNewz(request):
     return render(request, "Home/LatestNewz.html")
-
-
-
-
 
 # Admin Dashbord's
 def dashboard(request):
@@ -195,8 +211,6 @@ def ManageContact(request):
 
 # Account's Details
 
-
-
 def ProfilePage(request):
     return render(request, "Account/Profile.html")
 
@@ -207,6 +221,3 @@ def PostArticle(request):
 
 def Posts(request):
     return render(request,"Account/Posts.html")
-
-
-
