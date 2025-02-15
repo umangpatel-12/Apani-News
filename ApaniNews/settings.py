@@ -55,6 +55,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'ApaniNews.urls'
 
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

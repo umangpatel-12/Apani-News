@@ -3,7 +3,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import requests
-from ApaniNewz.models import Registration,News,Category
+from django.core.exceptions import ValidationError
+from ApaniNewz.models import Profile, Registration,News,Category
 from ckeditor.widgets import CKEditorWidget
 
 class LoginForm(forms.Form):
@@ -130,12 +131,19 @@ class RegistrationForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
+
+        # Check if username already exists
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("Username is already taken.")
-        if not re.match(r'^[a-zA-Z]+$', username):
-            raise forms.ValidationError("Username should contain only alphabetic characters.")
-        if re.search(r'[^\w]', username):  # Checks for non-alphanumeric characters
-            raise forms.ValidationError("Username should not contain special characters except underscore or hyphen.")
+            raise ValidationError("Username is already taken.")
+
+        # Ensure username contains only alphabets and optionally underscores or hyphens
+        if not re.match(r'^[a-zA-Z][a-zA-Z0-9_-]*$', username):
+            raise ValidationError("Username should start with a letter and can only contain letters, numbers, underscores, or hyphens.")
+
+        # Ensure username does not contain consecutive special characters (e.g., "__" or "--")
+        if re.search(r'[_-]{2,}', username):
+            raise ValidationError("Username should not contain consecutive underscores or hyphens.")
+
         return username
 
     def clean_first_name(self):
@@ -194,6 +202,22 @@ class RegistrationForm(forms.ModelForm):
 
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
+        
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])  # Hash password before saving
+
+        if commit:
+            user.save()
+            Profile.objects.create(
+                user=user,
+                enrollment_number=self.cleaned_data["enrollment_number"],
+                phone=self.cleaned_data["phone"],
+                profile_image=self.cleaned_data.get("profile_image")
+            )
+
+        return user
 
 class NewsForm(forms.ModelForm):
     title = forms.CharField(

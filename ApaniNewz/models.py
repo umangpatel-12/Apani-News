@@ -4,7 +4,11 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+
+
+# Custom User Model
 
 # Create your models here.
 class Registration(AbstractUser):
@@ -57,6 +61,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=15, blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    enrollment_number = models.CharField(max_length=12, unique=True)  # Add unique enrollment number
     profile_image = models.ImageField(upload_to='media/profile/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)

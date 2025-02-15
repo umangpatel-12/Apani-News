@@ -46,7 +46,8 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('index')
+    messages.success(request, "You have been logged out successfully.")
+    return redirect("login")
 
 # def register_view(request):
 #     if request.user.is_authenticated:
@@ -73,47 +74,30 @@ def register_view(request):
         return redirect('index')
 
     if request.method == 'POST':
-        # get_OTP = request.POST.get('OTP')
-        form = RegistrationForm(request.POST)
-
-        # if get_OTP:
-        #     get_user = request.POST.get('user')
-        #     user = User.objects.get(email=get_user)
-            
-        #     if int(get_OTP) == UserOTP.objects.filter(user=user).last().OTP:
-        #         user.is_active = True
-        #         login(request, user)
-        #         user.save()
-        #         messages.success(request, "Your account was successfully created.")
-        #         # return redirect('login')
-        #         return render(request, 'Home/login.html', {'form': form})
-        #     else:
-        #         messages.error(request, "You entered a wrong OTP.")
-        #         return render(request, "registration.html", {'OTP': True, 'user': user})
-         
-        # form = RegistrationForm(request.POST)
+        form = RegistrationForm(request.POST, request.FILES)
+        
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.is_active = True
+            user = form.save(commit=False)  # Save user but don't commit yet
+            user.set_password(form.cleaned_data['password'])  # Hash password
+            user.is_active = True  # Activate user immediately (change if using OTP)
             user.save()
-            # user_OTP = random.randint(100000, 999999)
-            # UserOTP.objects.create(user=user, OTP=user_OTP)
-            # subject = 'Your OTP Verification Code'
-            # message = f'Hello {user.first_name},\n\nYour OTP code is {user_OTP}. Please use this code to verify your email address.\nDo not share OTP with anyone.\n\nThanks!'
-            # send_mail(
-            #     subject,
-            #     message,
-            #     settings.EMAIL_HOST_USER,
-            #     [user.email],
-            #     fail_silently=False
-            # )
-            return render(request, "Home/Registration.html", {'form': form, 'user': user})
+
+            # Save additional fields in Profile model
+            cost =Profile.objects.create(
+                user=user,
+                enrollment_number=form.cleaned_data['enrollment_number'],
+                phone=form.cleaned_data['phone'],
+                profile_image=form.cleaned_data.get('profile_image')
+            )
+            cost.save()
+            messages.success(request, "Your account was successfully created.")
+            login(request, user)  # Log in the user after registration
+            return redirect('index')  # Redirect to homepage after successful registration
 
     else:
         form = RegistrationForm()
-    return render(request,"Home/Registration.html",{'form':form})
-
+    
+    return render(request, "Home/Registration.html", {'form': form})
 
 def News_Detail(request):
     return render(request, "Home/News_Details.html")
