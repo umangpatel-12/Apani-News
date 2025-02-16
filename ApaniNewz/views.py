@@ -199,9 +199,13 @@ def ProfilePage(request):
     return render(request, "Account/Profile.html")
 
 def PostArticle(request):
-    categories = Category.objects.all()
+    cate = Category.objects.all()
     form = NewsForm()
-    return render(request,"Account/PostArticle.html",{"categories":categories,'form':form})
+    context = {
+        "cate":cate,
+        "form":form
+    }
+    return render(request,"Account/PostArticle.html",context)
 
 def Posts(request):
     return render(request,"Account/Posts.html")

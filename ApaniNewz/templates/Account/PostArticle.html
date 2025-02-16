@@ -14,70 +14,73 @@
           <h5 class="card-title fw-bold text-center text-dark mb-4">Add News/Article</h5>
 
           <div class="table-responsive">
-            <form method="POST" action="{% url 'addnews' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.media|safe }}
+            <form method="POST" action="{% url 'post_article' %}" id="post_article" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ form.media|safe }}
 
-                <div class="mb-3 row align-items-center">
-                  <label for="title" class="col-md-5 col-form-label">Title :</label>
-                  <div class="col-md-12">
-                    <input type="text" id="title" name="title" class="form-control form-control-lg" placeholder="Enter News Title" maxlength="255" required />
-                  </div>
+              <div class="mb-3 row align-items-center">
+                <label for="title" class="col-md-5 col-form-label">Title :</label>
+                <div class="col-md-12">
+                  <input type="text" id="title" name="title" class="form-control form-control-lg" placeholder="Enter News Title" maxlength="255" required />
                 </div>
+              </div>
 
-                <div class="mb-3 row align-items-center">
-                  <label for="sub_title" class="col-md-5 col-form-label">Sub-Title :</label>
-                  <div class="col-md-12">
-                    <input type="text" id="sub_title" name="sub_title" class="form-control form-control-lg" placeholder="Enter Sub Title" maxlength="255" required />
-                  </div>
+              <div class="mb-3 row align-items-center">
+                <label for="sub_title" class="col-md-5 col-form-label">Sub-Title :</label>
+                <div class="col-md-12">
+                  <input type="text" id="sub_title" name="sub_title" class="form-control form-control-lg" placeholder="Enter Sub Title" maxlength="255" required />
                 </div>
+              </div>
 
-                <div class="mb-3 row align-items-center">
-                  <label for="category" class="col-md-2 col-form-label">Category :</label>
-                  <div class="col-md-8">
+              <div class="mb-3 row align-items-center">
+                <label for="category" class="col-md-2 col-form-label">Category :</label>
+                <div class="col-md-8">
                     <select name="category" class="form-control col-md-4" required>
-                      <option value="">Choose Category</option>
-                      {% for c in categories %}
-                        <option value="{{ c.id }}">{{ c.category_name }}</option>
-                      {% endfor %}
+                        <option value="">Choose Category</option>
+                        {% for i in cate %}
+                            <option value="{{ i.id }}">{{ i.category_name }}</option>
+                        {% empty %}
+                            <option value="">No categories available</option>
+                        {% endfor %}
                     </select>
-                  </div>
                 </div>
+            </div>
+            
 
-                <div class="mb-3 row align-items-center">
-                  <label for="author" class="col-md-4 col-form-label">Author :</label>
-                  <div class="col-md-12">
-                    <input type="text" id="author" name="author" class="form-control form-control-lg" placeholder="Author Name" maxlength="50" required />
-                  </div>
+              <div class="mb-3 row align-items-center">
+                <label for="author" class="col-md-4 col-form-label">Author :</label>
+                <div class="col-md-12">
+                  <input type="text" id="author" name="author" class="form-control form-control-lg" placeholder="Author Name" maxlength="50" required />
                 </div>
+              </div>
 
-                <div class="mb-3 row align-items-center">
-                  <label for="content" class="col-md-4 col-form-label">Content :</label>
-                  <div class="col-md-12">{{ form.content }}</div>
+              <div class="mb-3 row align-items-center">
+                <label for="content" class="col-md-4 col-form-label">Content :</label>
+                <div class="col-md-12">{{ form.content }}</div>
+              </div>
+
+              <div class="mb-3 row align-items-center">
+                <label for="status" class="col-md-2 col-form-label">Status :</label>
+                <div class="col-md-2">
+                  <select name="status" class="form-control" required>
+                    <option value="">Choose Status</option>
+                    <option value="PUBLISH">Publish</option>
+                    <option value="DRAFT">Draft</option>
+                  </select>
                 </div>
+              </div>
 
-                <div class="mb-3 row align-items-center">
-                  <label for="status" class="col-md-2 col-form-label">Status :</label>
-                  <div class="col-md-2">
-                    <select name="status" class="form-control" required>
-                      <option value="">Choose Status</option>
-                      <option value="PUBLISH">Publish</option>
-                      <option value="DRAFT">Draft</option>
-                    </select>
-                  </div>
+              <div class="mb-3 row align-items-center">
+                <label for="image" class="col-md-4 col-form-label">Upload Image :</label>
+                <div class="col-md-12">
+                  <input type="file" id="image" name="image" class="form-control" />
                 </div>
+              </div>
 
-                <div class="mb-3 row align-items-center">
-                  <label for="image" class="col-md-4 col-form-label">Upload Image :</label>
-                  <div class="col-md-12">
-                    <input type="file" id="image" name="image" class="form-control" />
-                  </div>
-                </div>
-
-                <div class="d-grid" style="margin-left: 270px;">
-                    <button type="submit" name="submit" class="btn btn-dark btn-lg shadow-sm">Post</button>
-                  </div>
-              </form>
+              <div class="d-grid" style="margin-left: 270px;">
+                <button type="submit" name="submit" class="btn btn-dark btn-lg shadow-sm">Post</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
