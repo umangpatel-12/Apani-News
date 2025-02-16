@@ -292,6 +292,15 @@ class NewsForm(forms.ModelForm):
             })
         }
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Get the user from the view
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['author'] = forms.CharField(
+                initial=f"{user.first_name} {user.last_name}", 
+                widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control form-control-lg'})
+            )
+
 class CategoryForm(forms.ModelForm):
     category_name = forms.CharField(
         widget=forms.TextInput(attrs={

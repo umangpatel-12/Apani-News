@@ -200,7 +200,16 @@ def ProfilePage(request):
 
 def PostArticle(request):
     cate = Category.objects.all()
-    form = NewsForm()
+    if request.method == "POST":
+        form = NewsForm(request.POST, request.FILES, user=request.user)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user  # Save the logged-in user as the author
+            article.save()
+            return redirect('success_page')  # Change this to your success page
+    else:
+        form = NewsForm(user=request.user)
+        
     context = {
         "cate":cate,
         "form":form

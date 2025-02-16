@@ -35,23 +35,27 @@
               <div class="mb-3 row align-items-center">
                 <label for="category" class="col-md-2 col-form-label">Category :</label>
                 <div class="col-md-8">
-                    <select name="category" class="form-control col-md-4" required>
-                        <option value="">Choose Category</option>
-                        {% for i in cate %}
-                            <option value="{{ i.id }}">{{ i.category_name }}</option>
-                        {% empty %}
-                            <option value="">No categories available</option>
-                        {% endfor %}
-                    </select>
+                  <select name="category" class="form-control col-md-4" required>
+                    <option value="">Choose Category</option>
+                    {% for i in cate %}
+                      <option value="{{ i.id }}">{{ i.category_name }}</option>
+                    {% empty %}
+                      <option value="">No categories available</option>
+                    {% endfor %}
+                  </select>
                 </div>
-            </div>
-            
+              </div>
 
-              <div class="mb-3 row align-items-center">
+              {% comment %} <div class="mb-3 row align-items-center">
                 <label for="author" class="col-md-4 col-form-label">Author :</label>
                 <div class="col-md-12">
                   <input type="text" id="author" name="author" class="form-control form-control-lg" placeholder="Author Name" maxlength="50" required />
                 </div>
+              </div> {% endcomment %}
+
+              <div class="mb-3 row align-items-center">
+                <label for="author" class="col-md-2 col-form-label">Author :</label>
+                <div class="col-md-8" style="font-weight: 600;">{{ request.user.first_name }} {{ request.user.last_name }} </div>
               </div>
 
               <div class="mb-3 row align-items-center">
