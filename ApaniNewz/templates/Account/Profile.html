@@ -29,37 +29,38 @@
   <section class="blog_area" style="margin-top: 100px;margin-bottom: 100px;">
     <div class="container">
       <div class="row">
-
         <div class="col-lg-4">
           <div class="blog_right_sidebar">
             <aside class="single_sidebar_widget search_widget">
               <div class="profile">
                 {% if request.user.profile.profile_image %}
-                    <img src="{{ request.user.profile.profile_image.url }}" alt="Profile Image" class="profile-img" />
+                  <img src="{{ request.user.profile.profile_image.url }}" alt="Profile Image" class="profile-img" />
                 {% else %}
-                    <p>No profile image uploaded.</p>
+                  <p>No profile image uploaded.</p>
                 {% endif %}
-                
-                <p class="profile-name">{{request.user.first_name}} {{request.user.last_name}}</p> <!-- Replace with email if needed -->
+
+                <p class="profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</p> <!-- Replace with email if needed -->
                 <p style="font-size: large;font-family:Arial, Helvetica, sans-serif;">{{ request.user.email }}</p> <!-- Replace with email if needed -->
               </div>
             </aside>
 
-
-
             <aside class="single_sidebar_widget post_category_widget">
               <h4 class="widget_title">Information</h4>
               <ul class="list cat-list">
-                <li class="nav-item {% block editprofile_active %}active{% endblock editprofile_active %}">
+                <li class="nav-item {% block editprofile_active %}
+                    active
+                  {% endblock %}">
                   <a href="{% url 'profile' %}" class="d-flex"><p style="font-weight: 500;">Edit Profile</p></a>
                 </li>
-                <li class="nav-item {% block postarticle_active %}{% endblock postarticle_active %}">
+                <li class="nav-item {% block postarticle_active %}
+                  {% endblock %}">
                   <a href="{% url 'post_article' %}" class="d-flex">
                     <p style="font-weight: 500;">Post Article</p>
                     <p></p>
                   </a>
                 </li>
-                <li class="nav-item {% block posts_active %}{% endblock posts_active %}">
+                <li class="nav-item {% block posts_active %}
+                  {% endblock %}">
                   <a href="{% url 'posts' %}" class="d-flex">
                     <p style="font-weight: 500;">Posts</p>
                     <p>(03)</p>
@@ -78,57 +79,108 @@
                 </div>
               </div>
             </aside>
-
           </div>
         </div>
 
         {% block profile %}
-        <div class="col-lg-8 mb-5 mb-lg-0">
-          <div class="blog_left_sidebar">
-            <article class="blog_item">
-              <div class="blog_item_img">
-                <img class="card-img rounded-0" src=" {% static 'assets/img/blog/single_blog_2.png' %} " alt="" />
-                <a href="#" class="blog_item_date">
-                  <h3>15</h3>
-                  <p>Jan</p>
-                </a>
-              </div>
-      
-              <div class="blog_details">
-                <a class="d-inline-block" href="single-blog.html"><h2>Google inks pact for new 35-storey office</h2></a>
-                <p>That dominion stars lights dominion divide years for fourth have don't stars is that he earth it first without heaven in place seed it second morning saying.</p>
-                <ul class="blog-info-link">
-                  <li>
-                    <a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a>
-                  </li>
-                  <li>
-                    <a href="#"><i class="fa fa-comments"></i> 03 Comments</a>
-                  </li>
-                </ul>
-              </div>
-            </article>
-      
-            <nav class="blog-pagination justify-content-center d-flex">
-              <ul class="pagination">
-                <li class="page-item">
-                  <a href="#" class="page-link" aria-label="Previous"><i class="ti-angle-left"></i></a>
-                </li>
-                <li class="page-item">
-                  <a href="#" class="page-link">1</a>
-                </li>
-                <li class="page-item active">
-                  <a href="#" class="page-link">2</a>
-                </li>
-                <li class="page-item">
-                  <a href="#" class="page-link" aria-label="Next"><i class="ti-angle-right"></i></a>
-                </li>
-              </ul>
-            </nav>
+          <div class="col-lg-8 mb-5 mb-lg-0">
+            <div class="blog_left_sidebar">
+              {% comment %} <article class="blog_item">
+                {% endcomment %}
+                <div class="blog_details">
+                  <div class="text-center mb-4">
+                    <h3 class="fw-bold">Edit Profile</h3>
+                </div>
+                  <form action="{% url 'profile' %}" id="profile" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="p-3">
+                        <!-- Header -->
+                        {% comment %} <div class="d-flex justify-content-center align-items-center mb-4">
+                            <h3 class="fw-bold text-center">Edit Profile</h3>
+                        </div> {% endcomment %}
+                
+                        <!-- Username -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                {{ u_form.username.label_tag }}
+                                {{ u_form.username }}
+                                <div class="text-danger">{{ u_form.username.errors }}</div>
+                            </div>
+                        </div>
+                
+                        <!-- First Name & Last Name -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ u_form.first_name.label_tag }}
+                                {{ u_form.first_name }}
+                                <div class="text-danger">{{ u_form.first_name.errors }}</div>
+                            </div>
+                            <div class="col-md-6">
+                                {{ u_form.last_name.label_tag }}
+                                {{ u_form.last_name }}
+                                <div class="text-danger">{{ u_form.last_name.errors }}</div>
+                            </div>
+                        </div>
+                
+                        <!-- Email & Phone -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ u_form.email.label_tag }}
+                                {{ u_form.email }}
+                                <div class="text-danger">{{ u_form.email.errors }}</div>
+                            </div>
+                            <div class="col-md-6">
+                                {{ p_form.phone.label_tag }}
+                                {{ p_form.phone }}
+                                <div class="text-danger">{{ p_form.phone.errors }}</div>
+                            </div>
+                        </div>
+                
+                        <!-- Gender & Location -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ p_form.gender.label_tag }}
+                                {{ p_form.gender }}
+                                <div class="text-danger">{{ p_form.gender.errors }}</div>
+                            </div>
+                            <div class="col-md-6">
+                                {{ p_form.location.label_tag }}
+                                {{ p_form.location }}
+                                <div class="text-danger">{{ p_form.location.errors }}</div>
+                            </div>
+                        </div>
+                
+                        <!-- Profile Image -->
+                        <div class="row mb-3">
+                            <div class="col-md-3">{{ p_form.profile_image.label_tag }}</div>
+                            <div class="col-md-9">
+                                {{ p_form.profile_image }}
+                                <div class="text-danger">{{ p_form.profile_image.errors }}</div>
+                            </div>
+                        </div>
+                
+                        <!-- Bio -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                {{ p_form.bio.label_tag }}
+                                {{ p_form.bio }}
+                                <div class="text-danger">{{ p_form.bio.errors }}</div>
+                            </div>
+                        </div>
+                
+                        <!-- Submit Button -->
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
+                        </div>
+                    </div>
+                </form>
+                
+                </div>
+                {% comment %}
+              </article> {% endcomment %}
+            </div>
           </div>
-        </div>
         {% endblock %}
-       
-
       </div>
     </div>
   </section>

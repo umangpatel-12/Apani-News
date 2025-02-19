@@ -323,4 +323,118 @@ class CategoryForm(forms.ModelForm):
             raise forms.ValidationError("Category with this name already exists.")
         return category_name
    
+class UserUpdate(forms.ModelForm):
+
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'first_name',
+            'name': 'first_name',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'First Name'
+        }),
+        max_length=50,
+        required=True
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'last_name',
+            'name': 'last_name',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Last Name'
+        }),
+        max_length=50,
+        required=True
+    )
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'username',
+            'name': 'username',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Username'
+        }),
+        max_length=150,
+        disabled=True
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'id': 'email',
+            'name': 'email',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter your email'
+        }),
+        max_length=254,
+        disabled=True
+        # required=True
+    )
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'email']
+
+class ProfileUpdateForm(forms.ModelForm):
+    phone = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'phone',
+            'name': 'phone',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Phone Number'
+        }),
+        max_length=15,
+        required=True
+    )
+
+    gender = forms.ChoiceField(
+        choices=Profile.GENDER_CHOICES,
+        widget=forms.Select(attrs={
+            'id': 'gender',
+            'name': 'gender',
+            'class': 'form-select form-select-lg'
+        })
+    )
+
+    enrollment_number = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'enrollment_number',
+            'name': 'enrollment_number',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enrollment Number'
+        }),
+        max_length=12,
+        disabled=True
+        # required=True
+    )
+
+    profile_image = forms.ImageField(
+        widget=forms.FileInput(attrs={
+            'id': 'profile_image',
+            'name': 'profile_image',
+            'class': 'form-control'
+        }),
+        required=False
+    )
+
+    bio = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'id': 'bio',
+            'name': 'bio',
+            'class': 'form-control',
+            'placeholder': 'Enter your bio'
+        }),
+        max_length=125,
+        required=False
+    )
+
+    location = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'location',
+            'name': 'location',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter your location'
+        }),
+        max_length=30,
+        required=False
+    )
+    class Meta:
+        model = Profile
+        fields = ['phone', 'gender','enrollment_number', 'profile_image', 'bio', 'location']
 

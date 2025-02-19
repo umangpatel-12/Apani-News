@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
-from ApaniNewz.forms import CategoryForm, LoginForm, NewsForm, RegistrationForm
+from ApaniNewz.forms import CategoryForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, UserUpdate
 from .models import Category, News, Registration, Profile
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -196,7 +196,30 @@ def ManageContact(request):
 # Account's Details
 
 def ProfilePage(request):
-    return render(request, "Account/Profile.html")
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    if request.method == 'POST':
+        u_form = UserUpdate(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Profile has been updated !')
+            return redirect('profile')
+
+    else:
+        u_form = UserUpdate(instance=request.user)
+        p_form = ProfileUpdateForm(instance=profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+    return render(request, "Account/Profile.html",context)
 
 def PostArticle(request):
     cate = Category.objects.all()
