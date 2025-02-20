@@ -13,7 +13,7 @@ urlpatterns = [
     path('Details', views.News_Detail, name= 'details'),
     path('Contact', views.Contact, name= 'contact'),
     path('About', views.About, name= 'about'),
-    path('Category', views.Categories, name= 'category'),
+    path('Category/', views.Categories, name= 'category'),
     path('Latest-News', views.LatestNewz, name= 'latestnews'),
 
     # Account's

@@ -27,7 +27,7 @@ class Registration(AbstractUser):
 
     def __str__(self):
         return self.email
-
+    
 #Category
 class Category(models.Model):
     category_name = models.CharField(max_length=100)
@@ -51,6 +51,13 @@ class News(models.Model):
     
     def __str__(self):
         return self.title
+    
+    @staticmethod
+    def get_all_news_byID(category_id):
+         if category_id:
+            return News.objects.filter(category = category_id)
+         else:
+              return News.objects.all()
 
 class Profile(models.Model):
     GENDER_CHOICES = [

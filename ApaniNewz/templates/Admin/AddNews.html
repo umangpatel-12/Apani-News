@@ -130,8 +130,12 @@
                             <h6 class="fw-semibold mb-0">{{ a.id }}</h6>
                           </td>
                           <td>
-                            <img src="{{ a.news_image.url }}" style="height: 50px;width: 50px;" alt="{{ a.news_image.url }}" />
-                          </td>
+                            {% if a.news_image %}
+                                <img src="{{ a.news_image.url }}" style="height: 50px; width: 50px;" alt="{{ a.news_image.url }}" />
+                            {% else %}
+                                <p>No Image</p>
+                            {% endif %}
+                        </td>
                           <td class="border-bottom-0">
                             <p class="fw-semibold mb-0 fs-4">{{ a.title|truncatechars:25 }}</p>
                           </td>

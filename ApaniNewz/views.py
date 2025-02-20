@@ -110,16 +110,22 @@ def About(request):
 
 def Categories(request):
     categories = Category.objects.filter()
-    nws = None
+    news = None
     CATID = request.GET.get('category')
     if CATID:
-        nws = News.get_all_product_byID(CATID)
+        news = News.get_all_news_byID(CATID)
     else:
-        nws = News.objects.filter(status='PUBLISH')
-    return render(request, "Home/Category.html",{'categories':categories,'nws':nws})
+        news = News.objects.filter(status='PUBLISH')
+
+    context = {
+        'categories': categories,
+        'news': news,
+    }
+    return render(request, "Home/Category.html",context)
     
 def LatestNewz(request):
-    return render(request, "Home/LatestNewz.html")
+    news = News.objects.filter(status='PUBLISH')
+    return render(request, "Home/LatestNewz.html",{"news":news})
 
 # Admin Dashbord's
 def dashboard(request):
@@ -130,22 +136,19 @@ def AddNews(request):
     categories = Category.objects.all()
 
     if request.method == 'POST':
-        form = NewsForm(request.POST)  # Bind form for content field
+        form = NewsForm(request.POST, request.FILES)  # ✅ Include request.FILES
 
-        if form.is_valid():  # ✅ Validate form before accessing cleaned_data
-            content = form.cleaned_data.get("content")  # ✅ Correct way to access cleaned data
+        if form.is_valid():
+            # Extract cleaned form data
+            content = form.cleaned_data.get("content")
+            title = form.cleaned_data.get("title")
+            sub_title = form.cleaned_data.get("sub_title")
+            cat = form.cleaned_data.get("category")
+            author = form.cleaned_data.get("author")
+            status = form.cleaned_data.get("status")
+            news_image = form.cleaned_data.get("news_image")  # ✅ Use cleaned_data
 
-            # Manually retrieve other fields
-            title = request.POST.get("title")
-            sub_title = request.POST.get("sub_title")
-            cat = request.POST.get("category")
-            catOBJ = Category.objects.get(id=cat)  # Fetch category object
-            author = request.POST.get("author")
-            status = request.POST.get("status")
-            if 'news_image' in request.FILES:
-                news_image = request.FILES['news_image']
-            else:
-                news_image = None   # Handle file uploads safely
+            catOBJ = Category.objects.get(id=cat.id)  # Fetch category object
 
             # Create and save the news entry
             news = News(
@@ -153,7 +156,7 @@ def AddNews(request):
                 sub_title=sub_title,
                 category=catOBJ,
                 author=author,
-                content=content,  # ✅ Corrected content retrieval
+                content=content,
                 status=status,
                 news_image=news_image,
             )
@@ -163,7 +166,6 @@ def AddNews(request):
             return redirect("addnews")
         else:
             messages.error(request, "Form validation failed. Please check your input.")
-
     else:
         form = NewsForm()
 
