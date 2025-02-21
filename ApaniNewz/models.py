@@ -58,6 +58,8 @@ class News(models.Model):
             return News.objects.filter(category = category_id)
          else:
               return News.objects.all()
+         
+    
 
 class Profile(models.Model):
     GENDER_CHOICES = [

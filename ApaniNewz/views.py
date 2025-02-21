@@ -146,7 +146,11 @@ def AddNews(request):
             cat = form.cleaned_data.get("category")
             author = form.cleaned_data.get("author")
             status = form.cleaned_data.get("status")
-            news_image = form.cleaned_data.get("news_image")  # ✅ Use cleaned_data
+            # news_image = form.cleaned_data.get("news_image")  # ✅ Use cleaned_data
+            if 'news_image' in request.FILES:
+                news_image = request.FILES['news_image']
+            else:
+                news_image = None  # Handle as needed, maybe a default image
 
             catOBJ = Category.objects.get(id=cat.id)  # Fetch category object
 
@@ -225,15 +229,47 @@ def ProfilePage(request):
 
 def PostArticle(request):
     cate = Category.objects.all()
-    if request.method == "POST":
-        form = NewsForm(request.POST, request.FILES, user=request.user)
+    if request.method == 'POST':
+        form = NewsForm(request.POST, request.FILES)  # ✅ Include request.FILES
+
         if form.is_valid():
-            article = form.save(commit=False)
-            article.author = request.user  # Save the logged-in user as the author
-            article.save()
-            return redirect('success_page')  # Change this to your success page
+            # Extract cleaned form data
+            content = form.cleaned_data.get("content")
+            title = form.cleaned_data.get("title")
+            sub_title = form.cleaned_data.get("sub_title")
+            cat = form.cleaned_data.get("category")
+            status = form.cleaned_data.get("status")
+            news_image = form.cleaned_data.get("news_image")  # ✅ Use cleaned_data
+
+            # Get the logged-in user's full name
+            author_name = f"{request.user.first_name} {request.user.last_name}".strip()
+
+            catOBJ = Category.objects.get(id=cat.id)  # Fetch category object
+            n = form.save(commit=False)
+            # n.save()
+            # Create and save the news entry
+            news = News(
+                title=title,
+                sub_title=sub_title,
+                category=catOBJ,
+                author=author_name,  # ✅ Set author's name from logged-in user
+                content=content,
+                status=status,
+                news_image=news_image,
+            )
+            news = form.save(commit=False)
+            news.save()
+
+            messages.success(request, "News/Article added successfully!")
+            return redirect("post_article")
+        else:
+            messages.error(request, "Form validation failed. Please check your input.")
     else:
-        form = NewsForm(user=request.user)
+        # Prepopulate author field with logged-in user's name
+        initial_data = {
+            "author": f"{request.user.first_name} {request.user.last_name}".strip()
+        }
+        form = NewsForm(initial=initial_data)
         
     context = {
         "cate":cate,
