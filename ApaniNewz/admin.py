@@ -7,7 +7,7 @@ from .models import Category, Contact, News, Profile, Registration,Comment
 # Register your models here.
 @admin.register(Registration)
 class UserModelAdmin(admin.ModelAdmin):
-    ist_display = ('first_name','last_name','username', 'email','phone', 'profile_image','password','confirm_password')
+    ist_display = ('first_name','last_name','username', 'email','phone', 'profile_image','password','confirm_password','enrollment_number', 'role')
 
 
 @admin.register(Category)

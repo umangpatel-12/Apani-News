@@ -12,12 +12,12 @@
                 {% include 'Alert/alert.html' %}
                 <form method="post" action="{% url 'registration' %}" enctype="multipart/form-data">
                   {% csrf_token %}
+
                   <div class="d-flex align-items-center mb-3 pb-1">
-                    {% comment %} <i class="fas fa-user-plus fa-2x me-3" style="color: #ff6219;"></i> {% endcomment %}
-                    <span class="h1 fw-bold mb-0 align-items-center" style="left: 10px;">Registration</span>
+                    <span class="h1 fw-bold mb-0 align-items-center">Registration</span>
                   </div>
 
-                  <!-- First Name and Last Name Row -->
+                  <!-- First Name and Last Name -->
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-outline mb-4">
@@ -35,20 +35,35 @@
                     </div>
                   </div>
 
-                  <div class="form-outline mb-4">
-                    {{ form.username.label_tag }}
-                    {{ form.username }}
-                    <div class="text-danger">{{ form.username.errors }}</div>
+                  <!-- Username and Role -->
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-outline mb-4">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                        <div class="text-danger">{{ form.username.errors }}</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-outline mb-4">
+                        {{ form.role.label_tag }}
+                        {{ form.role }}
+                        <div class="text-danger">{{ form.role.errors }}</div>
+                      </div>
+                    </div>
                   </div>
 
+                  <!-- Email -->
                   <div class="form-outline mb-4">
                     {{ form.email.label_tag }}
                     {{ form.email }}
                     <div class="text-danger">{{ form.email.errors }}</div>
                   </div>
 
+                  {% if 'enrollment_number' in form.fields %}
                   <div class="row">
                     <div class="col-md-6">
+                      <!-- Phone -->
                       <div class="form-outline mb-4">
                         {{ form.phone.label_tag }}
                         {{ form.phone }}
@@ -56,22 +71,32 @@
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <div class="form-outline mb-4">
-                        {{ form.enrollment_number.label_tag }}
-                        {{ form.enrollment_number }}
-                        <div class="text-danger">{{ form.enrollment_number.errors }}</div>
-                      </div>
+                      <!-- Enrollment Number (Only for Students) -->
+                      
+                        <div class="form-outline mb-4">
+                          {{ form.enrollment_number.label_tag }}
+                          {{ form.enrollment_number }}
+                          <div class="text-danger">{{ form.enrollment_number.errors }}</div>
+                        </div>
                     </div>
                   </div>
+                  {% else %}
+                  <div class="form-outline mb-4">
+                    {{ form.phone.label_tag }}
+                    {{ form.phone }}
+                    <div class="text-danger">{{ form.phone.errors }}</div>
+                  </div>
+                  {% endif %}
+                  
 
+                  <!-- Profile Image -->
                   <div class="form-outline mb-4">
                     {{ form.profile_image.label_tag }}
                     {{ form.profile_image }}
-                    {% if errors.profile_image %}
-                      <small class="text-danger">{{ errors.profile_image }}</small>
-                    {% endif %}
+                    <div class="text-danger">{{ form.profile_image.errors }}</div>
                   </div>
 
+                  <!-- Password and Confirm Password -->
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-outline mb-4">
@@ -88,10 +113,13 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- Submit Button -->
                   <div class="pt-1 mb-4">
-                    <button class="btn btn-dark btn-lg btn-block" name="submit" id="submit" type="submit">Register</button>
+                    <button class="btn btn-dark btn-lg btn-block" type="submit">Register</button>
                   </div>
 
+                  <!-- Login Link -->
                   <p class="mb" style="color: rgb(0, 0, 0);">
                     Already have an account? <a href="{% url 'login' %}" style="color: #393f81;">Login here</a>
                   </p>

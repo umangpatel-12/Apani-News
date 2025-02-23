@@ -64,7 +64,7 @@
                 <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
                   <!-- sticky -->
                   <div class="sticky-logo">
-                    <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt="" /></a>
+                    <a href="index.html"><img src="{% static 'assets/img/logo/logos.png' %}" alt="" height="80px" width="160px" style="margin-top: -15px;"/></a>
                   </div>
                   <!-- Main-menu -->
                   {% comment %} <div class="main-menu d-none d-md-block">
@@ -123,23 +123,7 @@
                         <li class="nav-item {% block contact_active %}{% endblock contact_active %}">
                           <a href="{% url 'contact' %}" class="nav-link">Contact</a>
                         </li>
-                        {% comment %} <li>
-                          <a href="#" class="nav-link">Pages</a>
-                          <ul class="submenu">
-                            <li>
-                              <a href="elements.html" class="nav-link">Element</a>
-                            </li>
-                            <li>
-                              <a href="blog.html" class="nav-link">Blog</a>
-                            </li>
-                            <li>
-                              <a href="single-blog.html" class="nav-link">Blog Details</a>
-                            </li>
-                            <li>
-                              <a href="details.html" class="nav-link">Categori Details</a>
-                            </li>
-                          </ul>
-                        </li> {% endcomment %}
+                       
                       </ul>
                     </nav>
                   </div>

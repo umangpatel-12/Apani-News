@@ -12,6 +12,13 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 # Create your models here.
 class Registration(AbstractUser):
+
+    ROLE_CHOICES = [
+        ('Choose Role', 'Choose Role'),
+        ('Student', 'Student'),
+        ('Faculty/Staff', 'Faculty/Staff'),
+    ]
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=50, unique=True)
@@ -19,6 +26,7 @@ class Registration(AbstractUser):
     phone = models.CharField(max_length=10, null=True)
     profile_image = models.ImageField(upload_to='media/profile/')
     enrollment_number = models.CharField(max_length=12, unique=True)  # Add unique enrollment number
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Choose Role')  # Dropdown list
     password = models.CharField(max_length=128)
     confirm_password = models.CharField(max_length=128)
 

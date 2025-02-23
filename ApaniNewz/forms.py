@@ -37,6 +37,21 @@ class LoginForm(forms.Form):
         return email
 
 class RegistrationForm(forms.ModelForm):
+    ROLE_CHOICES = [
+        ('Choose Role', 'Choose Role'),
+        ('Student', 'Student'),
+        ('Faculty/Staff', 'Faculty/Staff'),
+    ]
+    role = forms.ChoiceField(
+        choices=ROLE_CHOICES,
+        widget=forms.Select(attrs={
+            'id': 'role',
+            'name': 'role',
+            'class': 'form-select form-select-lg',
+            'onchange': 'this.form.submit();'
+        })
+    )
+
     enrollment_number = forms.CharField(
         widget=forms.TextInput(attrs={
             'id': 'enrollment_number',
@@ -45,7 +60,7 @@ class RegistrationForm(forms.ModelForm):
             'placeholder': 'Enrollment Number'
         }),
         max_length=12,
-        required=True
+        required= False
     )
     username = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -127,7 +142,44 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 'phone', 'profile_image', 'enrollment_number']
+        fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 'phone', 'profile_image', 'enrollment_number', 'role']
+
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+
+    #     # Remove enrollment_number if the selected role is Faculty/Staff
+    #     if self.data.get('role') == 'Faculty/Staff':
+    #         self.fields.pop('enrollment_number')
+
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     role = cleaned_data.get('role')
+    #     enrollment_number = cleaned_data.get('enrollment_number')
+
+    #     # If role is "Student", enrollment_number is required
+    #     if role == 'Student' and not enrollment_number:
+    #         self.add_error('enrollment_number', 'Enrollment number is required for students.')
+
+    #     return cleaned_data
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Remove enrollment_number if role is Faculty/Staff
+        if 'role' in self.data and self.data['role'] == 'Faculty/Staff':
+            self.fields.pop('enrollment_number')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        role = cleaned_data.get('role')
+        enrollment_number = cleaned_data.get('enrollment_number')
+
+        # If role is "Student", enrollment_number is required
+        if role == 'Student' and not enrollment_number:
+            self.add_error('enrollment_number', 'Enrollment number is required for students.')
+
+        return cleaned_data
+
 
     def clean_username(self):
         username = self.cleaned_data.get('username')

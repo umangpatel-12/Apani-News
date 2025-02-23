@@ -73,26 +73,55 @@ def register_view(request):
     if request.user.is_authenticated:
         return redirect('index')
 
+    # if request.method == 'POST':
+    #     form = RegistrationForm(request.POST, request.FILES)
+        
+    #     if form.is_valid():
+    #         user = form.save(commit=False)  # Save user but don't commit yet
+    #         user.set_password(form.cleaned_data['password'])  # Hash password
+    #         user.is_active = True  # Activate user immediately
+    #         user.save()
+
+    #         # Get role and enrollment number
+    #         role = form.cleaned_data['role']
+    #         enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
+
+    #         # Save additional details in Profile model
+    #         Profile.objects.create(
+    #             user=user,
+    #             enrollment_number=enrollment_number,  # Only save if Student
+    #             phone=form.cleaned_data['phone'],
+    #             profile_image=form.cleaned_data.get('profile_image')
+    #         )
+
+    #         messages.success(request, "Your account was successfully created.")
+    #         login(request, user)
+    #         return redirect('index')
+
+    # else:
+    #     form = RegistrationForm()
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
         
         if form.is_valid():
-            user = form.save(commit=False)  # Save user but don't commit yet
-            user.set_password(form.cleaned_data['password'])  # Hash password
-            user.is_active = True  # Activate user immediately (change if using OTP)
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.is_active = True
             user.save()
 
-            # Save additional fields in Profile model
-            cost =Profile.objects.create(
+            role = form.cleaned_data['role']
+            enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
+
+            Profile.objects.create(
                 user=user,
-                enrollment_number=form.cleaned_data['enrollment_number'],
+                enrollment_number=enrollment_number,
                 phone=form.cleaned_data['phone'],
                 profile_image=form.cleaned_data.get('profile_image')
             )
-            cost.save()
+
             messages.success(request, "Your account was successfully created.")
-            login(request, user)  # Log in the user after registration
-            return redirect('index')  # Redirect to homepage after successful registration
+            login(request, user)
+            return redirect('index')
 
     else:
         form = RegistrationForm()
