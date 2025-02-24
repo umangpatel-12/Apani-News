@@ -424,6 +424,21 @@ class UserUpdate(forms.ModelForm):
         fields = ['first_name', 'last_name', 'username', 'email']
 
 class ProfileUpdateForm(forms.ModelForm):
+    ROLE_CHOICES = [
+        ('Student', 'Student'),
+        ('Faculty/Staff', 'Faculty/Staff'),
+    ]
+    role = forms.ChoiceField(
+        choices=ROLE_CHOICES,
+        widget=forms.Select(attrs={
+            'id': 'role',
+            'name': 'role',
+            'class': 'form-select form-select-lg',
+            'onchange': 'this.form.submit();'
+        }),
+        disabled=True
+    )
+    
     phone = forms.CharField(
         widget=forms.TextInput(attrs={
             'id': 'phone',
@@ -488,5 +503,7 @@ class ProfileUpdateForm(forms.ModelForm):
     )
     class Meta:
         model = Profile
-        fields = ['phone', 'gender','enrollment_number', 'profile_image', 'bio', 'location']
+        fields = ['phone', 'gender','enrollment_number','role' ,'profile_image', 'bio', 'location']
+
+    
 

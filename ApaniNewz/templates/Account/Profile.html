@@ -150,14 +150,18 @@
                             </div>
                         </div>
                 
-                        <!-- Profile Image -->
                         <div class="row mb-3">
-                            <div class="col-md-3">{{ p_form.profile_image.label_tag }}</div>
-                            <div class="col-md-9">
-                                {{ p_form.profile_image }}
-                                <div class="text-danger">{{ p_form.profile_image.errors }}</div>
-                            </div>
-                        </div>
+                          <div class="col-md-6">
+                            {{ p_form.profile_image.label_tag }}
+                            {{ p_form.profile_image }}
+                            <div class="text-danger">{{ p_form.profile_image.errors }}</div>
+                          </div>
+                          <div class="col-md-6">
+                            {{ p_form.role.label_tag }}
+                            {{ p_form.role }}
+                            <div class="text-danger">{{ p_form.role.errors }}</div>
+                          </div>
+                      </div>
                 
                         <!-- Bio -->
                         <div class="row mb-3">

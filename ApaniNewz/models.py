@@ -25,7 +25,7 @@ class Registration(AbstractUser):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=10, null=True)
     profile_image = models.ImageField(upload_to='media/profile/')
-    enrollment_number = models.CharField(max_length=12, unique=True)  # Add unique enrollment number
+    enrollment_number = models.CharField(max_length=12, unique=True,null=True, blank=True)  # Add unique enrollment number
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Choose Role')  # Dropdown list
     password = models.CharField(max_length=128)
     confirm_password = models.CharField(max_length=128)
@@ -75,11 +75,17 @@ class Profile(models.Model):
         ('F', 'Female'),
         ('O', 'Other'),
     ]
+    ROLE_CHOICES = [
+        ('Choose Role', 'Choose Role'),
+        ('Student', 'Student'),
+        ('Faculty/Staff', 'Faculty/Staff'),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=15, blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    enrollment_number = models.CharField(max_length=12, unique=True)  # Add unique enrollment number
-    profile_image = models.ImageField(upload_to='media/profile/', blank=True, null=True)
+    enrollment_number = models.CharField(max_length=12, null=True, blank=True,unique=True)  # Add unique enrollment number
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Choose Role')  # Dropdown list
+    profile_image = models.ImageField(upload_to='media/profile/')
     bio = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)

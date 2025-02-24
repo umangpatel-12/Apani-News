@@ -73,36 +73,9 @@ def register_view(request):
     if request.user.is_authenticated:
         return redirect('index')
 
-    # if request.method == 'POST':
-    #     form = RegistrationForm(request.POST, request.FILES)
-        
-    #     if form.is_valid():
-    #         user = form.save(commit=False)  # Save user but don't commit yet
-    #         user.set_password(form.cleaned_data['password'])  # Hash password
-    #         user.is_active = True  # Activate user immediately
-    #         user.save()
-
-    #         # Get role and enrollment number
-    #         role = form.cleaned_data['role']
-    #         enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
-
-    #         # Save additional details in Profile model
-    #         Profile.objects.create(
-    #             user=user,
-    #             enrollment_number=enrollment_number,  # Only save if Student
-    #             phone=form.cleaned_data['phone'],
-    #             profile_image=form.cleaned_data.get('profile_image')
-    #         )
-
-    #         messages.success(request, "Your account was successfully created.")
-    #         login(request, user)
-    #         return redirect('index')
-
-    # else:
-    #     form = RegistrationForm()
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
-        
+
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
@@ -112,9 +85,10 @@ def register_view(request):
             role = form.cleaned_data['role']
             enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
 
+            # Save profile with or without enrollment_number
             Profile.objects.create(
                 user=user,
-                enrollment_number=enrollment_number,
+                enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
                 phone=form.cleaned_data['phone'],
                 profile_image=form.cleaned_data.get('profile_image')
             )
@@ -125,8 +99,9 @@ def register_view(request):
 
     else:
         form = RegistrationForm()
-    
+
     return render(request, "Home/Registration.html", {'form': form})
+
 
 def News_Detail(request):
     return render(request, "Home/News_Details.html")

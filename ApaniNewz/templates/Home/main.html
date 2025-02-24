@@ -10,7 +10,6 @@
     <link rel="manifest" href="site.webmanifest" />
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %} " />
 
-    
     <!-- CSS here -->
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %} " />
     <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.min.css' %} " />
@@ -24,35 +23,23 @@
     <link rel="stylesheet" href="{% static 'assets/css/slick.css' %} " />
     <link rel="stylesheet" href="{% static 'assets/css/nice-select.css' %} " />
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %} " />
-    <style>
-      {% comment %} /* Highlight the active item */
-      .nav-item.active .nav-link {
-        color: white;
-        background-color:rgb(232, 243, 255);
-        border-radius: 5px;
-        padding: 8px 15px;
-      } {% endcomment %}
-      
-      .nav-item.active .nav-link {
-        color: red; /* Change text color for the active menu item */
-    }
-    </style>
+    <style></style>
   </head>
 
   <body>
     {% include 'Alert/alert.html' %}
+
     <header>
       <!-- Header Start -->
       <div class="header-area">
         <div class="main-header">
-          
           <div class="header-mid d-none d-md-block">
             <div class="container">
               <div class="row d-flex align-items-center">
                 <!-- Logo -->
                 <div class="col-xl-3 col-lg-3 col-md-3">
                   <div class="logo">
-                    <a href="index.html"><img src="{% static 'assets/img/logo/logos.png' %}" alt="" height="85px" width="170px"/></a>
+                    <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/logos.png' %}" alt="" height="85px" width="170px" /></a>
                   </div>
                 </div>
               </div>
@@ -64,7 +51,7 @@
                 <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
                   <!-- sticky -->
                   <div class="sticky-logo">
-                    <a href="index.html"><img src="{% static 'assets/img/logo/logos.png' %}" alt="" height="80px" width="160px" style="margin-top: -15px;"/></a>
+                    <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/logos.png' %}" alt="" height="80px" width="160px" style="margin-top: -15px;" /></a>
                   </div>
                   <!-- Main-menu -->
                   {% comment %} <div class="main-menu d-none d-md-block">
@@ -108,22 +95,26 @@
                   <div class="main-menu">
                     <nav>
                       <ul id="navigation">
-                        <li class="nav-item {% block home_active %}{% endblock home_active %}">
+                        <li class="nav-item {% block home_active %}
+                          {% endblock %}">
                           <a href="{% url 'index' %}" class="nav-link">Home</a>
                         </li>
-                        <li class="nav-item {% block category_active %}{% endblock category_active %}">
+                        <li class="nav-item {% block category_active %}
+                          {% endblock %}">
                           <a href="{% url 'category' %}" class="nav-link">Category</a>
                         </li>
-                        <li class="nav-item {% block latestnews_active %}{% endblock latestnews_active %}">
+                        <li class="nav-item {% block latestnews_active %}
+                          {% endblock %}">
                           <a href="{% url 'latestnews' %}" class="nav-link">Latest News</a>
                         </li>
-                        <li class="nav-item {% block about_active %}{% endblock about_active %}">
+                        <li class="nav-item {% block about_active %}
+                          {% endblock %}">
                           <a href="{% url 'about' %}" class="nav-link">About</a>
                         </li>
-                        <li class="nav-item {% block contact_active %}{% endblock contact_active %}">
+                        <li class="nav-item {% block contact_active %}
+                          {% endblock %}">
                           <a href="{% url 'contact' %}" class="nav-link">Contact</a>
                         </li>
-                       
                       </ul>
                     </nav>
                   </div>
@@ -298,43 +289,43 @@
     <!-- JS here -->
 
     <!-- All JS Custom Plugins Link Here here -->
-    <script src="./{% static 'assets/js/vendor/modernizr-3.5.0.min.js' %} "></script>
+    <script src="{% static 'assets/js/vendor/modernizr-3.5.0.min.js' %} "></script>
     <!-- Jquery, Popper, Bootstrap -->
-    <script src="./{% static 'assets/js/vendor/jquery-1.12.4.min.js' %} "></script>
-    <script src="./{% static 'assets/js/popper.min.js' %} "></script>
-    <script src="./{% static 'assets/js/bootstrap.min.js' %} "></script>
+    <script src="{% static 'assets/js/vendor/jquery-1.12.4.min.js' %} "></script>
+    <script src="{% static 'assets/js/popper.min.js' %} "></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %} "></script>
     <!-- Jquery Mobile Menu -->
-    <script src="./{% static 'assets/js/jquery.slicknav.min.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.slicknav.min.js' %} "></script>
 
     <!-- Jquery Slick , Owl-Carousel Plugins -->
-    <script src="./{% static 'assets/js/owl.carousel.min.js' %} "></script>
-    <script src="./{% static 'assets/js/slick.min.js' %} "></script>
+    <script src="{% static 'assets/js/owl.carousel.min.js' %} "></script>
+    <script src="{% static 'assets/js/slick.min.js' %} "></script>
     <!-- Date Picker -->
-    <script src="./{% static 'assets/js/gijgo.min.js' %} "></script>
+    <script src="{% static 'assets/js/gijgo.min.js' %} "></script>
     <!-- One Page, Animated-HeadLin -->
-    <script src="./{% static 'assets/js/wow.min.js' %} "></script>
-    <script src="./{% static 'assets/js/animated.headline.js' %} "></script>
-    <script src="./{% static 'assets/js/jquery.magnific-popup.js' %} "></script>
+    <script src="{% static 'assets/js/wow.min.js' %} "></script>
+    <script src="{% static 'assets/js/animated.headline.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.magnific-popup.js' %} "></script>
 
     <!-- Breaking New Pluging -->
-    <script src="./{% static 'assets/js/jquery.ticker.js' %} "></script>
-    <script src="./{% static 'assets/js/site.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.ticker.js' %} "></script>
+    <script src="{% static 'assets/js/site.js' %} "></script>
 
     <!-- Scrollup, nice-select, sticky -->
-    <script src="./{% static 'assets/js/jquery.scrollUp.min.js' %} "></script>
-    <script src="./{% static 'assets/js/jquery.nice-select.min.js' %} "></script>
-    <script src="./{% static 'assets/js/jquery.sticky.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.scrollUp.min.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.nice-select.min.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.sticky.js' %} "></script>
 
     <!-- contact js -->
-    <script src="./{% static 'assets/js/contact.js' %} "></script>
-    <script src="./{% static 'assets/js/jquery.form.js' %} "></script>
-    <script src="./{% static 'assets/js/jquery.validate.min.js' %} "></script>
-    <script src="./{% static 'assets/js/mail-script.js' %} "></script>
-    <script src="./{% static 'assets/js/jquery.ajaxchimp.min.js' %} "></script>
+    <script src="{% static 'assets/js/contact.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.form.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.validate.min.js' %} "></script>
+    <script src="{% static 'assets/js/mail-script.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.ajaxchimp.min.js' %} "></script>
 
     <!-- Jquery Plugins, main Jquery -->
-    <script src="./{% static 'assets/js/plugins.js' %} "></script>
-    <script src="./{% static 'assets/js/main.js' %} "></script>
+    <script src="{% static 'assets/js/plugins.js' %} "></script>
+    <script src="{% static 'assets/js/main.js' %} "></script>
     <style>
       /* Typing animation */
       .typing-animation {
