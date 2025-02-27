@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -102,9 +103,10 @@ def register_view(request):
 
     return render(request, "Home/Registration.html", {'form': form})
 
-
-def News_Detail(request):
-    return render(request, "Home/News_Details.html")
+@login_required(login_url='login')
+def News_Detail(request,id):
+    article = News.objects.filter(id = id)
+    return render(request, "Home/News_Details.html",{'article':article})
 
 def Contact(request):
     return render(request, "Home/Contact.html")
