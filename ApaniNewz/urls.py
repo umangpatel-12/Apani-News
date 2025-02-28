@@ -21,6 +21,8 @@ urlpatterns = [
     # path('Edit-Profile', views.EditProfile, name= 'edit_profile'),
     path('Post-Article', views.PostArticle, name= 'post_article'),
     path('Posts', views.Posts, name= 'posts'),
+    path('like/<int:id>/', views.like_post, name='like_post'),
+    path('unlike/<int:id>/', views.unlike_post, name='unlike_post'),
 
 
 

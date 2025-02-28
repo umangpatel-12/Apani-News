@@ -12,7 +12,7 @@
          {% endfor %} {% endcomment %}
          <div class="row">
             <div class="col-lg-8 posts-list">
-               {% for a in article %}
+               {% for a in news %}
                
                <div class="single-post">
                   <div class="feature-img">
@@ -34,18 +34,9 @@
                         {% comment %} <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li> {% endcomment %}
                      </ul>
                      
-                     <p class="excert">
-                        {{a.content}}
+                     <p class="excert" style="text-align: justify;">
+                        {{ a.content | safe }}
                      </p>
-                    
-                     {% comment %} <div class="quote-wrapper">
-                        <div class="quotes">
-                           MCSE boot camps have its supporters and its detractors. Some people do not understand why you
-                           should have to spend money on boot camp when you can get the MCSE study materials yourself at
-                           a fraction of the camp price. However, who has the willpower to actually sit through a
-                           self-imposed MCSE training.
-                        </div>
-                     </div> {% endcomment %}
                   </div>
                </div>
                {% endfor %}
@@ -53,17 +44,49 @@
 
                <div class="navigation-top">
                   <div class="d-sm-flex justify-content-between text-center">
-                     <p class="like-info"><span class="align-middle"><i class="fa fa-heart"></i></span> Lily and 4
-                        people like this</p>
+
+
+
+                    
+                    
+                    {% comment %} <form action="unlike_post" method="post">
+                     {% csrf_token %}
+                     <button type="submit"><span class="fas fa-heart"></span></button>
+                    </form>
+                    <form action="like_post" method="post">
+                     {% csrf_token %}
+                     <button type="submit"><span class="far fa-heart"></span></button>
+                    </form> {% endcomment %}
+
+                    {% if article.id %}
+                      {% if like_this_article %}
+                        <form action="{% url 'unlike_post' article.id %}" method="post">
+                        {% csrf_token %}
+                           <button type="submit" class="">
+                              <span class="fas fa-heart"></span>
+                           </button>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'like_post' article.id %}" method="post">
+                        {% csrf_token %}
+                           <button type="submit">
+                              <span class="far fa-heart"></span>
+                           </button>
+                        </form>
+                        {% endif %}
+                     {% else %}
+                        <p>Error: Article ID is missing.</p>
+                     {% endif %}
+
+
+
+                    
                      <div class="col-sm-4 text-center my-2 my-sm-0">
-                        <!-- <p class="comment-count"><span class="align-middle"><i class="fa fa-comment"></i></span> 06 Comments</p> -->
+                        <p class="comment-count">
+                           <span class="align-middle">
+                              <i class="fa fa-comment"></i>
+                           </span> 06 Comments</p>
                      </div>
-                     <ul class="social-icons">
-                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="#"><i class="fab fa-dribbble"></i></a></li>
-                        <li><a href="#"><i class="fab fa-behance"></i></a></li>
-                     </ul>
                   </div>
                   <div class="navigation-area">
                      <div class="row">

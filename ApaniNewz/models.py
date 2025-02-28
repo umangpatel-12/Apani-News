@@ -53,7 +53,7 @@ class News(models.Model):
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS,max_length=255)
     news_image = models.ImageField(upload_to="media/news/")
-    likes = models.ManyToManyField(User, related_name='News_blogs')
+    likes = models.ManyToManyField(User, related_name='Post_likes',blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
@@ -67,7 +67,18 @@ class News(models.Model):
          else:
               return News.objects.all()
          
-    
+    def total_likes(self):
+        return self.likes.count()
+         
+class Likes(models.Model):
+    article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes')    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    # is_liked = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('article', 'user')
+
 
 class Profile(models.Model):
     GENDER_CHOICES = [

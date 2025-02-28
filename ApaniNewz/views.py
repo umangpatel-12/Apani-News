@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
 from ApaniNewz.forms import CategoryForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, UserUpdate
-from .models import Category, News, Registration, Profile
+from .models import Category, Likes, News, Registration, Profile
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -103,10 +104,73 @@ def register_view(request):
 
     return render(request, "Home/Registration.html", {'form': form})
 
+# @login_required(login_url='login')
+# def News_Detail(request,id):
+#     article = News.objects.filter(id = id)
+#     try:
+#         Likes.objects.get(user = request.user,post_id=id)
+#         like_this_article = True
+#     except Exception as e:
+#         like_this_article = False
+    
+#     return render(request, "Home/News_Details.html",{'article':article,'like_this_article':like_this_article})
+
+# @login_required(login_url='login')
+# def News_Detail(request, id):
+#     art = get_object_or_404(News, id=id)  # Fetch a single News object
+#     article = News.objects.filter(id = id)
+    
+#     like_this_article = Likes.objects.filter(user=request.user, article_id=id).exists()  # Use 'article_id' if ForeignKey
+    
+#     return render(request, "Home/News_Details.html", {'article': article, 'like_this_article': like_this_article,'art':art})
 @login_required(login_url='login')
-def News_Detail(request,id):
-    article = News.objects.filter(id = id)
-    return render(request, "Home/News_Details.html",{'article':article})
+def News_Detail(request, id):
+    news = News.objects.filter(id=id)
+    article = get_object_or_404(News, id=id)  # Ensure a single object is retrieved
+    like_this_article = Likes.objects.filter(user=request.user, article=article).exists()  # Check if liked
+    
+    return render(request, "Home/News_Details.html", {'article': article, 'like_this_article': like_this_article,'news':news})
+
+# @login_required
+# def like_post(request, id):
+#     if request.method == "POST":
+#         try:
+#             # Check if the user already liked the post
+#             like, created = Likes.objects.get_or_create(user=request.user, post_id=id)
+#         except Exception as e:
+#             print(f"Error: {e}")  # Debugging
+#         return redirect(request.META.get('HTTP_REFERER', 'details'))
+    
+#     return redirect('details')  # Handle non-POST requests gracefully
+
+# @login_required
+# def unlike_post(request, id):
+#     if request.method == "POST":
+#         try:
+#             like = Likes.objects.get(user=request.user, post_id=id)
+#             like.delete()
+#         except Likes.DoesNotExist:
+#             pass  # If the like does not exist, do nothing
+#         return redirect(request.META.get('HTTP_REFERER', 'details'))
+#     return redirect('details')  # Handle non-POST requests gracefully
+
+
+@login_required(login_url='login')
+def like_post(request, id):
+    if request.method == "POST":
+        article = get_object_or_404(News, id=id)
+        Likes.objects.get_or_create(user=request.user, article=article)
+        return redirect(request.META.get('HTTP_REFERER') or 'details')
+    return redirect('details', id=id)
+
+@login_required(login_url='login')
+def unlike_post(request, id):
+    if request.method == "POST":
+        article = get_object_or_404(News, id=id)
+        Likes.objects.filter(user=request.user, article=article).delete()
+        return redirect(request.META.get('HTTP_REFERER') or 'details')
+    return redirect('details', id=id)
+
 
 def Contact(request):
     return render(request, "Home/Contact.html")

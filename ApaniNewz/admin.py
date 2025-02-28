@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Category, Contact, News, Profile, Registration,Comment
+from .models import Category, Contact, Likes, News, Profile, Registration,Comment
 
 # Register your models here.
 @admin.register(Registration)
@@ -13,6 +13,10 @@ class UserModelAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryModelAdmin(admin.ModelAdmin):
     list_display = ('id','category_name')
+
+@admin.register(Likes)
+class LikesModelAdmin(admin.ModelAdmin):
+    list_display = ('article', 'user', 'created')
 
 # Register your models here.
 @admin.register(News)
