@@ -131,29 +131,6 @@ def News_Detail(request, id):
     
     return render(request, "Home/News_Details.html", {'article': article, 'like_this_article': like_this_article,'news':news})
 
-# @login_required
-# def like_post(request, id):
-#     if request.method == "POST":
-#         try:
-#             # Check if the user already liked the post
-#             like, created = Likes.objects.get_or_create(user=request.user, post_id=id)
-#         except Exception as e:
-#             print(f"Error: {e}")  # Debugging
-#         return redirect(request.META.get('HTTP_REFERER', 'details'))
-    
-#     return redirect('details')  # Handle non-POST requests gracefully
-
-# @login_required
-# def unlike_post(request, id):
-#     if request.method == "POST":
-#         try:
-#             like = Likes.objects.get(user=request.user, post_id=id)
-#             like.delete()
-#         except Likes.DoesNotExist:
-#             pass  # If the like does not exist, do nothing
-#         return redirect(request.META.get('HTTP_REFERER', 'details'))
-#     return redirect('details')  # Handle non-POST requests gracefully
-
 
 @login_required(login_url='login')
 def like_post(request, id):

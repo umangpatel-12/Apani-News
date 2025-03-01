@@ -4,6 +4,24 @@
 
 {% block main %}
 
+<style>
+   .heart-btn {
+      background: transparent; /* No background */
+      border: none; /* No border */
+      padding: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1; /* Ensure it's visible */
+  }
+  
+  .heart-btn:focus {
+      outline: none; /* Remove focus outline */
+  }
+  
+</style>
+
 <!--================Blog Area =================-->
    <section class="blog_area single-post-area section-padding">
       <div class="container">
@@ -62,16 +80,18 @@
                       {% if like_this_article %}
                         <form action="{% url 'unlike_post' article.id %}" method="post">
                         {% csrf_token %}
-                           <button type="submit" class="">
-                              <span class="fas fa-heart"></span>
+                           <button type="submit" class="heart-btn">
+                              <span class="fas fa-heart" style="color: red;font-size: 20px;"></span>
                            </button>
+                           <span style="font-size: 20px;">{{ article.total_likes }} Likes</span>
                         </form>
                         {% else %}
                         <form action="{% url 'like_post' article.id %}" method="post">
                         {% csrf_token %}
-                           <button type="submit">
-                              <span class="far fa-heart"></span>
+                           <button type="submit" class="heart-btn">
+                              <span class="far fa-heart" style="color: black;font-size: 20px;"></span>
                            </button>
+                           <span style="font-size:20px;">{{ article.total_likes }} Likes</span>
                         </form>
                         {% endif %}
                      {% else %}
@@ -82,10 +102,10 @@
 
                     
                      <div class="col-sm-4 text-center my-2 my-sm-0">
-                        <p class="comment-count">
+                        <p class="comment-count" style="font-size: 20px;">
                            <span class="align-middle">
-                              <i class="fa fa-comment"></i>
-                           </span> 06 Comments</p>
+                              <i class="fa fa-comment" style="font-size: 20px;"></i>
+                           </span > 06 Comments</p>
                      </div>
                   </div>
                   <div class="navigation-area">

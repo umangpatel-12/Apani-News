@@ -68,7 +68,8 @@ class News(models.Model):
               return News.objects.all()
          
     def total_likes(self):
-        return self.likes.count()
+        count = self.Post_likes.count()
+        return count
          
 class Likes(models.Model):
     article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes')    
