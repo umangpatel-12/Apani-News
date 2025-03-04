@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Category, Contact, Likes, News, Profile, Registration,Comment
+from .models import Category, Contact, Likes, News, Profile, Registration,Comment, SubComments
 
 # Register your models here.
 @admin.register(Registration)
@@ -27,9 +27,13 @@ class NewsModelAdmin(admin.ModelAdmin):
 class ProfileModelAdmin(admin.ModelAdmin):
     list_display = ('phone','gender','profile_image','bio', 'location','created','updated')
 
+@admin.register(SubComments)
+class SubCommentsModelAdmin(admin.ModelAdmin):
+    list_display = ("news", "comment", "user", "reply", "created")
+
 @admin.register(Comment)
 class CommentModelAdmin(admin.ModelAdmin):
-    list_display = ("news","comment","created","updated")
+    list_display = ("news","user","comment","created")
 
 @admin.register(Contact)
 class ContectModelAdmin(admin.ModelAdmin):

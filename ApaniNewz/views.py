@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
 from ApaniNewz.forms import CategoryForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, UserUpdate
-from .models import Category, Likes, News, Registration, Profile
+from .models import Category, Likes, News, Registration, Profile,Comment,SubComments
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -123,13 +123,52 @@ def register_view(request):
 #     like_this_article = Likes.objects.filter(user=request.user, article_id=id).exists()  # Use 'article_id' if ForeignKey
     
 #     return render(request, "Home/News_Details.html", {'article': article, 'like_this_article': like_this_article,'art':art})
+# @login_required(login_url='login')
+# def News_Detail(request, id):
+#     news = News.objects.filter(id=id)
+#     article = get_object_or_404(News, id=id)  # Ensure a single object is retrieved
+#     like_this_article = Likes.objects.filter(user=request.user, article=article).exists()  # Check if liked
+    
+#     comments = []
+#     comm = Comment.objects.filter(news=news)
+#     for cm in comm:
+#         comments.append([cm, SubComments.objects.filter(comment=cm)])
+    
+#     return render(request, "Home/News_Details.html", {'article': article, 'like_this_article': like_this_article,'news':news,'comments':comments})
 @login_required(login_url='login')
 def News_Detail(request, id):
     news = News.objects.filter(id=id)
-    article = get_object_or_404(News, id=id)  # Ensure a single object is retrieved
-    like_this_article = Likes.objects.filter(user=request.user, article=article).exists()  # Check if liked
-    
-    return render(request, "Home/News_Details.html", {'article': article, 'like_this_article': like_this_article,'news':news})
+    article = get_object_or_404(News, id=id)
+    like_this_article = Likes.objects.filter(user=request.user, article=article).exists()
+
+    # Fetch comments and their replies
+    comments = []
+    comm = Comment.objects.filter(news=article)
+    for cm in comm:
+        comments.append([cm, SubComments.objects.filter(comment=cm)])
+
+    # Handling form submission
+    if request.method == "POST":
+        if "comment_submit" in request.POST:  # New comment
+            text = request.POST.get("text", "").strip()
+            if text:
+                Comment.objects.create(user=request.user, news=article, text=text)
+                return redirect("details", id=id)
+
+        elif "reply_submit" in request.POST:  # New reply
+            text = request.POST.get("text", "").strip()
+            comment_id = request.POST.get("comment_id")
+            comment = get_object_or_404(Comment, id=comment_id)
+            if text:
+                SubComments.objects.create(user=request.user, comment=comment, text=text)
+                return redirect("details", id=id)
+
+    return render(request, "Home/News_Details.html", {
+        'article': article,
+        'news':news,
+        'like_this_article': like_this_article,
+        'comments': comments,
+    })
 
 
 @login_required(login_url='login')
