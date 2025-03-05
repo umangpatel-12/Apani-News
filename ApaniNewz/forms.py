@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import requests
 from django.core.exceptions import ValidationError
-from ApaniNewz.models import Profile, Registration,News,Category
+from ApaniNewz.models import Comment, Profile, Registration,News,Category, SubComments
 from ckeditor.widgets import CKEditorWidget
 
 class LoginForm(forms.Form):
@@ -505,5 +505,34 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['phone', 'gender','enrollment_number','role' ,'profile_image', 'bio', 'location']
 
+class CommentForm(forms.ModelForm):
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'id': 'comment',
+            'name': 'comment',
+            'rows': '2',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Write your comment here...'
+        }),
+    )
+
+    class Meta:
+        model = Comment
+        fields = ['comment']
+
+class SubCommentForm(forms.ModelForm):
+    reply = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'id': 'reply',
+            'name': 'reply',
+            'rows': '2',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Write your reply here...'
+        }),
     
+    )
+
+    class Meta:
+        model = SubComments
+        fields = ['reply']
 

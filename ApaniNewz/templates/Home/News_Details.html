@@ -165,14 +165,15 @@
                <div class="blog-author mt-4">
                   <div class="media">
                     <div class="media-body">
-                      <h5 class="mb-3">Leave a comment</h5>
-                      <form action="" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                           <textarea name="comment" id="comment" rows="2" class="form-control form-control-lg" placeholder="Write your comment..."></textarea>
-                        </div>
-                        <button type="submit" class="buttn">Post</button>
-                      </form>
+                        <h5 class="mb-3">Leave a comment</h5>
+                        <form action="{% url 'details' article.id %}" method="post">
+                           {% csrf_token %}
+                           <div class="form-group">
+                              <textarea name="comment" rows="2" class="form-control form-control-lg" placeholder="Write your comment..."></textarea>
+                              {% comment %} {{ form.comment }} {% endcomment %}
+                           </div>
+                           <button type="submit" class="buttn">Post</button>
+                        </form>                    
                     </div>
                   </div>
                 </div>
@@ -184,19 +185,19 @@
                      <div class="single-comment justify-content-between d-flex">
                         <div class="user justify-content-between d-flex">
                            <div class="thumb">
-                              <img src="{% static 'assets/img/comment/comment_1.png' %}" alt="">
+                              <img src="{{ comment.user.profile.profile_image.url }}" alt="" style="width: 65px; height: 65px; border-radius: 50%;">
                            </div>
-                           <div class="desc" style="margin-left: 10px;">
-                              <h5>@Rajesh</h5>
+                           <div class="desc" style="margin-left: 18px;">
+                              <h5>@{{comment.user.username}}</h5>
                               <p class="comment">
-                                 Multiply sea night grass fourth day sea lesser rule open subdue female fill which them
+                                 {{comment.comment}}
                               </p>
                               <div class="d-flex justify-content-between">
                                  <div class="d-flex align-items-center">
-                                    <p class="date">December 4, 2017 at 3:12 pm</p>
+                                    <p class="date">{{comment.created}}</p>
                                  </div>
                                  <div class="desc">
-                                    <a href="javascript:void(0);" class="btn-reply text-uppercase" style="font-weight: 500;color:silver;" onclick="toggleReplyForm()">Reply</a>
+                                    <a href="javascript:void(0);" class="btn-reply text-uppercase" style="font-weight: 500;color:silver;margin-left: 350px;display: flex;align-items: center;min-width: 80px;justify-content: flex-end;" onclick="toggleReplyForm()">Reply</a>
                                  </div>
                               </div>
                
@@ -206,19 +207,20 @@
                                     {% csrf_token %}
                                     <div class="form-group">
                                        <textarea name="comment" rows="2" class="form-control form-control-lg" placeholder="Write your reply..."></textarea>
+                                       {% comment %} {{ form.reply }} {% endcomment %}
                                     </div>
-                                    <button type="submit" class="buttn">Post</button>
+                                    <button type="submit" class="buttn">REPLY</button>
                                  </form>
                               </div>
-               
+                              {% comment %} End Reply Form {% endcomment %}
                            </div>
                         </div>
                      </div>
                   </div>
                </div>
                {% empty %}
-            <p>No comments yet. Be the first to comment!</p>
-            {% endfor %}
+               <p>No comments yet. Be the first to comment!</p>
+               {% endfor %}
                <script>
                   function toggleReplyForm() {
                      var replyForm = document.getElementById("reply-form");
@@ -226,6 +228,8 @@
                   }
                </script>
             </div>
+
+
             <div class="col-lg-4">
                <div class="blog_right_sidebar">
                   <aside class="single_sidebar_widget search_widget">
@@ -322,81 +326,6 @@
                            <p>01 Hours ago</p>
                         </div>
                      </div>
-                  </aside>
-                  <aside class="single_sidebar_widget tag_cloud_widget">
-                     <h4 class="widget_title">Tag Clouds</h4>
-                     <ul class="list">
-                        <li>
-                           <a href="#">project</a>
-                        </li>
-                        <li>
-                           <a href="#">love</a>
-                        </li>
-                        <li>
-                           <a href="#">technology</a>
-                        </li>
-                        <li>
-                           <a href="#">travel</a>
-                        </li>
-                        <li>
-                           <a href="#">restaurant</a>
-                        </li>
-                        <li>
-                           <a href="#">life style</a>
-                        </li>
-                        <li>
-                           <a href="#">design</a>
-                        </li>
-                        <li>
-                           <a href="#">illustration</a>
-                        </li>
-                     </ul>
-                  </aside>
-                  <aside class="single_sidebar_widget instagram_feeds">
-                     <h4 class="widget_title">Instagram Feeds</h4>
-                     <ul class="instagram_row flex-wrap">
-                        <li>
-                           <a href="#">
-                              <img class="img-fluid" src="assets/img/post/post_5.png" alt="">
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#">
-                              <img class="img-fluid" src="assets/img/post/post_6.png" alt="">
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#">
-                              <img class="img-fluid" src="assets/img/post/post_7.png" alt="">
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#">
-                              <img class="img-fluid" src="assets/img/post/post_8.png" alt="">
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#">
-                              <img class="img-fluid" src="assets/img/post/post_9.png" alt="">
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#">
-                              <img class="img-fluid" src="assets/img/post/post_10.png" alt="">
-                           </a>
-                        </li>
-                     </ul>
-                  </aside>
-                  <aside class="single_sidebar_widget newsletter_widget">
-                     <h4 class="widget_title">Newsletter</h4>
-                     <form action="#">
-                        <div class="form-group">
-                           <input type="email" class="form-control" onfocus="this.placeholder = ''"
-                              onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
-                        </div>
-                        <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
-                           type="submit">Subscribe</button>
-                     </form>
                   </aside>
                </div>
             </div>
