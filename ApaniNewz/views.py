@@ -139,36 +139,41 @@ def register_view(request):
 def News_Detail(request, id):
     news = News.objects.filter(id=id)
     article = get_object_or_404(News, id=id)
-    #Likes
+
+    # Check if the user liked the article
     like_this_article = Likes.objects.filter(user=request.user, article=article).exists()
-    
-    # Fetch comments and their replies
-    
+
     if request.method == 'POST':
-        comment = request.POST.get('comment')
+        comment_text = request.POST.get('comment')
         comm_id = request.POST.get('comm_id')
-        
-        if comm_id:
-            SubComments(news=article,user = request.user, comment = Comment.objects.get(id=int(comm_id))).save()
+
+        if comm_id:  
+            # Save as a SubComment (reply)
+            parent_comment = get_object_or_404(Comment, id=int(comm_id))
+            SubComments.objects.create(
+                news=article,
+                user=request.user,
+                parent_comment=parent_comment,
+                reply=comment_text  # Corrected field
+            )
         else:
-            Comment(news=article, user = request.user, comment = comment).save()
-    
-    comments = []
-    for cm in Comment.objects.filter(news=article):
-        comments.append([cm, SubComments.objects.filter(comment=cm)])
+            # Save as a main Comment
+            Comment.objects.create(news=article, user=request.user, comment=comment_text)
+
+    # Fetch comments along with their replies (subcomments)
+    comments = [(cm, SubComments.objects.filter(parent_comment=cm)) for cm in Comment.objects.filter(news=article)]
 
     form = CommentForm()
-    
+
     context = {
         'article': article,
-        'news':news,
+        'news': news,
         'like_this_article': like_this_article,
-        "comments": comments,
-        'form':form
+        'comments': comments,
+        'form': form
     }
-    
+
     return render(request, "Home/News_Details.html", context)
-    
 
 @login_required(login_url='login')
 def like_post(request, id):

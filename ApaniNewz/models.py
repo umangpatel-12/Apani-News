@@ -115,7 +115,7 @@ class Comment(models.Model):
 
 class SubComments(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     reply = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

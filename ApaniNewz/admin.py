@@ -29,7 +29,7 @@ class ProfileModelAdmin(admin.ModelAdmin):
 
 @admin.register(SubComments)
 class SubCommentsModelAdmin(admin.ModelAdmin):
-    list_display = ("news", "comment", "user", "reply", "created")
+    list_display = ("news", "parent_comment", "user", "reply", "created")
 
 @admin.register(Comment)
 class CommentModelAdmin(admin.ModelAdmin):

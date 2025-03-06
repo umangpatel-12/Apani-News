@@ -180,7 +180,7 @@
                {% comment %} End Comment On Post {% endcomment %}
 
                {% for comment, replies in comments %}
-               <div class="comments" style="border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);margin-top: 20px;">
+               <div class="comments" style="border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px;">
                   <div class="d-flex" style="padding: 15px; margin-left: 15px;">
                      <div class="single-comment justify-content-between d-flex">
                         <div class="user justify-content-between d-flex">
@@ -189,30 +189,45 @@
                            </div>
                            <div class="desc" style="margin-left: 18px;">
                               <h5>@{{comment.user.username}}</h5>
-                              <p class="comment">
-                                 {{comment.comment}}
-                              </p>
+                              <p class="comment">{{comment.comment}}</p>
                               <div class="d-flex justify-content-between">
                                  <div class="d-flex align-items-center">
                                     <p class="date">{{comment.created}}</p>
                                  </div>
                                  <div class="desc">
-                                    <a href="javascript:void(0);" class="btn-reply text-uppercase" style="font-weight: 500;color:silver;margin-left: 350px;display: flex;align-items: center;min-width: 80px;justify-content: flex-end;" onclick="toggleReplyForm()">Reply</a>
+                                    <a href="javascript:void(0);" class="btn-reply text-uppercase" style="font-weight: 500; color:silver; margin-left: 350px; display: flex; align-items: center; min-width: 80px; justify-content: flex-end;" onclick="toggleReplyForm('{{ comment.id }}')">Reply</a>
                                  </div>
                               </div>
-               
+
                               <!-- Reply Form (Initially Hidden) -->
-                              <div id="reply-form" style="display: none; margin-top: 10px;">
+                              <div id="reply-form-{{ comment.id }}" style="display: none; margin-top: 10px;">
                                  <form action="" method="post">
                                     {% csrf_token %}
                                     <div class="form-group">
                                        <textarea name="comment" rows="2" class="form-control form-control-lg" placeholder="Write your reply..."></textarea>
-                                       {% comment %} {{ form.reply }} {% endcomment %}
+                                       <input type="hidden" name="comm_id" value="{{ comment.id }}">
                                     </div>
                                     <button type="submit" class="buttn">REPLY</button>
                                  </form>
                               </div>
-                              {% comment %} End Reply Form {% endcomment %}
+
+                              <!-- Display Replies (SubComments) -->
+                              {% if replies %}
+                              <ul class="subcomments" style="list-style: none; margin-top: 15px;">
+                                 {% for reply in replies %}
+                                 <li class="reply-comment" style="margin-left: 50px; padding: 10px; border-left: 2px solid #ddd;">
+                                    <div class="d-flex align-items-center">
+                                       <img src="{{ reply.user.profile.profile_image.url }}" alt="" style="width: 50px; height: 50px; border-radius: 50%;">
+                                       <div class="desc" style="margin-left: 15px;">
+                                          <h6>@{{ reply.user.username }}</h6>
+                                          <p>{{ reply.reply }}</p> <!-- Corrected field for displaying replies -->
+                                          <p class="date" style="font-size: 12px; color: gray;">{{ reply.created }}</p>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 {% endfor %}
+                              </ul>
+                              {% endif %}
                            </div>
                         </div>
                      </div>
@@ -221,15 +236,18 @@
                {% empty %}
                <p>No comments yet. Be the first to comment!</p>
                {% endfor %}
+
                <script>
-                  function toggleReplyForm() {
-                     var replyForm = document.getElementById("reply-form");
+                  function toggleReplyForm(commentId) {
+                     var replyForm = document.getElementById("reply-form-" + commentId);
                      replyForm.style.display = (replyForm.style.display === "none") ? "block" : "none";
                   }
                </script>
+
+
+
+               
             </div>
-
-
             <div class="col-lg-4">
                <div class="blog_right_sidebar">
                   <aside class="single_sidebar_widget search_widget">
