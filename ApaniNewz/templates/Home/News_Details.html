@@ -91,8 +91,8 @@
                      <div class="col-sm-4 text-center my-2 my-sm-0">
                         <p class="comment-count" style="font-size: 20px;">
                            <span class="align-middle">
-                              <i class="fa fa-comment" style="font-size: 20px;"></i>
-                           </span > 06 Comments</p>
+                              <i class="fa fa-comment" style="font-size: 20px;color: #f4511e;"></i>
+                           </span >{{total_comments}} Comments</p>
                      </div>
                   </div>
                   <div class="navigation-area">
@@ -192,7 +192,7 @@
                               <p class="comment">{{comment.comment}}</p>
                               <div class="d-flex justify-content-between">
                                  <div class="d-flex align-items-center">
-                                    <p class="date">{{comment.created}}</p>
+                                    <p class="date">{{ comment.created | timesince }}</p>
                                  </div>
                                  <div class="desc">
                                     <a href="javascript:void(0);" class="btn-reply text-uppercase" style="font-weight: 500; color:silver; margin-left: 350px; display: flex; align-items: center; min-width: 80px; justify-content: flex-end;" onclick="toggleReplyForm('{{ comment.id }}')">Reply</a>
@@ -221,7 +221,7 @@
                                        <div class="desc" style="margin-left: 15px;">
                                           <h6>@{{ reply.user.username }}</h6>
                                           <p>{{ reply.reply }}</p> <!-- Corrected field for displaying replies -->
-                                          <p class="date" style="font-size: 12px; color: gray;">{{ reply.created }}</p>
+                                          <p class="date" style="font-size: 12px; color: gray;">{{ reply.created | timesince }}</p>
                                        </div>
                                     </div>
                                  </li>

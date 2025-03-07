@@ -70,6 +70,11 @@ class News(models.Model):
     def total_likes(self):
         count = self.Post_likes.count()
         return count
+    
+    def total_comments(self):
+        comments_count = Comment.objects.filter(news=self).count()
+        subcomments_count = SubComments.objects.filter(news=self).count()
+        return comments_count + subcomments_count
          
 class Likes(models.Model):
     article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes')    

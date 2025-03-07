@@ -23,6 +23,7 @@ urlpatterns = [
     path('Posts', views.Posts, name= 'posts'),
     path('like/<int:id>/', views.like_post, name='like_post'),
     path('unlike/<int:id>/', views.unlike_post, name='unlike_post'),
+    path('Article/Search/', views.Search_View,name='search'),
     
 
 

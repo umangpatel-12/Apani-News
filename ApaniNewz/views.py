@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 
@@ -139,6 +140,7 @@ def register_view(request):
 def News_Detail(request, id):
     news = News.objects.filter(id=id)
     article = get_object_or_404(News, id=id)
+    
 
     # Check if the user liked the article
     like_this_article = Likes.objects.filter(user=request.user, article=article).exists()
@@ -165,12 +167,16 @@ def News_Detail(request, id):
 
     form = CommentForm()
 
+    # Comment Count
+    total_comments = article.total_comments()
+
     context = {
         'article': article,
         'news': news,
         'like_this_article': like_this_article,
         'comments': comments,
-        'form': form
+        'form': form,
+        "total_comments":total_comments
     }
 
     return render(request, "Home/News_Details.html", context)
@@ -191,6 +197,16 @@ def unlike_post(request, id):
         return redirect(request.META.get('HTTP_REFERER') or 'details')
     return redirect('details', id=id)
 
+
+def Search_View(request):
+    keyword = request.GET.get('keyword')
+    articles = News.objects.filter(Q(title__icontains=keyword) | Q(sub_title__icontains=keyword) | Q(content__icontains = keyword),status = "PUBLISH")
+
+    context = {
+        'keyword':keyword,
+        'articles': articles,
+    }
+    return render(request, "Home/Search.html",context)
 
 def Contact(request):
     return render(request, "Home/Contact.html")

@@ -33,7 +33,8 @@
       <!-- Header Start -->
       <div class="header-area">
         <div class="main-header">
-          <div class="header-mid d-none d-md-block">
+
+          <div class="header-mid d-none d-md-block" style="margin-top: -10px;">
             <div class="container">
               <div class="row d-flex align-items-center">
                 <!-- Logo -->
@@ -42,6 +43,37 @@
                     <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/logos.png' %}" alt="" height="85px" width="170px" /></a>
                   </div>
                 </div>
+                <style>
+                  .buttn {
+                     background-color: #f4511e;
+                     border-radius: 8px;
+                     border: 2px;
+                     color: white;
+                     height: 38px;
+                     width: 45px;
+                     text-align: center;
+                     font-size: 16px;
+                     margin: 4px 2px;
+                     opacity: 0.6;
+                     transition: 0.3s;
+                     display: inline-block;
+                     text-decoration: none;
+                     cursor: pointer;
+                   }
+                   
+                   .buttn:hover {
+                     opacity: 1;
+                  }
+               </style>
+                <div class="col-md-9">
+                  <div class="d-flex justify-content-end align-items-center">
+                      <form class="d-flex w-50" action="{% url 'search' %}" method="get" style="margin-top: 10px;">
+                        <input class="form-control border shadow-none" type="text" name="keyword" placeholder="Search anything..." style="margin-top: 5px;">
+                        <button class="buttn" type="submit"><i class="fas fa-search special-tag"></i></i></button>
+                      </form>
+                  </div>
+              </div>
+
               </div>
             </div>
           </div>
@@ -53,45 +85,9 @@
                   <div class="sticky-logo">
                     <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/logos.png' %}" alt="" height="80px" width="160px" style="margin-top: -15px;" /></a>
                   </div>
-                  <!-- Main-menu -->
-                  {% comment %} <div class="main-menu d-none d-md-block">
-                    <nav>
-                      <ul id="navigation">
-                        <li class="nav-item active">
-                          <a href="{% url 'index' %}">Home</a>
-                        </li>
-                        <li>
-                          <a href="categori.html">Category</a>
-                        </li>
-                        <li>
-                          <a href="about.html">About</a>
-                        </li>
-                        <li>
-                          <a href="latest_news.html">Latest News</a>
-                        </li>
-                        <li>
-                          <a href="{% url 'contact' %}">Contact</a>
-                        </li>
-                        <li>
-                          <a href="#">Pages</a>
-                          <ul class="submenu">
-                            <li>
-                              <a href="elements.html">Element</a>
-                            </li>
-                            <li>
-                              <a href="blog.html">Blog</a>
-                            </li>
-                            <li>
-                              <a href="single-blog.html">Blog Details</a>
-                            </li>
-                            <li>
-                              <a href="details.html">Categori Details</a>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div> {% endcomment %}
+
+
+                  
                   <div class="main-menu">
                     <nav>
                       <ul id="navigation">
@@ -123,6 +119,10 @@
                   <div class="main-menu d-none d-md-block" id="navbar-menu">
                     <ul id="navigation">
                       {% if user.is_authenticated %}
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-md-none"></div>
+                        </div>
                         <li>
                           <a href="#" class="trending-animated" style="color: #ff6219; font-size: 18px;">Hi, {{ user.first_name|default:'User' }}</a>
                           <ul class="submenu">
@@ -154,10 +154,7 @@
                   </div>
                 </div>
 
-                <!-- Mobile Menu -->
-                <div class="col-12">
-                  <div class="mobile_menu d-block d-md-none"></div>
-                </div>
+                
               </div>
             </div>
           </div>
