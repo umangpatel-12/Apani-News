@@ -12,6 +12,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -197,7 +198,7 @@ def unlike_post(request, id):
         return redirect(request.META.get('HTTP_REFERER') or 'details')
     return redirect('details', id=id)
 
-
+# Search Functionality
 def Search_View(request):
     keyword = request.GET.get('keyword')
     articles = News.objects.filter(Q(title__icontains=keyword) | Q(sub_title__icontains=keyword) | Q(content__icontains = keyword),status = "PUBLISH")
@@ -231,7 +232,18 @@ def Categories(request):
     
 def LatestNewz(request):
     news = News.objects.filter(status='PUBLISH')
-    return render(request, "Home/LatestNewz.html",{"news":news})
+    
+    paginator = Paginator(news, 2)  # Show 2 news per page
+    page_number = request.GET.get('page')
+    NewsDatafinal = paginator.get_page(page_number)
+    
+    context = {
+        'news': news,
+        'NewsDatafinal': NewsDatafinal,
+        'totalPagelist': range(1, NewsDatafinal.paginator.num_pages + 1),
+    }
+    
+    return render(request, "Home/LatestNewz.html", context)
 
 # Admin Dashbord's
 def dashboard(request):
