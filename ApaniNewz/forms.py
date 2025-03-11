@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import requests
 from django.core.exceptions import ValidationError
-from ApaniNewz.models import Comment, Profile, Registration,News,Category, SubComments
+from ApaniNewz.models import Comment, LJNews, Profile, Registration,News,Category, SubComments
 from ckeditor.widgets import CKEditorWidget
 
 class LoginForm(forms.Form):
@@ -352,6 +352,90 @@ class NewsForm(forms.ModelForm):
                 initial=f"{user.first_name} {user.last_name}", 
                 widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control form-control-lg'})
             )
+
+class LJNewsForm(forms.ModelForm):
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'title',
+            'name': 'title',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter News Title'
+        }),
+        max_length=255,
+        required=True
+    )
+
+    sub_title = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'sub_title',
+            'name': 'sub_title',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter Sub Title'
+        }),
+        max_length=255,
+        required=True
+    )
+
+    author = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'author',
+            'name': 'author',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Author Name'
+        }),
+        max_length=50,
+        required=True
+    )
+
+    content = forms.CharField(
+        widget=CKEditorWidget(attrs={
+            'id': 'content',
+            'name': 'content',
+            'class': 'form-control',
+            'placeholder': 'Write your news content here...'
+        }),
+        required=False
+    )
+
+    status = forms.ChoiceField(
+        choices=News.STATUS,
+        widget=forms.Select(attrs={
+            'id': 'status',
+            'name': 'status',
+            'class': 'form-select form-select-lg'
+        })
+    )
+
+    image = forms.ImageField(
+        widget=forms.FileInput(attrs={
+            'id': 'image',
+            'name': 'image',
+            'class': 'form-control'
+        }),
+        required=False
+    )
+
+    class Meta:
+        model = LJNews
+        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'image']
+        widgets = {
+            'category': forms.Select(attrs={
+                'id': 'category',
+                'name': 'category',
+                'class': 'form-select form-select-lg'
+            })
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Get the user from the view
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['author'] = forms.CharField(
+                initial=f"{user.first_name} {user.last_name}", 
+                widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control form-control-lg'})
+            )
+
+    
 
 class CategoryForm(forms.ModelForm):
     category_name = forms.CharField(

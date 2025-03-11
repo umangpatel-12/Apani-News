@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
-from ApaniNewz.forms import CategoryForm, CommentForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SubCommentForm, UserUpdate
-from .models import Category, Likes, News, Registration, Profile,Comment,SubComments
+from ApaniNewz.forms import CategoryForm, CommentForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SubCommentForm, UserUpdate
+from .models import Category, LJNews, Likes, News, Registration, Profile,Comment,SubComments
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -106,37 +106,6 @@ def register_view(request):
 
     return render(request, "Home/Registration.html", {'form': form})
 
-# @login_required(login_url='login')
-# def News_Detail(request,id):
-#     article = News.objects.filter(id = id)
-#     try:
-#         Likes.objects.get(user = request.user,post_id=id)
-#         like_this_article = True
-#     except Exception as e:
-#         like_this_article = False
-    
-#     return render(request, "Home/News_Details.html",{'article':article,'like_this_article':like_this_article})
-
-# @login_required(login_url='login')
-# def News_Detail(request, id):
-#     art = get_object_or_404(News, id=id)  # Fetch a single News object
-#     article = News.objects.filter(id = id)
-    
-#     like_this_article = Likes.objects.filter(user=request.user, article_id=id).exists()  # Use 'article_id' if ForeignKey
-    
-#     return render(request, "Home/News_Details.html", {'article': article, 'like_this_article': like_this_article,'art':art})
-# @login_required(login_url='login')
-# def News_Detail(request, id):
-#     news = News.objects.filter(id=id)
-#     article = get_object_or_404(News, id=id)  # Ensure a single object is retrieved
-#     like_this_article = Likes.objects.filter(user=request.user, article=article).exists()  # Check if liked
-    
-#     comments = []
-#     comm = Comment.objects.filter(news=news)
-#     for cm in comm:
-#         comments.append([cm, SubComments.objects.filter(comment=cm)])
-    
-#     return render(request, "Home/News_Details.html", {'article': article, 'like_this_article': like_this_article,'news':news,'comments':comments})
 @login_required(login_url='login')
 def News_Detail(request, id):
     news = News.objects.filter(id=id)
@@ -245,6 +214,8 @@ def LatestNewz(request):
     
     return render(request, "Home/LatestNewz.html", context)
 
+
+
 # Admin Dashbord's
 def dashboard(request):
     return render(request,"Admin/Dashboard.html")
@@ -317,8 +288,9 @@ def ManageUsers(request):
 def ManageContact(request):
     return render(request,"Admin/ManageContact.html")
 
-# Account's Details
 
+
+# Account's Details
 def ProfilePage(request):
     try:
         profile = request.user.profile
@@ -348,7 +320,7 @@ def ProfilePage(request):
 def PostArticle(request):
     cate = Category.objects.all()
     if request.method == 'POST':
-        form = NewsForm(request.POST, request.FILES)  # ✅ Include request.FILES
+        form = LJNewsForm(request.POST, request.FILES)  # ✅ Include request.FILES
 
         if form.is_valid():
             # Extract cleaned form data
@@ -357,7 +329,7 @@ def PostArticle(request):
             sub_title = form.cleaned_data.get("sub_title")
             cat = form.cleaned_data.get("category")
             status = form.cleaned_data.get("status")
-            news_image = form.cleaned_data.get("news_image")  # ✅ Use cleaned_data
+            ljnews_image = form.cleaned_data.get("ljnews_image")  # ✅ Use cleaned_data
 
             # Get the logged-in user's full name
             author_name = f"{request.user.first_name} {request.user.last_name}".strip()
@@ -366,14 +338,14 @@ def PostArticle(request):
             n = form.save(commit=False)
             # n.save()
             # Create and save the news entry
-            news = News(
+            news = LJNews(
                 title=title,
                 sub_title=sub_title,
                 category=catOBJ,
                 author=author_name,  # ✅ Set author's name from logged-in user
                 content=content,
                 status=status,
-                news_image=news_image,
+                ljnews_image=ljnews_image,
             )
             news = form.save(commit=False)
             news.save()
@@ -387,7 +359,7 @@ def PostArticle(request):
         initial_data = {
             "author": f"{request.user.first_name} {request.user.last_name}".strip()
         }
-        form = NewsForm(initial=initial_data)
+        form = LJNewsForm(initial=initial_data)
         
     context = {
         "cate":cate,

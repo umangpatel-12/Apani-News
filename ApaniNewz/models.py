@@ -75,7 +75,30 @@ class News(models.Model):
         comments_count = Comment.objects.filter(news=self).count()
         subcomments_count = SubComments.objects.filter(news=self).count()
         return comments_count + subcomments_count
-         
+
+class LJNews(models.Model):
+    STATUS = ('PUBLISH', 'PUBLISH'),('DRAFT', 'DRAFT')
+
+    title = models.CharField(max_length=255)
+    sub_title = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    author = models.CharField(max_length=50)
+    content = RichTextField(blank=True, null=True)
+    status = models.CharField(choices=STATUS, max_length=255)
+    ljnews_image = models.ImageField(upload_to="media/ljnews/")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    @staticmethod
+    def get_all_ljnews_byID(category_id):
+         if category_id:
+            return LJNews.objects.filter(category = category_id)
+         else:
+              return LJNews.objects.all()
+       
 class Likes(models.Model):
     article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes')    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
