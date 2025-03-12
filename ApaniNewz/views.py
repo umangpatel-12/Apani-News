@@ -17,7 +17,20 @@ from django.core.paginator import Paginator
 # Create your views here.
 
 def home(request):
-    return render(request, 'Home/index.html')
+    
+    categories = Category.objects.filter()
+    news = None
+    CATID = request.GET.get('category')
+    if CATID:
+        news = News.get_all_news_byID(CATID)
+    else:
+        news = News.objects.filter(status='PUBLISH')
+    
+    context = {
+        'categories':categories,
+        'news': news,
+    }
+    return render(request, 'Home/index.html',context)
 
 def login_view(request):
     if request.user.is_authenticated:
