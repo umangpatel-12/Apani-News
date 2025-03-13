@@ -46,12 +46,13 @@ class Category(models.Model):
 class News(models.Model):
     STATUS = ('PUBLISH','PUBLISH'),('DRAFT','DRAFT')
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255,unique=True)
     sub_title = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     author = models.CharField(max_length=50)
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS,max_length=255)
+    Is_Featured = models.BooleanField(default=False)
     news_image = models.ImageField(upload_to="media/news/")
     likes = models.ManyToManyField(User, related_name='Post_likes',blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -79,12 +80,13 @@ class News(models.Model):
 class LJNews(models.Model):
     STATUS = ('PUBLISH', 'PUBLISH'),('DRAFT', 'DRAFT')
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255,unique=True)
     sub_title = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     author = models.CharField(max_length=50)
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, max_length=255)
+    Is_Featured = models.BooleanField(default=False)
     ljnews_image = models.ImageField(upload_to="media/ljnews/")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
