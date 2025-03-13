@@ -94,10 +94,7 @@ class LJNews(models.Model):
 
     @staticmethod
     def get_all_ljnews_byID(category_id):
-         if category_id:
-            return LJNews.objects.filter(category = category_id)
-         else:
-              return LJNews.objects.all()
+        return LJNews.objects.filter(category=category_id, status='PUBLISH')
        
 class Likes(models.Model):
     article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes')    

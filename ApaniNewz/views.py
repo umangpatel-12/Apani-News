@@ -16,8 +16,7 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 
-def home(request):
-    
+def home(request):  
     categories = Category.objects.filter()
     news = None
     CATID = request.GET.get('category')
@@ -26,9 +25,12 @@ def home(request):
     else:
         news = News.objects.filter(status='PUBLISH')
     
+    ljnews = LJNews.objects.filter(status='PUBLISH')
+        
     context = {
         'categories':categories,
         'news': news,
+        'ljnews':ljnews,
     }
     return render(request, 'Home/index.html',context)
 
@@ -122,6 +124,7 @@ def register_view(request):
 @login_required(login_url='login')
 def News_Detail(request, id):
     news = News.objects.filter(id=id)
+    ljnews = LJNews.objects.filter(id=id)
     article = get_object_or_404(News, id=id)
     
 
@@ -159,7 +162,8 @@ def News_Detail(request, id):
         'like_this_article': like_this_article,
         'comments': comments,
         'form': form,
-        "total_comments":total_comments
+        "total_comments":total_comments,
+        'ljnews':ljnews,
     }
 
     return render(request, "Home/News_Details.html", context)

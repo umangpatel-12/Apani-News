@@ -43,89 +43,39 @@
               <!-- Trending Bottom -->
               <div class="trending-bottom">
                 <div class="row">
-                  <div class="col-lg-4">
-                    <div class="single-bottom mb-35">
-                      <div class="trend-bottom-img mb-30">
-                        <img src="{% static 'assets/img/trending/trending_bottom1.jpg' %} " alt="" />
+                  {% for a in news|slice:"3:7" %}
+                    {% if not forloop.first %}
+                      <div class="col-lg-4">
+                        <div class="single-bottom mb-35">
+                          <div class="trend-bottom-img mb-30">
+                            <img src="{{a.news_image.url}}" height="157" width="236" alt="" />
+                          </div>
+                          <div class="trend-bottom-cap">
+                            <span class="color1">{{a.category}}</span>
+                            <h4><a href="details.html">{{a.title|truncatechars:40}}</a></h4>
+                          </div>
+                        </div>
                       </div>
-                      <div class="trend-bottom-cap">
-                        <span class="color1">Lifestyple</span>
-                        <h4><a href="details.html">Get the Illusion of Fuller Lashes by “Mascng.”</a></h4>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4">
-                    <div class="single-bottom mb-35">
-                      <div class="trend-bottom-img mb-30">
-                        <img src="{% static 'assets/img/trending/trending_bottom2.jpg' %} " alt="" />
-                      </div>
-                      <div class="trend-bottom-cap">
-                        <span class="color2">Sports</span>
-                        <h4><h4><a href="details.html">Get the Illusion of Fuller Lashes by “Mascng.”</a></h4></h4>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4">
-                    <div class="single-bottom mb-35">
-                      <div class="trend-bottom-img mb-30">
-                        <img src="{% static 'assets/img/trending/trending_bottom3.jpg' %} " alt="" />
-                      </div>
-                      <div class="trend-bottom-cap">
-                        <span class="color3">Travels</span>
-                        <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                      </div>
-                    </div>
-                  </div>
+                    {% endif %}
+                  {% endfor %}
                 </div>
               </div>
             </div>
             <!-- Riht content -->
             <div class="col-lg-4">
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-img">
-                  <img src="{% static 'assets/img/trending/right1.jpg' %} " alt="" />
-                </div>
-                <div class="trand-right-cap">
-                  <span class="color1">Concert</span>
-                  <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                </div>
-              </div>
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-img">
-                  <img src="{% static 'assets/img/trending/right2.jpg' %} " alt="" />
-                </div>
-                <div class="trand-right-cap">
-                  <span class="color3">sea beach</span>
-                  <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                </div>
-              </div>
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-img">
-                  <img src="{% static 'assets/img/trending/right3.jpg' %} " alt="" />
-                </div>
-                <div class="trand-right-cap">
-                  <span class="color2">Bike Show</span>
-                  <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                </div>
-              </div>
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-img">
-                  <img src="{% static 'assets/img/trending/right4.jpg' %} " alt="" />
-                </div>
-                <div class="trand-right-cap">
-                  <span class="color4">See beach</span>
-                  <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                </div>
-              </div>
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-img">
-                  <img src="{% static 'assets/img/trending/right5.jpg' %} " alt="" />
-                </div>
-                <div class="trand-right-cap">
-                  <span class="color1">Skeping</span>
-                  <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                </div>
-              </div>
+              {% for a in news|slice:"4" %}
+                {% if not forloop.first %}
+                  <div class="trand-right-single d-flex">
+                    <div class="trand-right-img">
+                      <img src="{{a.news_image.url}} " height="100" width="120" alt="" />
+                    </div>
+                    <div class="trand-right-cap">
+                      <span class="color1">{{a.category}}</span>
+                      <h4><a href="{% url 'details' a.id %}">{{a.title|truncatechars:40}}</a></h4>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
             </div>
           </div>
         </div>
@@ -141,7 +91,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="section-tittle mb-30">
-                <h3>Weekly Top News</h3>
+                <h3>LJ News</h3>
               </div>
             </div>
           </div>
@@ -157,7 +107,7 @@
                     <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
                   </div>
                 </div>
-                <div class="weekly-single active">
+                <div class="weekly-single">
                   <div class="weekly-img">
                     <img src="{% static 'assets/img/news/weeklyNews1.jpg' %} " alt="" />
                   </div>
@@ -175,15 +125,17 @@
                     <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
                   </div>
                 </div>
-                <div class="weekly-single">
-                  <div class="weekly-img">
-                    <img src="{% static 'assets/img/news/weeklyNews1.jpg' %} " alt="" />
+                {% for lj in ljnews %}
+                  <div class="weekly-single">
+                    <div class="weekly-img">
+                      <img src="{{lj.ljnews_image.url}}" height="432" width="370" alt="" />
+                    </div>
+                    <div class="weekly-caption" style="width: 320px;">
+                      <span class="color1">{{lj.category}}</span>
+                      <h4><a href="{% url 'details' lj.id %}">{{lj.title|truncatechars:35}}</a></h4>
+                    </div>
                   </div>
-                  <div class="weekly-caption">
-                    <span class="color1">Strike</span>
-                    <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
-                  </div>
-                </div>
+                {% endfor %}
               </div>
             </div>
           </div>
@@ -233,11 +185,11 @@
                           <div class="col-lg-4 col-md-6 {{ a.category }}">
                             <div class="single-what-news mb-100">
                               <div class="what-img">
-                                <img src="{{a.news_image.url}}" height="335" width="380" alt="" />
+                                <img src="{{a.news_image.url}}" height="300" width="380" alt="" />
                               </div>
                               <div class="what-cap">
                                 <span class="color1">{{a.category}}</span>
-                                <h4><a href="#">{{a.title|truncatechars:30}}</a></h4>
+                                <h4><a href="{% url 'details' a.id %}">{{a.title|truncatechars:28}}</a></h4>
                               </div>
                             </div>
                           </div>
