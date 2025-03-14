@@ -333,9 +333,18 @@ class NewsForm(forms.ModelForm):
         required=False
     )
 
+    is_Featured = forms.BooleanField(
+        widget=forms.CheckboxInput(attrs={
+            'id': 'is_Featured',
+            'name': 'is_Featured',
+            'class': 'custom-checkbox'
+        }),
+        required=False
+    )
+
     class Meta:
         model = News
-        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'image']
+        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'image','is_Featured']
         widgets = {
             'category': forms.Select(attrs={
                 'id': 'category',
@@ -406,7 +415,7 @@ class LJNewsForm(forms.ModelForm):
         })
     )
 
-    image = forms.ImageField(
+    ljnews_image = forms.ImageField(
         widget=forms.FileInput(attrs={
             'id': 'image',
             'name': 'image',
@@ -414,10 +423,19 @@ class LJNewsForm(forms.ModelForm):
         }),
         required=False
     )
+    
+    is_Featured = forms.BooleanField(
+        widget=forms.CheckboxInput(attrs={
+            'id': 'is_Featured',
+            'name': 'is_Featured',
+            'class': 'custom-checkbox'
+        }),
+        required=False
+    )
 
     class Meta:
         model = LJNews
-        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'image']
+        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'ljnews_image','is_Featured']
         widgets = {
             'category': forms.Select(attrs={
                 'id': 'category',

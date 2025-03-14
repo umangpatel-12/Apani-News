@@ -87,7 +87,7 @@ class LJNews(models.Model):
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, max_length=255)
     Is_Featured = models.BooleanField(default=False)
-    ljnews_image = models.ImageField(upload_to="media/ljnews/")
+    ljnews_image = models.ImageField(upload_to="media/ljnews/",blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
