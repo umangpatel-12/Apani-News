@@ -324,7 +324,7 @@ class NewsForm(forms.ModelForm):
         })
     )
 
-    image = forms.ImageField(
+    news_image = forms.ImageField(
         widget=forms.FileInput(attrs={
             'id': 'image',
             'name': 'image',
@@ -333,18 +333,19 @@ class NewsForm(forms.ModelForm):
         required=False
     )
 
-    is_Featured = forms.BooleanField(
-        widget=forms.CheckboxInput(attrs={
-            'id': 'is_Featured',
-            'name': 'is_Featured',
-            'class': 'custom-checkbox'
-        }),
-        required=False
-    )
+    is_featured = forms.BooleanField(
+    widget=forms.CheckboxInput(attrs={
+        'id': 'is_featured',
+        'name': 'is_featured',
+        'class': 'custom-checkbox'
+    }),
+    required=False,  # ✅ Ensure unchecked state is handled as False
+    initial=False
+)
 
     class Meta:
         model = News
-        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'image','is_Featured']
+        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'news_image','is_featured']
         widgets = {
             'category': forms.Select(attrs={
                 'id': 'category',
@@ -424,18 +425,19 @@ class LJNewsForm(forms.ModelForm):
         required=False
     )
     
-    is_Featured = forms.BooleanField(
-        widget=forms.CheckboxInput(attrs={
-            'id': 'is_Featured',
-            'name': 'is_Featured',
-            'class': 'custom-checkbox'
-        }),
-        required=False
-    )
+    is_featured = forms.BooleanField(
+    widget=forms.CheckboxInput(attrs={
+        'id': 'is_featured',
+        'name': 'is_featured',
+        'class': 'custom-checkbox'
+    }),
+    required=False,  # ✅ Ensure unchecked state is handled as False
+    initial=False
+)
 
     class Meta:
         model = LJNews
-        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'ljnews_image','is_Featured']
+        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'ljnews_image','is_featured']
         widgets = {
             'category': forms.Select(attrs={
                 'id': 'category',
@@ -452,8 +454,6 @@ class LJNewsForm(forms.ModelForm):
                 initial=f"{user.first_name} {user.last_name}", 
                 widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control form-control-lg'})
             )
-
-    
 
 class CategoryForm(forms.ModelForm):
     category_name = forms.CharField(

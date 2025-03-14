@@ -17,20 +17,31 @@ from django.core.paginator import Paginator
 # Create your views here.
 
 def home(request):  
+    
+    # Featured News
+    featured = News.objects.filter(is_featured=True, status='PUBLISH')
+    print(featured)
+    # Trending Now
+    trending = News.objects.filter(status='PUBLISH').order_by('-created')
+    
+    # News
     categories = Category.objects.filter()
     news = None
     CATID = request.GET.get('category')
     if CATID:
         news = News.get_all_news_byID(CATID)
     else:
-        news = News.objects.filter(status='PUBLISH')
+        news = News.objects.filter(is_featured=False,status='PUBLISH').order_by('-created')
     
+    # LJ News
     ljnews = LJNews.objects.filter(status='PUBLISH')
         
     context = {
         'categories':categories,
         'news': news,
         'ljnews':ljnews,
+        'trending':trending,
+        'featured':featured
     }
     return render(request, 'Home/index.html',context)
 
@@ -231,8 +242,6 @@ def LatestNewz(request):
     
     return render(request, "Home/LatestNewz.html", context)
 
-
-
 # Admin Dashbord's
 def dashboard(request):
     return render(request,"Admin/Dashboard.html")
@@ -242,48 +251,26 @@ def AddNews(request):
     categories = Category.objects.all()
 
     if request.method == 'POST':
-        form = NewsForm(request.POST, request.FILES)  # ✅ Include request.FILES
+        form = NewsForm(request.POST, request.FILES, user=request.user)
 
         if form.is_valid():
-            # Extract cleaned form data
-            content = form.cleaned_data.get("content")
-            title = form.cleaned_data.get("title")
-            sub_title = form.cleaned_data.get("sub_title")
-            cat = form.cleaned_data.get("category")
-            author = form.cleaned_data.get("author")
-            status = form.cleaned_data.get("status")
-            # news_image = form.cleaned_data.get("news_image")  # ✅ Use cleaned_data
-            if 'news_image' in request.FILES:
-                news_image = request.FILES['news_image']
-            else:
-                news_image = None  # Handle as needed, maybe a default image
-
-            catOBJ = Category.objects.get(id=cat.id)  # Fetch category object
-
-            # Create and save the news entry
-            news = News(
-                title=title,
-                sub_title=sub_title,
-                category=catOBJ,
-                author=author,
-                content=content,
-                status=status,
-                news_image=news_image,
-            )
+            news = form.save(commit=False)  # ✅ Get model instance but don't save yet
+            news.is_featured = request.POST.get('is_featured') == 'on'  # ✅ Handle checkbox manually
             news.save()
-
             messages.success(request, "News/Article added successfully!")
             return redirect("addnews")
         else:
             messages.error(request, "Form validation failed. Please check your input.")
     else:
-        form = NewsForm()
+        form = NewsForm(user=request.user)
 
     return render(request, "Admin/AddNews.html", {
         "article": article,
         "categories": categories,
         "form": form,
     })
+
+
 
 def AddCategory(request):
     form = CategoryForm()
@@ -304,8 +291,6 @@ def ManageUsers(request):
 
 def ManageContact(request):
     return render(request,"Admin/ManageContact.html")
-
-
 
 # Account's Details
 def ProfilePage(request):

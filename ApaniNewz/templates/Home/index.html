@@ -16,7 +16,10 @@
                 <!-- <p>Rem ipsum dolor sit amet, consectetur adipisicing elit.</p> -->
                 <div class="trending-animated">
                   <ul id="js-news" class="js-hidden">
-                    <li class="news-item">Bangladesh dolor sit amet, consectetur adipisicing elit.</li>
+                    {% for t in trending %}
+                    <li class="news-item">{{t.title}}</li>
+                    {% endfor %}
+                    
                     <li class="news-item">Spondon IT sit amet, consectetur.......</li>
                     <li class="news-item">Rem ipsum dolor sit amet, consectetur adipisicing elit.</li>
                   </ul>
@@ -24,6 +27,8 @@
               </div>
             </div>
           </div>
+
+          {% comment %} Trending News {% endcomment %}
           <div class="row">
             <div class="col-lg-8">
               <!-- Trending Top -->
@@ -34,7 +39,7 @@
                       <img src="{{ a.news_image.url }}" alt="" height="411" width="770"/>
                       <div class="trend-top-cap">
                         <span>{{a.category}}</span>
-                        <h2><a href="details.html">{{a.title|truncatechars:30}}</a></h2>
+                        <h2><a href="{% url 'details' a.id %}">{{a.title|truncatechars:30}}</a></h2>
                       </div>
                     </div>
                   </div>
@@ -52,7 +57,7 @@
                           </div>
                           <div class="trend-bottom-cap">
                             <span class="color1">{{a.category}}</span>
-                            <h4><a href="details.html">{{a.title|truncatechars:40}}</a></h4>
+                            <h4><a href="{% url 'details' a.id %}">{{a.title|truncatechars:40}}</a></h4>
                           </div>
                         </div>
                       </div>
@@ -78,6 +83,7 @@
               {% endfor %}
             </div>
           </div>
+          {% comment %} End Trending News {% endcomment %}
         </div>
       </div>
     </div>
@@ -91,40 +97,13 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="section-tittle mb-30">
-                <h3>LJ News</h3>
+                <h3 style="color: #ff6219;">LJ News</h3>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <div class="weekly-news-active dot-style d-flex dot-style">
-                <div class="weekly-single">
-                  <div class="weekly-img">
-                    <img src="{% static 'assets/img/news/weeklyNews2.jpg' %} " alt="" />
-                  </div>
-                  <div class="weekly-caption">
-                    <span class="color1">Strike</span>
-                    <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
-                  </div>
-                </div>
-                <div class="weekly-single">
-                  <div class="weekly-img">
-                    <img src="{% static 'assets/img/news/weeklyNews1.jpg' %} " alt="" />
-                  </div>
-                  <div class="weekly-caption">
-                    <span class="color1">Strike</span>
-                    <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
-                  </div>
-                </div>
-                <div class="weekly-single">
-                  <div class="weekly-img">
-                    <img src="{% static 'assets/img/news/weeklyNews3.jpg' %} " alt="" />
-                  </div>
-                  <div class="weekly-caption">
-                    <span class="color1">Strike</span>
-                    <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
-                  </div>
-                </div>
+              <div class="weekly-news dot-style d-flex dot-style">
                 {% for lj in ljnews %}
                   <div class="weekly-single">
                     <div class="weekly-img">
@@ -152,7 +131,7 @@
             <div class="row d-flex justify-content-between">
               <div class="col-lg-3 col-md-3">
                 <div class="section-tittle mb-30">
-                  <h3>Whats New</h3>
+                  <h3 style="color: #ff6219;">Whats New</h3>
                 </div>
               </div>
               <div class="col-lg-9 col-md-9">
@@ -269,49 +248,26 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="section-tittle mb-30">
-                <h3>Recent Articles</h3>
+                <h3 style="color: #ff6219;">Articles</h3>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <div class="recent-active dot-style d-flex dot-style">
-                <div class="single-recent mb-100">
-                  <div class="what-img">
-                    <img src="{% static 'assets/img/news/recent1.jpg' %} " alt="" />
-                  </div>
-                  <div class="what-cap">
-                    <span class="color1">Night party</span>
-                    <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
-                  </div>
-                </div>
-                <div class="single-recent mb-100">
-                  <div class="what-img">
-                    <img src="{% static 'assets/img/news/recent2.jpg' %} " alt="" />
-                  </div>
-                  <div class="what-cap">
-                    <span class="color1">Night party</span>
-                    <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
-                  </div>
-                </div>
-                <div class="single-recent mb-100">
-                  <div class="what-img">
-                    <img src="{% static 'assets/img/news/recent3.jpg' %} " alt="" />
-                  </div>
-                  <div class="what-cap">
-                    <span class="color1">Night party</span>
-                    <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
-                  </div>
-                </div>
-                <div class="single-recent mb-100">
-                  <div class="what-img">
-                    <img src="{% static 'assets/img/news/recent2.jpg' %} " alt="" />
-                  </div>
-                  <div class="what-cap">
-                    <span class="color1">Night party</span>
-                    <h4><a href="#">Welcome To The Best Model Winner Contest</a></h4>
-                  </div>
-                </div>
+              <div class="recent dot-style d-flex dot-style">
+                {% if featured %}
+                  {% for f in featured %}
+                    <div class="single-recent mb-100">
+                      <div class="what-img">
+                        <img src="{{ f.news_image.url }}" height="350px" width="370px" alt="" />
+                      </div>
+                      <div class="what-cap">
+                        <span class="color1">{{f.category}}</span>
+                        <h4><a href="{% url 'details' f.id %}">{{f.title|truncatechars:35}}</a></h4>
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% endif %}
               </div>
             </div>
           </div>
