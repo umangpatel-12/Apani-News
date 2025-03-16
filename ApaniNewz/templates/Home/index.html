@@ -29,7 +29,7 @@
           </div>
 
           {% comment %} Trending News {% endcomment %}
-          <div class="row">
+          <div class="row"> 
             <div class="col-lg-8">
               <!-- Trending Top -->
                {% for a in news %}
@@ -158,17 +158,17 @@
                   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                     <div class="whats-news-caption">
                       <div class="row">
-                        {% if news %}
-                        {% for a in news %}
+                        {% if cat_news %}
+                        {% for c in cat_news %}
                         
-                          <div class="col-lg-4 col-md-6 {{ a.category }}">
+                          <div class="col-lg-4 col-md-6 {{ c.category }}">
                             <div class="single-what-news mb-100">
                               <div class="what-img">
-                                <img src="{{a.news_image.url}}" height="300" width="380" alt="" />
+                                <img src="{{c.news_image.url}}" height="300" width="380" alt="" />
                               </div>
                               <div class="what-cap">
-                                <span class="color1">{{a.category}}</span>
-                                <h4><a href="{% url 'details' a.id %}">{{a.title|truncatechars:28}}</a></h4>
+                                <span class="color1">{{c.category}}</span>
+                                <h4><a href="{% url 'details' c.id %}">{{c.title|truncatechars:28}}</a></h4>
                               </div>
                             </div>
                           </div>

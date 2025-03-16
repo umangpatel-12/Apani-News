@@ -24,14 +24,18 @@ def home(request):
     # Trending Now
     trending = News.objects.filter(status='PUBLISH').order_by('-created')
     
-    # News
     categories = Category.objects.filter()
-    news = None
+    # Category Wise Show Posts
+    cat_news = None
     CATID = request.GET.get('category')
     if CATID:
-        news = News.get_all_news_byID(CATID)
+        cat_news = News.get_all_news_byID(CATID)
     else:
-        news = News.objects.filter(is_featured=False,status='PUBLISH').order_by('-created')
+        cat_news = News.objects.filter(is_featured=False,status='PUBLISH').order_by('-created')
+    
+    # News
+    
+    news = News.objects.filter(is_featured=False,status='PUBLISH').order_by('-created')
     
     # LJ News
     ljnews = LJNews.objects.filter(status='PUBLISH')
@@ -41,7 +45,8 @@ def home(request):
         'news': news,
         'ljnews':ljnews,
         'trending':trending,
-        'featured':featured
+        'featured':featured,
+        'cat_news':cat_news
     }
     return render(request, 'Home/index.html',context)
 
@@ -134,6 +139,10 @@ def register_view(request):
 
 @login_required(login_url='login')
 def News_Detail(request, id):
+    # Recent Post's
+    recent = News.objects.filter(status='PUBLISH',is_featured=False).order_by('-created')
+    
+    
     news = News.objects.filter(id=id)
     ljnews = LJNews.objects.filter(id=id)
     article = get_object_or_404(News, id=id)
@@ -175,6 +184,7 @@ def News_Detail(request, id):
         'form': form,
         "total_comments":total_comments,
         'ljnews':ljnews,
+        'recent':recent
     }
 
     return render(request, "Home/News_Details.html", context)
