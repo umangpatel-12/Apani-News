@@ -18,7 +18,7 @@ class Registration(AbstractUser):
         ('Student', 'Student'),
         ('Faculty/Staff', 'Faculty/Staff'),
     ]
-
+    
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=50, unique=True)
@@ -26,6 +26,7 @@ class Registration(AbstractUser):
     phone = models.CharField(max_length=10, null=True)
     profile_image = models.ImageField(upload_to='media/profile/')
     enrollment_number = models.CharField(max_length=12, unique=True,null=True, blank=True)  # Add unique enrollment number
+    department = models.CharField(max_length=100, blank=True, null=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Choose Role')  # Dropdown list
     password = models.CharField(max_length=128)
     confirm_password = models.CharField(max_length=128)
@@ -50,6 +51,7 @@ class News(models.Model):
     sub_title = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     author = models.CharField(max_length=50)
+    author_id = models.EmailField(max_length=255, editable=False)  # Auto-stored user email
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS,max_length=255)
     is_featured = models.BooleanField(default=False)
@@ -57,6 +59,12 @@ class News(models.Model):
     likes = models.ManyToManyField(User, related_name='Post_likes',blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        """ Automatically save the author's email """
+        if not self.pk and hasattr(self, 'author_user'):
+            self.author_id = self.author_id.email
+        super(News, self).save(*args, **kwargs)
     
     def __str__(self):
         return self.title
@@ -84,12 +92,19 @@ class LJNews(models.Model):
     sub_title = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     author = models.CharField(max_length=50)
+    author_id = models.EmailField(max_length=255)  # Auto-stored user email
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, max_length=255)
     is_featured = models.BooleanField(default=False)
     ljnews_image = models.ImageField(upload_to="media/ljnews/",blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        """ Automatically save the author's email """
+        if not self.pk and hasattr(self, 'author_user'):
+            self.author_id = self.author_id.email
+        super(LJNews, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title

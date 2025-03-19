@@ -21,11 +21,11 @@ class LikesModelAdmin(admin.ModelAdmin):
 # Register your models here.
 @admin.register(News)
 class NewsModelAdmin(admin.ModelAdmin):
-    list_display = ('id','title','sub_title','category','author','content','status','news_image','created','updated')
+    list_display = ('id','title','sub_title','category','author','author_id','content','status','news_image','created','updated')
     
 @admin.register(LJNews)
 class LJNewsModelAdmin(admin.ModelAdmin):
-    list_display = ('id','title','sub_title','category','author','content','status','ljnews_image','created','updated')
+    list_display = ('id','title','sub_title','category','author','author_id','content','status','ljnews_image','created','updated')
 
 @admin.register(Profile)
 class ProfileModelAdmin(admin.ModelAdmin):

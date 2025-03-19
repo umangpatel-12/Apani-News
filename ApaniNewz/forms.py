@@ -139,10 +139,21 @@ class RegistrationForm(forms.ModelForm):
         }),
         required=False  # Set to `True` if profile image is mandatory
     )
+    
+    department = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'department',
+            'name': 'department',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Department'
+        }),
+        max_length=50,
+        required=True
+    )
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 'phone', 'profile_image', 'enrollment_number', 'role']
+        fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 'phone', 'profile_image', 'enrollment_number','department', 'role']
 
 
     # def __init__(self, *args, **kwargs):
@@ -173,10 +184,14 @@ class RegistrationForm(forms.ModelForm):
         cleaned_data = super().clean()
         role = cleaned_data.get('role')
         enrollment_number = cleaned_data.get('enrollment_number')
+        department = cleaned_data.get('department')
+        
 
         # If role is "Student", enrollment_number is required
         if role == 'Student' and not enrollment_number:
             self.add_error('enrollment_number', 'Enrollment number is required for students.')
+        if role == 'Student' and not department:
+            self.add_error('department', 'department is required for students.')
 
         return cleaned_data
 

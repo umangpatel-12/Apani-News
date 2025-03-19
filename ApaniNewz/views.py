@@ -8,11 +8,18 @@ from .models import Category, LJNews, Likes, News, Registration, Profile,Comment
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
+
+from django.contrib.auth import get_user_model
+# Rest Framework API's
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.generics import CreateAPIView
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
 
@@ -119,10 +126,12 @@ def register_view(request):
 
             role = form.cleaned_data['role']
             enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
+            department = form.cleaned_data.get('department')
 
             # Save profile with or without enrollment_number
             Profile.objects.create(
                 user=user,
+                department=department,
                 enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
                 phone=form.cleaned_data['phone'],
                 profile_image=form.cleaned_data.get('profile_image')
@@ -136,6 +145,36 @@ def register_view(request):
         form = RegistrationForm()
 
     return render(request, "Home/Registration.html", {'form': form})
+
+# def register_view(request):
+#     if request.method == "POST":
+#         form = RegistrationForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             user.password = make_password(form.cleaned_data['password'])
+#             user.is_active = True
+#             user.save()
+            
+#             role = form.cleaned_data['role']
+#             enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
+#             department = form.cleaned_data.get('department')
+            
+#             # Save profile with or without enrollment_number
+#             Profile.objects.create(
+#                 user=user,
+#                 enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
+#                 department=department,
+#                 phone=form.cleaned_data['phone'],
+#                 profile_image=form.cleaned_data.get('profile_image')
+#             )
+            
+#             messages.success(request, "Your account was successfully created.")
+#             login(request, user)
+#             return redirect("index")
+#     else:
+#         form = RegistrationForm()
+#     return render(request, "Home/Registration.html", {"form": form})
+
 
 @login_required(login_url='login')
 def News_Detail(request, id):
@@ -337,6 +376,7 @@ def PostArticle(request):
         if form.is_valid():
             ljnews = form.save(commit=False)  # ✅ Get model instance, but don't save yet
             ljnews.author = f"{request.user.first_name} {request.user.last_name}".strip()  # ✅ Set author field correctly
+            ljnews.auther_id = request.user.email  # ✅ Set auther_id field correctly<
             ljnews.save()  # ✅ Now save the instance
             messages.success(request, "News/Article added successfully!")
             return redirect("post_article")
@@ -356,4 +396,19 @@ def PostArticle(request):
     return render(request, "Account/PostArticle.html", context)
 
 def Posts(request):
-    return render(request,"Account/Posts.html")
+    # Check if the user is authenticated
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to login page if not authenticated
+
+    # केवल लॉगिन किए हुए यूज़र की पोस्ट को फ़िल्टर करें
+    ljnews = LJNews.objects.filter(author_id=request.user.email, status='PUBLISH')
+    
+    paginator = Paginator(ljnews, 4)  # Show 2 news per page
+    page_number = request.GET.get('page')
+    ViewDatafinal = paginator.get_page(page_number)
+    
+    context = {
+        'ViewDatafinal': ViewDatafinal,  # केवल पेजिनेटेड डेटा भेजें
+        'totalPage': range(1, ViewDatafinal.paginator.num_pages + 1),
+    }
+    return render(request, "Account/ViewPosts.html", context)
