@@ -69,7 +69,9 @@
                   <div class="d-flex justify-content-end align-items-center">
                       <form class="d-flex w-50" action="{% url 'search' %}" method="get" style="margin-top: 10px;">
                         <input class="form-control border shadow-none" type="text" name="keyword" placeholder="Search anything..." style="margin-top: 5px;">
-                        <button class="buttn" type="submit"><i class="fas fa-search special-tag"></i></i></button>
+                        <button class="buttn" type="submit">
+                          <i class="fas fa-search special-tag"></i>
+                        </button>
                       </form>
                   </div>
               </div>
@@ -120,9 +122,9 @@
                     <ul id="navigation">
                       {% if user.is_authenticated %}
                         <!-- Mobile Menu -->
-                        <div class="col-12">
+                        {% comment %} <div class="col-12">
                             <div class="mobile_menu d-block d-md-none"></div>
-                        </div>
+                        </div> {% endcomment %}
                         <li>
                           <a href="#" class="trending-animated" style="color: #ff6219; font-size: 18px;">Hi, {{ user.first_name|default:'User' }}</a>
                           <ul class="submenu">
@@ -135,9 +137,6 @@
                           </ul>
                         </li>
                       {% else %}
-                        <li>
-                          <i class="fas fa-search special-tag"></i>
-                        </li>
                         <li>
                           <a href="#"><i class="fas fa-user" style="color: black;"></i></a>
                           <ul class="submenu">

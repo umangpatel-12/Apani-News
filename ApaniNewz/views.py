@@ -91,29 +91,10 @@ def logout_view(request):
     messages.success(request, "You have been logged out successfully.")
     return redirect("login")
 
-# def register_view(request):
-#     if request.user.is_authenticated:
-#         return redirect('index')
-
-#     if request.method == 'POST':
-#         form = RegistrationForm(request.POST, request.FILES)  # Handle file uploads
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.set_password(form.cleaned_data['password'])  # Hash the password
-#             user.is_active = True
-#             user.save()
-
-#             messages.success(request, "Your account was successfully created.")
-#             login(request, user)  # Log the user in after registration
-#             return redirect('login')  # Redirect to home page after successful registration
-
-#     else:
-#         form = RegistrationForm()
-#     return render(request,"Home/Registration.html",{'form':form})
 
 def register_view(request):
     if request.user.is_authenticated:
-        return redirect('index')
+        return redirect('login')
 
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
@@ -145,35 +126,6 @@ def register_view(request):
         form = RegistrationForm()
 
     return render(request, "Home/Registration.html", {'form': form})
-
-# def register_view(request):
-#     if request.method == "POST":
-#         form = RegistrationForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.password = make_password(form.cleaned_data['password'])
-#             user.is_active = True
-#             user.save()
-            
-#             role = form.cleaned_data['role']
-#             enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
-#             department = form.cleaned_data.get('department')
-            
-#             # Save profile with or without enrollment_number
-#             Profile.objects.create(
-#                 user=user,
-#                 enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
-#                 department=department,
-#                 phone=form.cleaned_data['phone'],
-#                 profile_image=form.cleaned_data.get('profile_image')
-#             )
-            
-#             messages.success(request, "Your account was successfully created.")
-#             login(request, user)
-#             return redirect("index")
-#     else:
-#         form = RegistrationForm()
-#     return render(request, "Home/Registration.html", {"form": form})
 
 
 @login_required(login_url='login')
@@ -245,6 +197,7 @@ def unlike_post(request, id):
     return redirect('details', id=id)
 
 # Search Functionality
+@login_required(login_url='login')
 def Search_View(request):
     keyword = request.GET.get('keyword')
     articles = News.objects.filter(Q(title__icontains=keyword) | Q(sub_title__icontains=keyword) | Q(content__icontains = keyword),status = "PUBLISH")
