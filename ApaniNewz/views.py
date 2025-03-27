@@ -284,7 +284,12 @@ def AddCategory(request):
     return render(request,"Admin/AddCategory.html",{'form':form ,'categories':categories})
 
 def Comments(request):
-    return render(request,"Admin/ManageComment.html")
+    comments = Comment.objects.all().order_by('-created')  # Latest comments first
+
+    context = {
+        'comments': comments,
+    }
+    return render(request,"Admin/ManageComment.html",context)
 
 def ManageUsers(request):
     user_data = User.objects.all()

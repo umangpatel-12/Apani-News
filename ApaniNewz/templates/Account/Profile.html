@@ -48,11 +48,12 @@
               <h4 class="widget_title">Information</h4>
               <ul class="list cat-list">
                 <li class="nav-item {% block editprofile_active %}
-                    active
+
                   {% endblock %}">
                   <a href="{% url 'profile' %}" class="d-flex"><p style="font-weight: 500;">Edit Profile</p></a>
                 </li>
                 <li class="nav-item {% block postarticle_active %}
+
                   {% endblock %}">
                   <a href="{% url 'post_article' %}" class="d-flex">
                     <p style="font-weight: 500;">Post Article</p>
@@ -90,95 +91,94 @@
                 <div class="blog_details">
                   <div class="text-center mb-4">
                     <h3 class="fw-bold">Edit Profile</h3>
-                </div>
+                  </div>
                   <form action="{% url 'profile' %}" id="profile" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="p-3">
-                        <!-- Header -->
-                        {% comment %} <div class="d-flex justify-content-center align-items-center mb-4">
-                            <h3 class="fw-bold text-center">Edit Profile</h3>
-                        </div> {% endcomment %}
-                
-                        <!-- Username -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                {{ u_form.username.label_tag }}
-                                {{ u_form.username }}
-                                <div class="text-danger">{{ u_form.username.errors }}</div>
-                            </div>
+                      <!-- Header -->
+                      {% comment %} <div class="d-flex justify-content-center align-items-center mb-4">
+                        <h3 class="fw-bold text-center">Edit Profile</h3>
+                      </div> {% endcomment %}
+
+                      <!-- Username -->
+                      <div class="row mb-3">
+                        <div class="col-md-12">
+                          {{ u_form.username.label_tag }}
+                          {{ u_form.username }}
+                          <div class="text-danger">{{ u_form.username.errors }}</div>
                         </div>
-                
-                        <!-- First Name & Last Name -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                {{ u_form.first_name.label_tag }}
-                                {{ u_form.first_name }}
-                                <div class="text-danger">{{ u_form.first_name.errors }}</div>
-                            </div>
-                            <div class="col-md-6">
-                                {{ u_form.last_name.label_tag }}
-                                {{ u_form.last_name }}
-                                <div class="text-danger">{{ u_form.last_name.errors }}</div>
-                            </div>
-                        </div>
-                
-                        <!-- Email & Phone -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                {{ u_form.email.label_tag }}
-                                {{ u_form.email }}
-                                <div class="text-danger">{{ u_form.email.errors }}</div>
-                            </div>
-                            <div class="col-md-6">
-                                {{ p_form.phone.label_tag }}
-                                {{ p_form.phone }}
-                                <div class="text-danger">{{ p_form.phone.errors }}</div>
-                            </div>
-                        </div>
-                
-                        <!-- Gender & Location -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                {{ p_form.gender.label_tag }}
-                                {{ p_form.gender }}
-                                <div class="text-danger">{{ p_form.gender.errors }}</div>
-                            </div>
-                            <div class="col-md-6">
-                                {{ p_form.location.label_tag }}
-                                {{ p_form.location }}
-                                <div class="text-danger">{{ p_form.location.errors }}</div>
-                            </div>
-                        </div>
-                
-                        <div class="row mb-3">
-                          <div class="col-md-6">
-                            {{ p_form.profile_image.label_tag }}
-                            {{ p_form.profile_image }}
-                            <div class="text-danger">{{ p_form.profile_image.errors }}</div>
-                          </div>
-                          <div class="col-md-6">
-                            {{ p_form.role.label_tag }}
-                            {{ p_form.role }}
-                            <div class="text-danger">{{ p_form.role.errors }}</div>
-                          </div>
                       </div>
-                
-                        <!-- Bio -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                {{ p_form.bio.label_tag }}
-                                {{ p_form.bio }}
-                                <div class="text-danger">{{ p_form.bio.errors }}</div>
-                            </div>
+
+                      <!-- First Name & Last Name -->
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          {{ u_form.first_name.label_tag }}
+                          {{ u_form.first_name }}
+                          <div class="text-danger">{{ u_form.first_name.errors }}</div>
                         </div>
-                
-                        <!-- Submit Button -->
-                        <div class="text-center mt-4">
-                            <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
+                        <div class="col-md-6">
+                          {{ u_form.last_name.label_tag }}
+                          {{ u_form.last_name }}
+                          <div class="text-danger">{{ u_form.last_name.errors }}</div>
                         </div>
+                      </div>
+
+                      <!-- Email & Phone -->
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          {{ u_form.email.label_tag }}
+                          {{ u_form.email }}
+                          <div class="text-danger">{{ u_form.email.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                          {{ p_form.phone.label_tag }}
+                          {{ p_form.phone }}
+                          <div class="text-danger">{{ p_form.phone.errors }}</div>
+                        </div>
+                      </div>
+
+                      <!-- Gender & Location -->
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          {{ p_form.gender.label_tag }}
+                          {{ p_form.gender }}
+                          <div class="text-danger">{{ p_form.gender.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                          {{ p_form.location.label_tag }}
+                          {{ p_form.location }}
+                          <div class="text-danger">{{ p_form.location.errors }}</div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          {{ p_form.profile_image.label_tag }}
+                          {{ p_form.profile_image }}
+                          <div class="text-danger">{{ p_form.profile_image.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                          {{ p_form.role.label_tag }}
+                          {{ p_form.role }}
+                          <div class="text-danger">{{ p_form.role.errors }}</div>
+                        </div>
+                      </div>
+
+                      <!-- Bio -->
+                      <div class="row mb-3">
+                        <div class="col-md-12">
+                          {{ p_form.bio.label_tag }}
+                          {{ p_form.bio }}
+                          <div class="text-danger">{{ p_form.bio.errors }}</div>
+                        </div>
+                      </div>
+
+                      <!-- Submit Button -->
+                      <div class="text-center mt-4">
+                        <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
+                      </div>
                     </div>
-                </form>
-                
+                  </form>
                 </div>
                 {% comment %}
               </article> {% endcomment %}

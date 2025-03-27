@@ -1,7 +1,102 @@
-{% extends "Admin/main.html" %}
-{% block comments_active %}selected{% endblock comments_active %}
+{% extends 'Admin/main.html' %}
+{% block comments_active %}
+  selected
+{% endblock %}
 {% load static %}
 
 {% block admin %}
-
-{% endblock admin %}
+  <div class="body-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body p-4">
+              <h5 class="card-title fw-semibold mb-4">Comment's</h5>
+              <div class="table-responsive">
+                <table class="table text-nowrap mb-0 align-middle">
+                  <thead class="text-dark fs-4">
+                    <tr>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">ID</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">User</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Comment</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Replies</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Date</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for c in comments %}
+                      <tr>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">{{ c.id }}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-1">{{ c.user.username }}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                          <p class="mb-0 fw-normal">{{ c.comment }}</p>
+                        </td>
+                        <td class="border-bottom-0">
+                          <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
+                        </td>
+                        <td class="border-bottom-0">
+                          <button class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#replies{{ c.id }}">View Replies</button>
+                        </td>
+                      </tr>
+                      <!-- Replies Section (Nested Table) -->
+                      <tr id="replies{{ c.id }}" class="collapse">
+                        <td colspan="5">
+                          <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                              <thead class="table-light">
+                                <tr>
+                                  <th class="text-center">ID</th>
+                                  <th>User</th>
+                                  <th>Reply</th>
+                                  <th>Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for reply in c.subcomments_set.all %}
+                                  <tr>
+                                    <td class="text-center">
+                                      <span class="badg">{{ reply.id }}</span>
+                                    </td>
+                                    <td>
+                                      <div class="d-flex align-items-center">
+                                        <strong class="text-dark">{{ reply.user.username }}</strong>
+                                      </div>
+                                    </td>
+                                    <td>{{ reply.reply }}</td>
+                                    <td class="text-muted">{{ reply.created|date:'M d, Y H:i' }}</td>
+                                  </tr>
+                                {% empty %}
+                                  <tr>
+                                    <td colspan="4" class="text-muted text-center">No replies yet.</td>
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

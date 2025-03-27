@@ -1,5 +1,7 @@
 {% extends 'Home/main.html' %}
-{% block home_active %}active{% endblock home_active %}
+{% block home_active %}
+  active
+{% endblock %}
 {% load static %}
 
 {% block main %}
@@ -17,9 +19,9 @@
                 <div class="trending-animated">
                   <ul id="js-news" class="js-hidden">
                     {% for t in trending %}
-                    <li class="news-item">{{t.title}}</li>
+                      <li class="news-item">{{ t.title }}</li>
                     {% endfor %}
-                    
+
                     <li class="news-item">Spondon IT sit amet, consectetur.......</li>
                     <li class="news-item">Rem ipsum dolor sit amet, consectetur adipisicing elit.</li>
                   </ul>
@@ -28,18 +30,18 @@
             </div>
           </div>
 
-          {% comment %} Trending News {% endcomment %}
-          <div class="row"> 
+          {% comment %}Trending News{% endcomment %}
+          <div class="row">
             <div class="col-lg-8">
               <!-- Trending Top -->
-               {% for a in news %}
+              {% for a in news %}
                 {% if forloop.first %}
                   <div class="trending-top mb-30">
                     <div class="trend-top-img">
-                      <img src="{{ a.news_image.url }}" alt="" height="411" width="770"/>
+                      <img src="{{ a.news_image.url }}" alt="" height="411" width="770" />
                       <div class="trend-top-cap">
-                        <span>{{a.category}}</span>
-                        <h2><a href="{% url 'details' a.id %}">{{a.title|truncatechars:30}}</a></h2>
+                        <span>{{ a.category }}</span>
+                        <h2><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:30 }}</a></h2>
                       </div>
                     </div>
                   </div>
@@ -48,16 +50,16 @@
               <!-- Trending Bottom -->
               <div class="trending-bottom">
                 <div class="row">
-                  {% for a in news|slice:"3:7" %}
+                  {% for a in news|slice:'3:7' %}
                     {% if not forloop.first %}
                       <div class="col-lg-4">
                         <div class="single-bottom mb-35">
                           <div class="trend-bottom-img mb-30">
-                            <img src="{{a.news_image.url}}" height="157" width="236" alt="" />
+                            <img src="{{ a.news_image.url }}" height="157" width="236" alt="" />
                           </div>
                           <div class="trend-bottom-cap">
-                            <span class="color1">{{a.category}}</span>
-                            <h4><a href="{% url 'details' a.id %}">{{a.title|truncatechars:40}}</a></h4>
+                            <span class="color1">{{ a.category }}</span>
+                            <h4><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:40 }}</a></h4>
                           </div>
                         </div>
                       </div>
@@ -68,28 +70,28 @@
             </div>
             <!-- Riht content -->
             <div class="col-lg-4">
-              {% for a in news|slice:"4" %}
+              {% for a in news|slice:'4' %}
                 {% if not forloop.first %}
                   <div class="trand-right-single d-flex">
                     <div class="trand-right-img">
-                      <img src="{{a.news_image.url}} " height="100" width="120" alt="" />
+                      <img src="{{ a.news_image.url }} " height="100" width="120" alt="" />
                     </div>
                     <div class="trand-right-cap">
-                      <span class="color1">{{a.category}}</span>
-                      <h4><a href="{% url 'details' a.id %}">{{a.title|truncatechars:40}}</a></h4>
+                      <span class="color1">{{ a.category }}</span>
+                      <h4><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:40 }}</a></h4>
                     </div>
                   </div>
                 {% endif %}
               {% endfor %}
             </div>
           </div>
-          {% comment %} End Trending News {% endcomment %}
+          {% comment %}End Trending News{% endcomment %}
         </div>
       </div>
     </div>
     <!-- Trending Area End -->
 
-    <!-- Weekly-News start -->
+    <!-- LJ-News start -->
     <div class="weekly-news-area pt-50">
       <div class="container">
         <div class="weekly-wrapper">
@@ -107,11 +109,11 @@
                 {% for lj in ljnews %}
                   <div class="weekly-single">
                     <div class="weekly-img">
-                      <img src="{{lj.ljnews_image.url}}" height="432" width="370" alt="" />
+                      <img src="{{ lj.ljnews_image.url }}" height="432" width="370" alt="" />
                     </div>
                     <div class="weekly-caption" style="width: 320px;">
-                      <span class="color1">{{lj.category}}</span>
-                      <h4><a href="{% url 'details' lj.id %}">{{lj.title|truncatechars:35}}</a></h4>
+                      <span class="color1">{{ lj.category }}</span>
+                      <h4><a href="{% url 'details' lj.id %}">{{ lj.title|truncatechars:35 }}</a></h4>
                     </div>
                   </div>
                 {% endfor %}
@@ -121,7 +123,7 @@
         </div>
       </div>
     </div>
-    <!-- End Weekly-News -->
+    <!-- LJ-News end -->
 
     <!-- Whats New Start -->
     <section class="whats-news-area pt-50 pb-20">
@@ -159,21 +161,19 @@
                     <div class="whats-news-caption">
                       <div class="row">
                         {% if cat_news %}
-                        {% for c in cat_news %}
-                        
-                          <div class="col-lg-4 col-md-6 {{ c.category }}">
-                            <div class="single-what-news mb-100">
-                              <div class="what-img">
-                                <img src="{{c.news_image.url}}" height="300" width="380" alt="" />
-                              </div>
-                              <div class="what-cap">
-                                <span class="color1">{{c.category}}</span>
-                                <h4><a href="{% url 'details' c.id %}">{{c.title|truncatechars:28}}</a></h4>
+                          {% for c in cat_news %}
+                            <div class="col-lg-4 col-md-6 {{ c.category }}">
+                              <div class="single-what-news mb-100">
+                                <div class="what-img">
+                                  <img src="{{ c.news_image.url }}" height="300" width="380" alt="" />
+                                </div>
+                                <div class="what-cap">
+                                  <span class="color1">{{ c.category }}</span>
+                                  <h4><a href="{% url 'details' c.id %}">{{ c.title|truncatechars:28 }}</a></h4>
+                                </div>
                               </div>
                             </div>
-                          </div>
-
-                        {% endfor %}
+                          {% endfor %}
                         {% endif %}
                       </div>
                     </div>
@@ -183,7 +183,7 @@
               </div>
             </div>
           </div>
-          {% comment %} <div class="col-lg-4">  
+          {% comment %} <div class="col-lg-4">
             <!-- Section Tittle -->
             <div class="section-tittle mb-40">
               <h3>Follow Us</h3>
@@ -239,7 +239,6 @@
     </section>
     <!-- Whats New End -->
 
-   
     <!-- Recent Articles start -->
     <div class="recent-articles" style="margin-top: 50px;">
       <div class="container">
@@ -262,8 +261,8 @@
                         <img src="{{ f.news_image.url }}" height="350px" width="370px" alt="" />
                       </div>
                       <div class="what-cap">
-                        <span class="color1">{{f.category}}</span>
-                        <h4><a href="{% url 'details' f.id %}">{{f.title|truncatechars:35}}</a></h4>
+                        <span class="color1">{{ f.category }}</span>
+                        <h4><a href="{% url 'details' f.id %}">{{ f.title|truncatechars:35 }}</a></h4>
                       </div>
                     </div>
                   {% endfor %}
