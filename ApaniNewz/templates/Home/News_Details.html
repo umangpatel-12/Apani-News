@@ -1,11 +1,9 @@
-{% extends "Home/main.html" %}
+{% extends 'Home/main.html' %}
 {% load static %}
 
-
 {% block main %}
-
-<style>
-   .heart-btn {
+  <style>
+    .heart-btn {
       background: transparent; /* No background */
       border: none; /* No border */
       padding: 0;
@@ -14,279 +12,224 @@
       align-items: center;
       justify-content: center;
       opacity: 1; /* Ensure it's visible */
-  }
-  
-  .heart-btn:focus {
+    }
+    
+    .heart-btn:focus {
       outline: none; /* Remove focus outline */
-  }
-  
-</style>
+    }
+  </style>
 
-<!--================Blog Area =================-->
-   <section class="blog_area single-post-area section-padding">
-      <div class="container">
-         {% comment %} {% for a in article %}
-         
-         {% endfor %} {% endcomment %}
-         <div class="row">
-            <div class="col-lg-8 posts-list">
-               {% for a in news %}
-               
-               <div class="single-post">
-                  <div class="feature-img">
-                     <img class="img-fluid" src="{{a.news_image.url}}" alt="" style="height: 475px;width: 780px;">
+  <!-- ================Blog Area ================= -->
+  <section class="blog_area single-post-area section-padding">
+    <div class="container">
+      {% comment %} {% for a in article %}{% endfor %} {% endcomment %}
+      <div class="row">
+        <div class="col-lg-8 posts-list">
+          {% for a in news %}
+            <div class="single-post">
+              <div class="feature-img">
+                <img class="img-fluid" src="{{ a.news_image.url }}" alt="" style="height: 475px;width: 780px;" />
+              </div>
+              <div class="blog_details">
+                <div class="quote-wrapper">
+                  <h2 style="font-size: 30px;">{{ a.title }}</h2>
+                </div>
+                <h3 class="blog-info-link mt-3 mb-4">{{ a.sub_title }}</h3>
+
+                <ul class="blog-info-link mt-3 mb-4">
+                  <li>
+                    <a href="#"><i class="fa fa-user"></i> {{ a.category }}</a>
+                  </li>
+                  {% comment %} <li>
+                    <a href="#"><i class="fa fa-comments"></i> 03 Comments</a>
+                  </li> {% endcomment %}
+                </ul>
+
+                <p class="excert" style="text-align: justify;">{{ a.content|safe }}</p>
+              </div>
+            </div>
+          {% endfor %}
+
+          <div class="navigation-top">
+            <div class="d-sm-flex justify-content-between text-center">
+              {% if article.id %}
+                {% if like_this_article %}
+                  <form action="{% url 'unlike_post' article.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="heart-btn"><span class="fas fa-heart" style="color: red;font-size: 20px;"></span></button>
+                    <span style="font-size: 20px;">{{ article.total_likes }} Likes</span>
+                  </form>
+                {% else %}
+                  <form action="{% url 'like_post' article.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="heart-btn"><span class="far fa-heart" style="color: black;font-size: 20px;"></span></button>
+                    <span style="font-size:20px;">{{ article.total_likes }} Likes</span>
+                  </form>
+                {% endif %}
+              {% else %}
+                <p>Error: Article ID is missing.</p>
+              {% endif %}
+
+              <div class="col-sm-4 text-center my-2 my-sm-0">
+                <p class="comment-count" style="font-size: 20px;">
+                  <span class="align-middle"><i class="fa fa-comment" style="font-size: 20px;color: #f4511e;"></i></span>{{ total_comments }} Comments
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {% comment %}Comment On Post{% endcomment %}
+          <style>
+            .buttn {
+              background-color: #f4511e;
+              border-radius: 8px;
+              border: 2px;
+              color: white;
+              height: 38px;
+              width: 75px;
+              text-align: center;
+              font-size: 16px;
+              margin: 4px 2px;
+              opacity: 0.6;
+              transition: 0.3s;
+              display: inline-block;
+              text-decoration: none;
+              cursor: pointer;
+            }
+            
+            .buttn:hover {
+              opacity: 1;
+            }
+          </style>
+          <div class="blog-author mt-4">
+            <div class="media">
+              <div class="media-body">
+                <h5 class="mb-3">Leave a comment</h5>
+                <form action="{% url 'details' article.id %}" method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <textarea name="comment" rows="2" class="form-control form-control-lg" placeholder="Write your comment..."></textarea>
+                    {% comment %} {{ form.comment }} {% endcomment %}
                   </div>
-                  <div class="blog_details">
-                     <div class="quote-wrapper">
-                        <h2 style="font-size: 30px;">
-                           {{a.title}}
-                        </h2>
-                     </div>
-                     <h3 class="blog-info-link mt-3 mb-4">
-                        {{a.sub_title}}
-                     </h3>
-                     
-                     
-                     <ul class="blog-info-link mt-3 mb-4">
-                        <li><a href="#"><i class="fa fa-user"></i> {{a.category}}</a></li>
-                        {% comment %} <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li> {% endcomment %}
-                     </ul>
-                     
-                     <p class="excert" style="text-align: justify;">
-                        {{ a.content | safe }}
-                     </p>
-                  </div>
-               </div>
-               {% endfor %}
-               
+                  <button type="submit" class="buttn">Post</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          {% comment %}End Comment On Post{% endcomment %}
 
-               <div class="navigation-top">
-                  <div class="d-sm-flex justify-content-between text-center">
+          {% for comment, replies in comments %}
+            <div class="comments" style="border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px;">
+              <div class="d-flex" style="padding: 15px; margin-left: 15px;">
+                <div class="single-comment justify-content-between d-flex">
+                  <div class="user justify-content-between d-flex">
+                    <div class="thumb">
+                      <img src="{{ comment.user.profile.profile_image.url }}" alt="" style="width: 65px; height: 65px; border-radius: 50%;" />
+                    </div>
+                    <div class="desc" style="margin-left: 18px;">
+                      <h5>@{{ comment.user.username }}</h5>
+                      <p class="comment">{{ comment.comment }}</p>
+                      <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                          <p class="date">{{ comment.created|timesince }}</p>
+                        </div>
+                        <div class="desc">
+                          <a href="javascript:void(0);" class="btn-reply text-uppercase" style="font-weight: 500; color:silver; margin-left: 350px; display: flex; align-items: center; min-width: 80px; justify-content: flex-end;" onclick="toggleReplyForm('{{ comment.id }}')">Reply</a>
+                        </div>
+                      </div>
 
-                    {% if article.id %}
-                      {% if like_this_article %}
-                        <form action="{% url 'unlike_post' article.id %}" method="post">
-                        {% csrf_token %}
-                           <button type="submit" class="heart-btn">
-                              <span class="fas fa-heart" style="color: red;font-size: 20px;"></span>
-                           </button>
-                           <span style="font-size: 20px;">{{ article.total_likes }} Likes</span>
+                      <!-- Reply Form (Initially Hidden) -->
+                      <div id="reply-form-{{ comment.id }}" style="display: none; margin-top: 10px;">
+                        <form action="" method="post">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <textarea name="comment" rows="2" class="form-control form-control-lg" placeholder="Write your reply..."></textarea>
+                            <input type="hidden" name="comm_id" value="{{ comment.id }}" />
+                          </div>
+                          <button type="submit" class="buttn">REPLY</button>
                         </form>
-                        {% else %}
-                        <form action="{% url 'like_post' article.id %}" method="post">
-                        {% csrf_token %}
-                           <button type="submit" class="heart-btn">
-                              <span class="far fa-heart" style="color: black;font-size: 20px;"></span>
-                           </button>
-                           <span style="font-size:20px;">{{ article.total_likes }} Likes</span>
-                        </form>
-                        {% endif %}
-                     {% else %}
-                        <p>Error: Article ID is missing.</p>
-                     {% endif %}
+                      </div>
 
-
-
-                    
-                     <div class="col-sm-4 text-center my-2 my-sm-0">
-                        <p class="comment-count" style="font-size: 20px;">
-                           <span class="align-middle">
-                              <i class="fa fa-comment" style="font-size: 20px;color: #f4511e;"></i>
-                           </span >{{total_comments}} Comments</p>
-                     </div>
-                  </div>
-                  
-               </div>
-
-               {% comment %} Comment On Post {% endcomment %}
-               <style>
-                  .buttn {
-                     background-color: #f4511e;
-                     border-radius: 8px;
-                     border: 2px;
-                     color: white;
-                     height: 38px;
-                     width: 75px;
-                     text-align: center;
-                     font-size: 16px;
-                     margin: 4px 2px;
-                     opacity: 0.6;
-                     transition: 0.3s;
-                     display: inline-block;
-                     text-decoration: none;
-                     cursor: pointer;
-                   }
-                   
-                   .buttn:hover {
-                     opacity: 1;
-                  }
-               </style>
-               <div class="blog-author mt-4">
-                  <div class="media">
-                    <div class="media-body">
-                        <h5 class="mb-3">Leave a comment</h5>
-                        <form action="{% url 'details' article.id %}" method="post">
-                           {% csrf_token %}
-                           <div class="form-group">
-                              <textarea name="comment" rows="2" class="form-control form-control-lg" placeholder="Write your comment..."></textarea>
-                              {% comment %} {{ form.comment }} {% endcomment %}
-                           </div>
-                           <button type="submit" class="buttn">Post</button>
-                        </form>                    
+                      <!-- Display Replies (SubComments) -->
+                      {% if replies %}
+                        <ul class="subcomments" style="list-style: none; margin-top: 15px;">
+                          {% for reply in replies %}
+                            <li class="reply-comment" style="margin-left: 50px; padding: 10px; border-left: 2px solid #ddd;">
+                              <div class="d-flex align-items-center">
+                                <img src="{{ reply.user.profile.profile_image.url }}" alt="" style="width: 50px; height: 50px; border-radius: 50%;" />
+                                <div class="desc" style="margin-left: 15px;">
+                                  <h6>@{{ reply.user.username }}</h6>
+                                  <p>{{ reply.reply }}</p> <!-- Corrected field for displaying replies -->
+                                  <p class="date" style="font-size: 12px; color: gray;">{{ reply.created|timesince }}</p>
+                                </div>
+                              </div>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
-               {% comment %} End Comment On Post {% endcomment %}
+              </div>
+            </div>
+          {% empty %}
+            <p>No comments yet. Be the first to comment!</p>
+          {% endfor %}
 
-               {% for comment, replies in comments %}
-               <div class="comments" style="border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px;">
-                  <div class="d-flex" style="padding: 15px; margin-left: 15px;">
-                     <div class="single-comment justify-content-between d-flex">
-                        <div class="user justify-content-between d-flex">
-                           <div class="thumb">
-                              <img src="{{ comment.user.profile.profile_image.url }}" alt="" style="width: 65px; height: 65px; border-radius: 50%;">
-                           </div>
-                           <div class="desc" style="margin-left: 18px;">
-                              <h5>@{{comment.user.username}}</h5>
-                              <p class="comment">{{comment.comment}}</p>
-                              <div class="d-flex justify-content-between">
-                                 <div class="d-flex align-items-center">
-                                    <p class="date">{{ comment.created | timesince }}</p>
-                                 </div>
-                                 <div class="desc">
-                                    <a href="javascript:void(0);" class="btn-reply text-uppercase" style="font-weight: 500; color:silver; margin-left: 350px; display: flex; align-items: center; min-width: 80px; justify-content: flex-end;" onclick="toggleReplyForm('{{ comment.id }}')">Reply</a>
-                                 </div>
-                              </div>
-
-                              <!-- Reply Form (Initially Hidden) -->
-                              <div id="reply-form-{{ comment.id }}" style="display: none; margin-top: 10px;">
-                                 <form action="" method="post">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                       <textarea name="comment" rows="2" class="form-control form-control-lg" placeholder="Write your reply..."></textarea>
-                                       <input type="hidden" name="comm_id" value="{{ comment.id }}">
-                                    </div>
-                                    <button type="submit" class="buttn">REPLY</button>
-                                 </form>
-                              </div>
-
-                              <!-- Display Replies (SubComments) -->
-                              {% if replies %}
-                              <ul class="subcomments" style="list-style: none; margin-top: 15px;">
-                                 {% for reply in replies %}
-                                 <li class="reply-comment" style="margin-left: 50px; padding: 10px; border-left: 2px solid #ddd;">
-                                    <div class="d-flex align-items-center">
-                                       <img src="{{ reply.user.profile.profile_image.url }}" alt="" style="width: 50px; height: 50px; border-radius: 50%;">
-                                       <div class="desc" style="margin-left: 15px;">
-                                          <h6>@{{ reply.user.username }}</h6>
-                                          <p>{{ reply.reply }}</p> <!-- Corrected field for displaying replies -->
-                                          <p class="date" style="font-size: 12px; color: gray;">{{ reply.created | timesince }}</p>
-                                       </div>
-                                    </div>
-                                 </li>
-                                 {% endfor %}
-                              </ul>
-                              {% endif %}
-                           </div>
-                        </div>
-                     </div>
+          <script>
+            function toggleReplyForm(commentId) {
+              var replyForm = document.getElementById('reply-form-' + commentId)
+              replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none'
+            }
+          </script>
+        </div>
+        <div class="col-lg-4">
+          <div class="blog_right_sidebar">
+            <aside class="single_sidebar_widget search_widget">
+              <form action="{% url 'search' %}" method="get">
+                <div class="form-group">
+                  <div class="input-group mb-3">
+                    <input type="text" name="keyword" class="form-control" placeholder="Search Keyword...." onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'" />
+                    <div class="input-group-append">
+                      {% comment %} <button class="btns" type="button"><i class="ti-search"></i></button> {% endcomment %}
+                    </div>
                   </div>
-               </div>
-               {% empty %}
-               <p>No comments yet. Be the first to comment!</p>
-               {% endfor %}
+                </div>
+                <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" type="submit">Search</button>
+              </form>
+            </aside>
+            {% comment %}Start Category{% endcomment %}
+            <aside class="single_sidebar_widget post_category_widget">
+              <h4 class="widget_title">Category</h4>
+              <ul class="list cat-list">
+                {% for cat in category %}
+                  <li>
+                    <a href="#" class="d-flex">
+                      <p>{{ cat.category_name }}</p>
+                      <p>({{ cat.post_count }})</p>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </aside>
+            {% comment %}End Category{% endcomment %}
 
-               <script>
-                  function toggleReplyForm(commentId) {
-                     var replyForm = document.getElementById("reply-form-" + commentId);
-                     replyForm.style.display = (replyForm.style.display === "none") ? "block" : "none";
-                  }
-               </script>
-
-
-
-               
-            </div>
-            <div class="col-lg-4">
-               <div class="blog_right_sidebar">
-                  <aside class="single_sidebar_widget search_widget">
-                     <form action="#">
-                        <div class="form-group">
-                           <div class="input-group mb-3">
-                              <input type="text" class="form-control" placeholder='Search Keyword'
-                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
-                              <div class="input-group-append">
-                                 <button class="btns" type="button"><i class="ti-search"></i></button>
-                              </div>
-                           </div>
-                        </div>
-                        <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
-                           type="submit">Search</button>
-                     </form>
-                  </aside>
-
-                  <aside class="single_sidebar_widget post_category_widget">
-                     <h4 class="widget_title">Category</h4>
-                     <ul class="list cat-list">
-                        <li>
-                           <a href="#" class="d-flex">
-                              <p>Resaurant food</p>
-                              <p>(37)</p>
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="d-flex">
-                              <p>Travel news</p>
-                              <p>(10)</p>
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="d-flex">
-                              <p>Modern technology</p>
-                              <p>(03)</p>
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="d-flex">
-                              <p>Product</p>
-                              <p>(11)</p>
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="d-flex">
-                              <p>Inspiration</p>
-                              <p>(21)</p>
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="d-flex">
-                              <p>Health Care</p>
-                              <p>(21)</p>
-                           </a>
-                        </li>
-                     </ul>
-                  </aside>
-
-                  <aside class="single_sidebar_widget popular_post_widget">
-                     <h3 class="widget_title">Recent Post</h3>
-                     {% for r in recent|slice:"4" %}
-                           <div class="media post_item">
-                              <img src="{{ r.news_image.url }}" height="75" width="75" alt="post">
-                              <div class="media-body">
-                                 <a href="single-blog.html">
-                                    <h3><a href="{% url 'details' r.id %}">{{r.title|truncatechars:25}}</a></h3>
-                                 </a>
-                                 <p>{{r.created|timesince}}</p>
-                              </div>
-                           </div>
-                     {% endfor %}
-                  </aside>
-               </div>
-            </div>
-         </div>
+            <aside class="single_sidebar_widget popular_post_widget">
+              <h3 class="widget_title">Recent Post</h3>
+              {% for r in recent|slice:'4' %}
+                <div class="media post_item">
+                  <img src="{{ r.news_image.url }}" height="75" width="75" alt="post" />
+                  <div class="media-body">
+                    <a href="single-blog.html"><h3><a href="{% url 'details' r.id %}">{{ r.title|truncatechars:25 }}</a></h3></a>
+                    <p>{{ r.created|timesince }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </aside>
+          </div>
+        </div>
       </div>
-   </section>
-   <!--================ Blog Area end =================-->
-
-
-{% endblock main %}
+    </div>
+  </section>
+  <!-- ================ Blog Area end ================= -->
+{% endblock %}

@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
-
+from django.db.models import Count
 from django.contrib.auth import get_user_model
 # Rest Framework API's
 from rest_framework.decorators import api_view
@@ -130,9 +130,11 @@ def register_view(request):
 
 @login_required(login_url='login')
 def News_Detail(request, id):
+    # Category Wise Show Posts
+    category = Category.objects.annotate(post_count=Count('news'))
+    
     # Recent Post's
     recent = News.objects.filter(status='PUBLISH',is_featured=False).order_by('-created')
-    
     
     news = News.objects.filter(id=id)
     ljnews = LJNews.objects.filter(id=id)
@@ -175,7 +177,8 @@ def News_Detail(request, id):
         'form': form,
         "total_comments":total_comments,
         'ljnews':ljnews,
-        'recent':recent
+        'recent':recent,
+        'category':category
     }
 
     return render(request, "Home/News_Details.html", context)

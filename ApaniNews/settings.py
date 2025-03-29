@@ -75,6 +75,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ApaniNews.wsgi.application'
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'extraPlugins': 'justify',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'JustifyCenter', 'JustifyBlock'],
+        ],
+        'width': '95%',
+    }
+}
+
 
 
 # Database
