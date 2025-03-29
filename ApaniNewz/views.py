@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
-from ApaniNewz.forms import CategoryForm, CommentForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SubCommentForm, UserUpdate
-from .models import Category, LJNews, Likes, News, Registration, Profile,Comment,SubComments
+from ApaniNewz.forms import CategoryForm, CommentForm, ContactForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SubCommentForm, UserUpdate
+from .models import Category, Contact, LJNews, Likes, News, Registration, Profile,Comment,SubComments
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -208,8 +208,18 @@ def Search_View(request):
     }
     return render(request, "Home/Search.html",context)
 
-def Contact(request):
-    return render(request, "Home/Contact.html")
+def Contacts(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your message has been sent successfully!")
+            return redirect('contact')  # Stay on the same page after submission
+        else:
+            messages.error(request, "There was an error. Please check your inputs.")
+    else:
+        form = ContactForm()    
+    return render(request, "Home/Contact.html",{'form':form})
 
 def About(request):
     return render(request, "Home/About.html")

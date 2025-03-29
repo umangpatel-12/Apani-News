@@ -11,7 +11,7 @@ urlpatterns = [
     path('Registration', views.register_view, name= 'registration'),
     
     path('Details/<int:id>', views.News_Detail, name= 'details'),
-    path('Contact', views.Contact, name= 'contact'),
+    path('Contact', views.Contacts, name= 'contact'),
     path('About', views.About, name= 'about'),
     path('Category/', views.Categories, name= 'category'),
     path('Latest-News', views.LatestNewz, name= 'latestnews'),
