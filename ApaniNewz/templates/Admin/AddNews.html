@@ -73,7 +73,7 @@
                         <input type="checkbox" id="is_featured" name="is_featured" class="form-check-input"
                         {% if form.is_featured.value %}checked{% endif %} />
                     </div>
-                ``</div>
+                  </div>
 
                   <div class="mb-3 row align-items-center">
                     <label for="image" class="col-md-1 col-form-label">Upload Image</label>
@@ -131,8 +131,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% if article %}
-                      {% for a in article %}
+                    {% if NewsData %}
+                      {% for a in NewsData %}
                         <tr>
                           <td class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">{{ a.id }}</h6>
@@ -164,16 +164,33 @@
                                 <i class="far fa-trash-alt" style="font-size:20px"></i>
                             </a>
                         </td>
-                          {% comment %} <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                              <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                            </div>
-                          </td> {% endcomment %}
                         </tr>
                       {% endfor %}
                     {% endif %}
                   </tbody>
                 </table>
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center">
+                      {% if NewsData.has_previous %}
+                          <li class="page-item">
+                              <a class="page-link" href="?page={{ NewsData.previous_page_number }}">Previous</a>
+                          </li>
+                      {% endif %}
+              
+                      {% for num in totalPagelist %}
+                          <li class="page-item {% if num == NewsData.number %}active{% endif %}">
+                              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                          </li>
+                      {% endfor %}
+              
+                      {% if NewsData.has_next %}
+                          <li class="page-item">
+                              <a class="page-link" href="?page={{ NewsData.next_page_number }}">Next</a>
+                          </li>
+                      {% endif %}
+                  </ul>
+              </nav>
+              
               </div>
             </div>
           </div>

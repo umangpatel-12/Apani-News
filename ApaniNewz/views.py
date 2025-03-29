@@ -274,15 +274,22 @@ def AddNews(request):
         else:
             messages.error(request, "Form validation failed. Please check your input.")
     else:
-        form = NewsForm(user=request.user)
+        form = NewsForm()
 
+
+    paginator = Paginator(article, 5)  # Show 5 articles per page
+    page_number = request.GET.get('page')  # Get page number from URL
+    page_obj = paginator.get_page(page_number)  # Get the current page
+
+    total_pages = range(1, paginator.num_pages + 1)  # List of all pages
+    
     return render(request, "Admin/AddNews.html", {
         "article": article,
         "categories": categories,
         "form": form,
+        "NewsData": page_obj,  # Pagination info
+        "totalPagelist": total_pages,
     })
-
-
 
 def AddCategory(request):
     form = CategoryForm()
@@ -307,7 +314,11 @@ def ManageUsers(request):
     return render(request,"Admin/ManageUsers.html",{'user_data':user_data,'user_profile':user_profile})
 
 def ManageContact(request):
-    return render(request,"Admin/ManageContact.html")
+    contact = Contact.objects.all()
+    context = {
+        'contact':contact
+    }
+    return render(request,"Admin/ManageContact.html",context)
 
 # Account's Details
 def ProfilePage(request):
@@ -374,7 +385,6 @@ def Posts(request):
     paginator = Paginator(ljnews, 4)  # Show 2 news per page
     page_number = request.GET.get('page')
     ViewDatafinal = paginator.get_page(page_number)
-    
     context = {
         'ViewDatafinal': ViewDatafinal,  # केवल पेजिनेटेड डेटा भेजें
         'totalPage': range(1, ViewDatafinal.paginator.num_pages + 1),
