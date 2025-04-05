@@ -123,56 +123,18 @@
 
                     <aside class="single_sidebar_widget popular_post_widget">
                         <h3 class="widget_title">Recent Post</h3>
-                        <div class="media post_item">
-                            <img src=" {% static 'assets/img/post/post_1.png' %} " alt="post">
+                        {% for r in recent|slice:'4' %}
+                          <div class="media post_item">
+                            <img src="{{ r.news_image.url }}" height="75" width="75" alt="post" />
                             <div class="media-body">
-                                <a href="single-blog.html">
-                                    <h3>From life was you fish...</h3>
-                                </a>
-                                <p>January 12, 2019</p>
+                              <a href="single-blog.html"><h3><a href="{% url 'details' r.id %}">{{ r.title|truncatechars:25 }}</a></h3></a>
+                              <p>{{ r.created|timesince }}</p>
                             </div>
-                        </div>
-                        <div class="media post_item">
-                            <img src=" {% static 'assets/img/post/post_2.png' %} " alt="post">
-                            <div class="media-body">
-                                <a href="single-blog.html">
-                                    <h3>The Amazing Hubble</h3>
-                                </a>
-                                <p>02 Hours ago</p>
-                            </div>
-                        </div>
-                        <div class="media post_item">
-                            <img src=" {% static 'assets/img/post/post_3.png' %} " alt="post">
-                            <div class="media-body">
-                                <a href="single-blog.html">
-                                    <h3>Astronomy Or Astrology</h3>
-                                </a>
-                                <p>03 Hours ago</p>
-                            </div>
-                        </div>
-                        <div class="media post_item">
-                            <img src=" {% static 'assets/img/post/post_4.png' %} " alt="post">
-                            <div class="media-body">
-                                <a href="single-blog.html">
-                                    <h3>Asteroids telescope</h3>
-                                </a>
-                                <p>01 Hours ago</p>
-                            </div>
-                        </div>
-                    </aside>
+                          </div>
+                        {% endfor %}
+                      </aside>
                 
-                    <aside class="single_sidebar_widget newsletter_widget">
-                        <h4 class="widget_title">Newsletter</h4>
-
-                        <form action="#">
-                            <div class="form-group">
-                                <input type="email" class="form-control" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
-                            </div>
-                            <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
-                                type="submit">Subscribe</button>
-                        </form>
-                    </aside>
+        
                 </div>
             </div>
         </div>

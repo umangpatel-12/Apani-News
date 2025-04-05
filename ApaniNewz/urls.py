@@ -15,6 +15,7 @@ urlpatterns = [
     path('About', views.About, name= 'about'),
     path('Category/', views.Categories, name= 'category'),
     path('Latest-News', views.LatestNewz, name= 'latestnews'),
+    path('Category/Search/', views.CategorySearch, name= 'category_search'),
 
     # Account's
     path('Profile', views.ProfilePage, name= 'profile'),

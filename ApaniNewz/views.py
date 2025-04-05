@@ -91,7 +91,6 @@ def logout_view(request):
     messages.success(request, "You have been logged out successfully.")
     return redirect("login")
 
-
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('login')
@@ -211,6 +210,16 @@ def Search_View(request):
     }
     return render(request, "Home/Search.html",context)
 
+# Category search on details page
+def CategorySearch(request,id):
+    category = get_object_or_404(Category, id=id)
+    posts = News.objects.filter(category=category)
+    context = {
+        'category': category,
+        'posts': posts,
+    }
+    return render(request, "Home/CategorySearch.html", context)
+
 def Contacts(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
@@ -245,6 +254,8 @@ def Categories(request):
 def LatestNewz(request):
     news = News.objects.filter(status='PUBLISH')
     
+    recent = News.objects.filter(status='PUBLISH',is_featured=False).order_by('-created')
+    
     paginator = Paginator(news, 2)  # Show 2 news per page
     page_number = request.GET.get('page')
     NewsDatafinal = paginator.get_page(page_number)
@@ -253,6 +264,7 @@ def LatestNewz(request):
         'news': news,
         'NewsDatafinal': NewsDatafinal,
         'totalPagelist': range(1, NewsDatafinal.paginator.num_pages + 1),
+        'recent':recent,
     }
     
     return render(request, "Home/LatestNewz.html", context)
