@@ -1,10 +1,12 @@
-from django.http import JsonResponse
+import random
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
+from ApaniNews import settings
 from ApaniNewz.forms import CategoryForm, CommentForm, ContactForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SubCommentForm, UserUpdate
-from .models import Category, Contact, LJNews, Likes, News, Registration, Profile,Comment,SubComments
+from .models import Category, Contact, LJNews, Likes, News, Registration, Profile,Comment,SubComments, UserOTP
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -12,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 # Rest Framework API's
 from rest_framework.decorators import api_view
@@ -91,41 +94,205 @@ def logout_view(request):
     messages.success(request, "You have been logged out successfully.")
     return redirect("login")
 
+# def register_view(request):
+#     if request.user.is_authenticated:
+#         return redirect('login')
+
+#     if request.method == 'POST':
+#         get_OTP = request.POST.get('OTP')
+#         form = RegistrationForm(request.POST, request.FILES)
+        
+#         if get_OTP:
+#             get_user = request.POST.get('user')
+#             user = User.objects.get(email=get_user)
+            
+#             if int(get_OTP) == UserOTP.objects.filter(user=user).last().OTP:
+#                 user.is_active = True
+#                 login(request, user)
+#                 user.save()
+#                 messages.success(request, "Your account was successfully created.")
+#                 return render(request, 'Home/login.html', {'form': form})
+#             else:
+#                 messages.error(request, "You entered a wrong OTP.")
+#                 return render(request, "Home/Registration.html", {'OTP': True, 'user': user})
+        
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             user.set_password(form.cleaned_data['password'])
+#             user.is_active = False
+#             user.save()
+#             otp_code = random.randint(100000, 999999)
+#             UserOTP.objects.create(user=user, OTP=otp_code)
+
+#             # Format professional OTP email
+#             subject = "Verify Your Email Address - OTP Code"
+#             message = f"""
+#                         Hi {user.first_name},
+
+#                         Thank you for registering with us!
+
+#                         Please use the One-Time Password (OTP) below to verify your email address and activate your account:
+
+#                         🔐 OTP Code: {otp_code}
+
+#                         This OTP is valid for a limited time and should not be shared with anyone.
+
+#                         If you did not attempt to register, please ignore this email.
+
+#                         Regards,  
+#                         Team Support  
+#                         """
+
+#             send_mail(
+#                 subject,
+#                 message.strip(),
+#                 settings.EMAIL_HOST_USER,
+#                 [user.email],
+#                 fail_silently=False,
+#             )
+
+#             role = form.cleaned_data['role']
+#             enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
+#             department = form.cleaned_data.get('department')
+
+#             # Save profile with or without enrollment_number
+#             Profile.objects.create(
+#                 user=user,
+#                 department=department,
+#                 enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
+#                 phone=form.cleaned_data['phone'],
+#                 profile_image=form.cleaned_data.get('profile_image')
+#             )
+#             messages.info(request, "We’ve sent you an OTP to your email. Please enter it below to verify your account.")
+#             messages.success(request, "Your account was successfully created.")
+#             login(request, user)
+#             return redirect('index')
+
+#     else:
+#         form = RegistrationForm()
+
+#     return render(request, "Home/Registration.html", {'form': form})
+
 def register_view(request):
     if request.user.is_authenticated:
-        return redirect('login')
+        return redirect('index')  # Redirect authenticated users to index
 
     if request.method == 'POST':
+        otp_input = request.POST.get('OTP')
         form = RegistrationForm(request.POST, request.FILES)
 
+        # OTP Verification Block
+        if otp_input:
+            email = request.POST.get('user')
+            try:
+                user = User.objects.get(email=email)
+                user_otp = UserOTP.objects.filter(user=user).last()
+                
+                if user_otp and int(otp_input) == user_otp.OTP:
+                    user.is_active = True
+                    user.save()
+                    login(request, user)
+                    messages.success(request, "Your account has been successfully verified and logged in.")
+                    return redirect('index')
+                else:
+                    messages.error(request, "Invalid OTP. Please try again.")
+            except User.DoesNotExist:
+                messages.error(request, "No user found for verification.")
+
+            return render(request, "Home/Registration.html", {'OTP': True, 'user': email})
+
+        # Registration Form Handling
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
-            user.is_active = True
+            user.is_active = False
             user.save()
 
-            role = form.cleaned_data['role']
-            enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
-            department = form.cleaned_data.get('department')
+            otp_code = random.randint(100000, 999999)
+            UserOTP.objects.create(user=user, OTP=otp_code)
 
-            # Save profile with or without enrollment_number
+            # Format professional OTP email
+            subject = "Verify Your Email Address - OTP Code"
+            message = f"""
+Hi {user.first_name},
+
+Thank you for registering with us!
+
+Please use the One-Time Password (OTP) below to verify your email address and activate your account:
+
+🔐 OTP Code: {otp_code}
+
+This OTP is valid for a limited time and should not be shared with anyone.
+
+If you did not attempt to register, please ignore this email.
+
+Regards,  
+Team Support  
+"""
+
+            send_mail(
+                subject,
+                message.strip(),
+                settings.EMAIL_HOST_USER,
+                [user.email],
+                fail_silently=False,
+            )
+
+            role = form.cleaned_data['role']
             Profile.objects.create(
                 user=user,
-                department=department,
-                enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
+                department=form.cleaned_data['department'],
+                enrollment_number=form.cleaned_data.get('enrollment_number') if role == 'Student' else None,
                 phone=form.cleaned_data['phone'],
                 profile_image=form.cleaned_data.get('profile_image')
             )
 
-            messages.success(request, "Your account was successfully created.")
-            login(request, user)
-            return redirect('index')
+            messages.info(request, "We’ve sent you an OTP to your email. Please enter it below to verify your account.")
+            return render(request, "Home/Registration.html", {'OTP': True, 'user': user.email})
+
+        else:
+            messages.error(request, "Please correct the errors in the form.")
 
     else:
         form = RegistrationForm()
 
     return render(request, "Home/Registration.html", {'form': form})
 
+def ResendOTP(request):
+    if request.method == 'GET':
+        get_user = request.GET['user']
+        if User.objects.filter(email = get_user).exists() and not User.objects.get(email = get_user).is_active:
+            user = User.objects.get(email= get_user)
+            user_OTP = random.randint(100000, 999999)
+            UserOTP.objects.create(user=user, OTP=user_OTP)
+            subject = 'Your OTP Verification Code'
+             # Format professional OTP email
+            subject = "Verify Your Email Address - OTP Code"
+            message = f"""
+                        Hi {user.first_name},
+
+                        Thank you for registering with us!
+
+                        Please use the One-Time Password (OTP) below to verify your email address and activate your account:
+
+                        🔐 OTP Code: {user_OTP}
+
+                        This OTP is valid for a limited time and should not be shared with anyone.
+
+                        If you did not attempt to register, please ignore this email.
+
+                        Regards,  
+                        Team Support  
+                        """
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [user.email],
+                fail_silently=False
+            )
+            return HttpResponse("Re-Send")
+    return HttpResponse("Can't send")
 
 @login_required(login_url='login')
 def News_Detail(request, id):

@@ -3,12 +3,14 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from ApaniNews import settings
 from ApaniNewz import views
+from .views import ResendOTP
 
 urlpatterns = [
     path('', views.home, name= 'index'),
     path('login', views.login_view, name= 'login'),
     path('accounts/logout',views.logout_view, name='logout'),
     path('Registration', views.register_view, name= 'registration'),
+    path('resend-otp', ResendOTP),
     
     path('Details/<int:id>', views.News_Detail, name= 'details'),
     path('Contact', views.Contacts, name= 'contact'),

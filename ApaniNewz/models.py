@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
@@ -174,3 +175,8 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
+
+class UserOTP(models.Model):
+     user = models.ForeignKey(User, on_delete=models.CASCADE)
+     time_st = models.DateTimeField(default=timezone.now) 
+     OTP = models.SmallIntegerField()
