@@ -214,35 +214,37 @@ def register_view(request):
             # Format professional OTP email
             subject = "Verify Your Email Address - OTP Code"
             message = f"""
-Hi {user.first_name},
+                        Hi {user.first_name},
 
-Thank you for registering with us!
+                        Thank you for registering with us!
 
-Please use the One-Time Password (OTP) below to verify your email address and activate your account:
+                        Please use the One-Time Password (OTP) below to verify your email address and activate your account:
 
-🔐 OTP Code: {otp_code}
+                        🔐 OTP Code: {otp_code}
 
-This OTP is valid for a limited time and should not be shared with anyone.
+                        This OTP is valid for a limited time and should not be shared with anyone.
 
-If you did not attempt to register, please ignore this email.
+                        If you did not attempt to register, please ignore this email.
 
-Regards,  
-Team Support  
-"""
+                        Regards,  
+                        Team Support  
+                        """
 
             send_mail(
                 subject,
                 message.strip(),
                 settings.EMAIL_HOST_USER,
                 [user.email],
-                fail_silently=False,
+                fail_silently = False,
             )
 
             role = form.cleaned_data['role']
+            department = form.cleaned_data.get('department')
+            enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
             Profile.objects.create(
                 user=user,
-                department=form.cleaned_data['department'],
-                enrollment_number=form.cleaned_data.get('enrollment_number') if role == 'Student' else None,
+                department=department,
+                enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
                 phone=form.cleaned_data['phone'],
                 profile_image=form.cleaned_data.get('profile_image')
             )
@@ -269,7 +271,7 @@ def ResendOTP(request):
              # Format professional OTP email
             subject = "Verify Your Email Address - OTP Code"
             message = f"""
-                        Hi {user.first_name},
+                        Hi {user.first_name}{user.last_name},
 
                         Thank you for registering with us!
 
@@ -289,7 +291,7 @@ def ResendOTP(request):
                 message,
                 settings.EMAIL_HOST_USER,
                 [user.email],
-                fail_silently=False
+                fail_silently = False
             )
             return HttpResponse("Re-Send")
     return HttpResponse("Can't send")

@@ -138,6 +138,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=15, blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    department = models.CharField(max_length=100, blank=True, null=True)
     enrollment_number = models.CharField(max_length=12, null=True, blank=True,unique=True)  # Add unique enrollment number
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Choose Role')  # Dropdown list
     profile_image = models.ImageField(upload_to='media/profile/')

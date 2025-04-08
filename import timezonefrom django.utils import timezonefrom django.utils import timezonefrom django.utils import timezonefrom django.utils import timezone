@@ -1,0 +1,275 @@
+[33mcommit 4081c7c61edd1b3fcd25a48165b3610ad2735144[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Mon Apr 7 22:21:25 2025 +0530
+
+    Add OTP Verification in Registeration form
+
+[33mcommit 21d4bd2b470c2a1c4f4bab3b5a0f7b527f534e44[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sat Apr 5 23:27:24 2025 +0530
+
+    Add in le=atest News Categiry
+
+[33mcommit e8ecaa774bcf15c676b58c0d1f28f907d516ae61[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sat Mar 29 21:04:09 2025 +0530
+
+    Add Justify In CKEditor
+
+[33mcommit 5df382cad18e427635a5afa6fd608196a3111aad[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sat Mar 29 14:20:03 2025 +0530
+
+    Show Contact Data on Admin Dashboard
+
+[33mcommit 20393e9b7d59b877f2f1d5037ea38bdbf2cbb458[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sat Mar 29 10:10:53 2025 +0530
+
+    Sava Contact Data
+
+[33mcommit 1a241568e2d9394ba10f769fc45b08f681ff8170[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Mar 27 21:32:21 2025 +0530
+
+    Display Comment and sub comment
+
+[33mcommit 5e9568fc60c39187761a5779194fc47becffe727[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Fri Mar 21 19:57:52 2025 +0530
+
+    User Post Modify and View Posts/Article
+
+[33mcommit f98156e91176be7002194b1defbb8167dc1c7416[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Wed Mar 19 22:06:04 2025 +0530
+
+    User Post Modify and View Posts/Article
+
+[33mcommit f527e3f154ca267dd0ee37c509034193d89278d8[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sun Mar 16 15:09:40 2025 +0530
+
+    Modify It
+
+[33mcommit 6afff40004488948cf2b92a9ee5b3de441fb8010[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Fri Mar 14 18:15:59 2025 +0530
+
+    modify Article and Is-Featured and Add Article section
+
+[33mcommit 77e697b0d8f5fbfec8b976863104b1d733c7b1e4[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Fri Mar 14 09:45:15 2025 +0530
+
+    Add  Is-Featured
+
+[33mcommit 6e6fb0f28ee745088046c4d7e8a8194f21fe8bda[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Mar 13 18:14:44 2025 +0530
+
+    Add Unique Tirle of Article and LJ News
+
+[33mcommit c8f0a889636871d30650cdc3439246f84bdb0f51[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Mar 13 11:28:54 2025 +0530
+
+    Home Page Modify
+
+[33mcommit 27b403da71cd8aef1f67272471156fabdc5c7786[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Wed Mar 12 21:50:13 2025 +0530
+
+    Home Page Modify
+
+[33mcommit 91d5b87f3108daa066f122160854a0082f7cca73[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Tue Mar 11 13:34:16 2025 +0530
+
+    Add LJNews Model And Save Image Data
+
+[33mcommit 2d22f7aa247745a3ae177131aea78e9f6d479c1b[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Tue Mar 11 13:31:52 2025 +0530
+
+    Add LJNews Model And Save Data
+
+[33mcommit 8811303ac7ba006a384d7eb291ed3cc169bf27d6[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Mon Mar 10 11:29:55 2025 +0530
+
+    Add Pagination
+
+[33mcommit 444f33721930f143ff3949565a4309a77a2d4ac8[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Fri Mar 7 18:18:56 2025 +0530
+
+    Add Search Functionality
+
+[33mcommit 0c9e83267b9a2b5c1fd8c18603e0f44d10052c90[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Mar 6 17:19:39 2025 +0530
+
+    Modify Comment and Sub Comment and show Parent or child wise
+
+[33mcommit f9c699f69e10d09e6330dc722885c4a33eadf118[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Wed Mar 5 14:45:37 2025 +0530
+
+    Add Comments
+
+[33mcommit 4d90dc9afba610bd6c29e738e707fc1da53e9c01[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Tue Mar 4 18:58:53 2025 +0530
+
+    Modify
+
+[33mcommit 1b9b3fb722e4127097045e5a8ee7311511567c0d[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sat Mar 1 10:40:42 2025 +0530
+
+    Modify Likes button
+
+[33mcommit 8bdd56e24303cf5d88bb70309aeaae29a79962b9[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Fri Feb 28 14:20:57 2025 +0530
+
+    Modify
+
+[33mcommit 111cb5bf5eadb25b62057774322f9c7cedbc9653[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Feb 27 17:45:31 2025 +0530
+
+    Modify Article-Details
+
+[33mcommit a6ee6ac09db7cf7957f72a488691ede424e27a32[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Mon Feb 24 18:55:06 2025 +0530
+
+    Modify User/Faculty Form and Profile
+
+[33mcommit bfeacead16c35f771e233381f966840ccc8b0502[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sun Feb 23 20:25:13 2025 +0530
+
+    Add
+
+[33mcommit 780bb4decdfd4d151c9e10bda19213bda49877e0[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sat Feb 22 12:09:49 2025 +0530
+
+    Logi Add
+
+[33mcommit 8a1e587ea31421e4fe7e192d514329188235c20a[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Fri Feb 21 19:57:22 2025 +0530
+
+    Add
+
+[33mcommit 3d8be01f035d0b57aa9add41e691dc68a79ce585[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Feb 20 18:02:14 2025 +0530
+
+    Category Modify and show Category vise Data
+
+[33mcommit db3d9bbdf1bb9650455cdb3cb28e8f28fdbea6a0[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Wed Feb 19 18:28:51 2025 +0530
+
+    Modify Profile Page
+
+[33mcommit 6e4328c99d4d6e56e2eabfa561fa3e9fb82e8302[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sun Feb 16 19:28:31 2025 +0530
+
+    Modify Post-Articles
+
+[33mcommit 13b7a1959c2788195a1b09a72794e86946f6d4e7[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sun Feb 16 19:10:23 2025 +0530
+
+     Add
+
+[33mcommit d2f008fb68898ef27759ea9ce167dfaebf5063d6[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sat Feb 15 12:39:30 2025 +0530
+
+    Add Profile Data
+
+[33mcommit 2ad577c79d01eb15e9d591d39c08a3677e0da2d4[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Fri Feb 14 17:50:04 2025 +0530
+
+    Add Additional Future
+
+[33mcommit e71649d43019898eb31b8369a364b0c7b3a8eadf[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Feb 13 18:56:46 2025 +0530
+
+    Add Additional Future
+
+[33mcommit 5a379add65e46aae37866519b7ccbcbbd662eb66[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Feb 13 15:21:43 2025 +0530
+
+    Add Images
+
+[33mcommit 2ff74784d0ac8d061e95cdf013db3150ff0813be[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Thu Feb 13 10:48:07 2025 +0530
+
+    Add Category and News Images
+
+[33mcommit cbffcd320ade333fdc293e74403a73151cffc9b3[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Wed Feb 12 17:05:13 2025 +0530
+
+    Add Category and News Modify Content
+
+[33mcommit 77735d4535fcc0003ce05576b6d817768c832dd3[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Tue Feb 11 21:13:01 2025 +0530
+
+    Modify
+
+[33mcommit b34b3d2379881cbc806e5b1f7106993aa62ffd6c[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Mon Feb 10 19:54:03 2025 +0530
+
+    Display and Add Article ,Category.
+
+[33mcommit 252755f207263f3e366ec390f5c26ce9e9da7578[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Sun Feb 9 21:42:39 2025 +0530
+
+    Display and Add Article ,Category.
+
+[33mcommit 7bf67760f4e3e6bb8e70e8397743994030c206fc[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Wed Feb 5 21:20:47 2025 +0530
+
+    News Form are Added
+
+[33mcommit 2eb62a9728d942d6544c1c0171fab70cf49860a6[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Wed Feb 5 17:52:45 2025 +0530
+
+    Added and Some Modify
+
+[33mcommit 43882df6a037e4c394c35c118509fe70a3b546a5[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Tue Feb 4 21:58:46 2025 +0530
+
+    All News files Added and Some Modify
+
+[33mcommit 4dd1dc08eba7f90dd2d46937f9c8d548f129a757[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Tue Feb 4 21:55:41 2025 +0530
+
+    All News files Added and Some Modify
+
+[33mcommit 113b9eb608bc0948a2fcf5e710df962b70a2208a[m
+Author: Patel Umangkumar <umangkumar170@gmail.com>
+Date:   Tue Feb 4 21:46:10 2025 +0530
+
+    Create
