@@ -34,6 +34,8 @@ urlpatterns = [
     # Admin Side
     path('Dashboard',views.dashboard,name='dashboard'),
     path('Add-News-Articles',views.AddNews,name='addnews'),
+    path('Edit-News/<int:id>',views.EDITNews,name='editnews'),
+    path('Delete-News/<int:id>/', views.deletenews, name='deletenews'),
     path('AddCategory',views.AddCategory,name='addcategory'),
     path('Comments',views.Comments,name='comments'),
     path('Manage-Contacts',views.ManageContact,name='contacts'),

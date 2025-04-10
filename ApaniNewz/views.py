@@ -63,31 +63,56 @@ def home(request):
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('index')
-    
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+
+            # Static admin login
+            if email == 'admin@gmail.com' and password == 'admin@123':
+                try:
+                    admin_user = User.objects.get(email=email)
+                except User.DoesNotExist:
+                    # Create admin user if it doesn't exist
+                    admin_user = User.objects.create_user(
+                        username='admin',
+                        email=email,
+                        password=password
+                    )
+                    admin_user.is_staff = True
+                    admin_user.is_superuser = True
+                    admin_user.save()
+
+                login(request, admin_user)
+                messages.info(request, "You are now logged in as admin.")
+                return redirect('dashboard')  # Redirect to admin dashboard
+
+            # Regular user login flow
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
-                messages.error(request, 'User does not exist')
-                return redirect('login')
-            if user.check_password(password):
+                messages.error(request, 'This email is not registered.')
+                return render(request, 'Home/login.html', {'form': form})
+
+            if not user.is_active:
+                messages.error(request, "Your account isn't active.")
+                return render(request, 'Home/login.html', {'form': form})
+
+            user = authenticate(request, username=user.username, password=password)
+            if user is not None:
                 login(request, user)
-                messages.success(request, f"You are now logged in as {email}.")
+                messages.info(request, f"You are now logged in as {email}.")
+                request.session['user_id'] = user.id
+                request.session['email'] = email
                 return redirect('index')
             else:
-                messages.error(request, 'Invalid Password')
-                return redirect('login')
-        else:
-            messages.error(request, 'Invalid Email')
-            return redirect('login')
+                messages.error(request, 'Invalid email or password.')
     else:
         form = LoginForm()
 
-    return render(request,"Home/login.html",{'form':form})
+    return render(request, 'Home/login.html', {'form': form})
 
 def logout_view(request):
     logout(request)
@@ -447,7 +472,7 @@ def AddNews(request):
     categories = Category.objects.all()
 
     if request.method == 'POST':
-        form = NewsForm(request.POST, request.FILES, user=request.user)
+        form = NewsForm(request.POST, request.FILES)
 
         if form.is_valid():
             news = form.save(commit=False)  # ✅ Get model instance but don't save yet
@@ -474,6 +499,52 @@ def AddNews(request):
         "NewsData": page_obj,  # Pagination info
         "totalPagelist": total_pages,
     })
+
+def EDITNews(request, id):
+    news = get_object_or_404(News, id=id)
+    categories = Category.objects.all()
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        sub_title = request.POST.get('sub_title')
+        category_id = request.POST.get('category')
+        author = request.POST.get('author')
+        content = request.POST.get('content')
+        status = request.POST.get('status')
+        is_featured = request.POST.get('is_featured') == 'on'  # Checkbox handling
+
+        # Get the category instance
+        category = get_object_or_404(Category, id=category_id)
+
+        # Assign values to news object
+        news.title = title
+        news.sub_title = sub_title
+        news.category = category
+        news.author = author
+        news.content = content
+        news.status = status
+        news.is_featured = is_featured
+
+        # Image upload check
+        if 'news_image' in request.FILES:
+            news.news_image = request.FILES['news_image']
+
+        # Save updated news
+        news.save()
+        messages.success(request, "News updated successfully!")
+        return redirect('addnews')
+
+    context = {
+        'news': news,
+        'categories': categories
+    }
+    return render(request, 'Admin/AddNews.html', context)
+
+def deletenews(request, id):
+    news = News.objects.filter(id=id)
+    news.delete()
+    messages.success(request, "News/Article deleted successfully!")
+    return redirect("addnews")
 
 def AddCategory(request):
     form = CategoryForm()

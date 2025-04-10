@@ -553,7 +553,6 @@ class ProfileUpdateForm(forms.ModelForm):
             'class': 'form-select form-select-lg',
             'onchange': 'this.form.submit();'
         }),
-        disabled=True
     )
     
     phone = forms.CharField(
