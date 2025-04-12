@@ -327,7 +327,6 @@ class NewsForm(forms.ModelForm):
             'class': 'form-control',
             'placeholder': 'Write your news content here...'
         }),
-        required=False
     )
 
     status = forms.ChoiceField(
@@ -349,13 +348,13 @@ class NewsForm(forms.ModelForm):
     )
 
     is_featured = forms.BooleanField(
-    widget=forms.CheckboxInput(attrs={
+        widget=forms.CheckboxInput(attrs={
         'id': 'is_featured',
         'name': 'is_featured',
         'class': 'custom-checkbox'
     }),
-    required=False,  # ✅ Ensure unchecked state is handled as False
-    initial=False
+        required=False,  # ✅ Ensure unchecked state is handled as False
+        initial=False
 )
 
     class Meta:

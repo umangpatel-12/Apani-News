@@ -500,45 +500,64 @@ def AddNews(request):
         "totalPagelist": total_pages,
     })
 
+# def EDITNews(request, id):
+#     news = get_object_or_404(News, id=id)
+#     categories = Category.objects.all()
+
+#     if request.method == 'POST':
+#         title = request.POST.get('title')
+#         sub_title = request.POST.get('sub_title')
+#         category_id = request.POST.get('category')
+#         author = request.POST.get('author')
+#         content = request.POST.get('content')
+#         status = request.POST.get('status')
+#         is_featured = request.POST.get('is_featured') == 'on'  # Checkbox handling
+
+#         # Get the category instance
+#         category = get_object_or_404(Category, id=category_id)
+
+#         # Assign values to news object
+#         news.title = title
+#         news.sub_title = sub_title
+#         news.category = category
+#         news.author = author
+#         news.content = content
+#         news.status = status
+#         news.is_featured = is_featured
+
+#         # Image upload check
+#         if 'news_image' in request.FILES:
+#             news.news_image = request.FILES['news_image']
+
+#         # Save updated news
+#         news.save()
+#         messages.success(request, "News updated successfully!")
+#         return redirect('addnews')
+
+#     context = {
+#         'news': news,
+#         'categories': categories
+#     }
+#     return render(request, 'Admin/AddNews.html', context)
+
 def EDITNews(request, id):
     news = get_object_or_404(News, id=id)
     categories = Category.objects.all()
 
     if request.method == 'POST':
-        title = request.POST.get('title')
-        sub_title = request.POST.get('sub_title')
-        category_id = request.POST.get('category')
-        author = request.POST.get('author')
-        content = request.POST.get('content')
-        status = request.POST.get('status')
-        is_featured = request.POST.get('is_featured') == 'on'  # Checkbox handling
+        form = NewsForm(request.POST, request.FILES, instance=news)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "News updated successfully!")
+            return redirect('addnews')
+    else:
+        form = NewsForm(instance=news)
 
-        # Get the category instance
-        category = get_object_or_404(Category, id=category_id)
-
-        # Assign values to news object
-        news.title = title
-        news.sub_title = sub_title
-        news.category = category
-        news.author = author
-        news.content = content
-        news.status = status
-        news.is_featured = is_featured
-
-        # Image upload check
-        if 'news_image' in request.FILES:
-            news.news_image = request.FILES['news_image']
-
-        # Save updated news
-        news.save()
-        messages.success(request, "News updated successfully!")
-        return redirect('addnews')
-
-    context = {
+    return render(request, 'Admin/AddNews.html', {
+        'form': form,
         'news': news,
         'categories': categories
-    }
-    return render(request, 'Admin/AddNews.html', context)
+    })
 
 def deletenews(request, id):
     news = News.objects.filter(id=id)
@@ -554,6 +573,26 @@ def AddCategory(request):
         form.save()
         return redirect("addcategory")
     return render(request,"Admin/AddCategory.html",{'form':form ,'categories':categories})
+
+def EditCategory(request, id):
+    categories = get_object_or_404(Category, pk=id)
+    if request.method == 'POST':
+        new_name = request.POST.get('category_name')
+        if new_name:
+            categories.category_name = new_name
+            categories.save()
+            messages.success(request, 'Category updated successfully.')
+        else:
+            messages.warning(request, 'Category name cannot be empty.')
+        return redirect('addcategory')
+    return render(request, "Admin/AddCategory.html", {'categories':categories})
+
+def DeleteCategory(request, id):
+    categories = get_object_or_404(Category, pk=id)
+    if request.method == 'POST':
+        categories.delete()
+        messages.success(request, 'Category deleted successfully.')
+    return redirect("addcategory")
 
 def Comments(request):
     comments = Comment.objects.all().order_by('-created')  # Latest comments first
