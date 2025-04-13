@@ -58,6 +58,7 @@ class News(models.Model):
     is_featured = models.BooleanField(default=False)
     news_image = models.ImageField(upload_to="media/news/")
     likes = models.ManyToManyField(User, related_name='Post_likes',blank=True)
+    views = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
@@ -98,6 +99,7 @@ class LJNews(models.Model):
     status = models.CharField(choices=STATUS, max_length=255)
     is_featured = models.BooleanField(default=False)
     ljnews_image = models.ImageField(upload_to="media/ljnews/",blank=True, null=True)
+    views = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

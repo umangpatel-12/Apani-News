@@ -40,9 +40,9 @@
                   <li>
                     <a href="#"><i class="fa fa-user"></i> {{ a.category }}</a>
                   </li>
-                  {% comment %} <li>
-                    <a href="#"><i class="fa fa-comments"></i> 03 Comments</a>
-                  </li> {% endcomment %}
+                  <li>
+                    <a href="#"><i class="fa fa-eye"></i> {{ a.views }} Views</a> <!-- Displaying the view count -->
+                  </li>
                 </ul>
 
                 <p class="excert" style="text-align: justify;">{{ a.content|safe }}</p>

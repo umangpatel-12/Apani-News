@@ -17,12 +17,7 @@ from django.db.models import Count
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 # Rest Framework API's
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.generics import CreateAPIView
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -325,14 +320,17 @@ def ResendOTP(request):
 def News_Detail(request, id):
     # Category Wise Show Posts
     category = Category.objects.annotate(post_count=Count('news'))
-    
+
     # Recent Post's
-    recent = News.objects.filter(status='PUBLISH',is_featured=False).order_by('-created')
-    
+    recent = News.objects.filter(status='PUBLISH', is_featured=False).order_by('-created')
+
     news = News.objects.filter(id=id)
     ljnews = LJNews.objects.filter(id=id)
     article = get_object_or_404(News, id=id)
-    
+
+    # 🔥 Increment view count
+    article.views += 1
+    article.save(update_fields=['views'])
 
     # Check if the user liked the article
     like_this_article = Likes.objects.filter(user=request.user, article=article).exists()
@@ -341,20 +339,20 @@ def News_Detail(request, id):
         comment_text = request.POST.get('comment')
         comm_id = request.POST.get('comm_id')
 
-        if comm_id:  
+        if comm_id:
             # Save as a SubComment (reply)
             parent_comment = get_object_or_404(Comment, id=int(comm_id))
             SubComments.objects.create(
                 news=article,
                 user=request.user,
                 parent_comment=parent_comment,
-                reply=comment_text  # Corrected field
+                reply=comment_text
             )
         else:
             # Save as a main Comment
             Comment.objects.create(news=article, user=request.user, comment=comment_text)
 
-    # Fetch comments along with their replies (subcomments)
+    # Fetch comments along with their replies
     comments = [(cm, SubComments.objects.filter(parent_comment=cm)) for cm in Comment.objects.filter(news=article)]
 
     form = CommentForm()
@@ -368,10 +366,10 @@ def News_Detail(request, id):
         'like_this_article': like_this_article,
         'comments': comments,
         'form': form,
-        "total_comments":total_comments,
-        'ljnews':ljnews,
-        'recent':recent,
-        'category':category
+        "total_comments": total_comments,
+        'ljnews': ljnews,
+        'recent': recent,
+        'category': category
     }
 
     return render(request, "Home/News_Details.html", context)
@@ -465,7 +463,22 @@ def LatestNewz(request):
 
 # Admin Dashbord's
 def dashboard(request):
-    return render(request,"Admin/Dashboard.html")
+    total_news_articles = News.objects.count()
+    total_ljnews_articles = LJNews.objects.count()
+    total_articles = total_news_articles + total_ljnews_articles
+
+    total_news_views = News.objects.aggregate(total=Sum('views'))['total'] or 0
+    total_ljnews_views = LJNews.objects.aggregate(total=Sum('views'))['total'] or 0
+    total_views = total_news_views + total_ljnews_views
+
+    total_comments = Comment.objects.count()
+    
+    context = {
+        'total_articles': total_articles,
+        'total_views': total_views,
+        'total_comments': total_comments,
+    }
+    return render(request,"Admin/Dashboard.html", context)
 
 def AddNews(request):
     article = News.objects.all()
