@@ -22,7 +22,7 @@ from django.db.models.functions import TruncDate
 from django.utils.timezone import now, timedelta
 from collections import defaultdict
 # Create your views here.
-
+@login_required(login_url='login')
 def home(request):  
     
     # Featured News
@@ -709,7 +709,7 @@ def PostArticle(request):
         if form.is_valid():
             ljnews = form.save(commit=False)  # ✅ Get model instance, but don't save yet
             ljnews.author = f"{request.user.first_name} {request.user.last_name}".strip()  # ✅ Set author field correctly
-            ljnews.auther_id = request.user.email  # ✅ Set auther_id field correctly<
+            ljnews.author_id = request.user.email  # ✅ Set auther_id field correctly<
             ljnews.save()  # ✅ Now save the instance
             messages.success(request, "News/Article added successfully!")
             return redirect("post_article")
@@ -734,7 +734,8 @@ def Posts(request):
         return redirect('login')  # Redirect to login page if not authenticated
 
     # केवल लॉगिन किए हुए यूज़र की पोस्ट को फ़िल्टर करें
-    ljnews = LJNews.objects.filter(author_id=request.user.email, status='PUBLISH')
+    ljnews = LJNews.objects.filter(author_id=request.user.email, status='PUBLISH').order_by('-created')
+
     
     paginator = Paginator(ljnews, 4)  # Show 2 news per page
     page_number = request.GET.get('page')
