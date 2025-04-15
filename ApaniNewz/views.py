@@ -1,8 +1,8 @@
+import json
 import random
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password, check_password
 
 from ApaniNews import settings
 from ApaniNewz.forms import CategoryForm, CommentForm, ContactForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SubCommentForm, UserUpdate
@@ -18,7 +18,9 @@ from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 # Rest Framework API's
 from django.db.models import Sum
-
+from django.db.models.functions import TruncDate
+from django.utils.timezone import now, timedelta
+from collections import defaultdict
 # Create your views here.
 
 def home(request):  
@@ -472,13 +474,58 @@ def dashboard(request):
     total_views = total_news_views + total_ljnews_views
 
     total_comments = Comment.objects.count()
-    
+
+    # Number of Articles per Category
+    category_article_counts = defaultdict(int)
+    categories = Category.objects.all()
+    for category in categories:
+        category_article_counts[category.category_name] = News.objects.filter(category=category).count()
+
+    # Prepare data for the bar chart
+    bar_labels = list(category_article_counts.keys())
+    bar_data = list(category_article_counts.values())
+
+    # Line Chart - Views for last 7 days
+    today = now().date()
+    seven_days_ago = today - timedelta(days=6)
+    date_range = [seven_days_ago + timedelta(days=i) for i in range(7)]
+
+    views_per_day = (
+        News.objects
+        .filter(created__date__range=(seven_days_ago, today))
+        .annotate(date=TruncDate('created'))
+        .values('date')
+        .annotate(total_views=Sum('views'))
+    )
+
+    views_dict = {v['date']: v['total_views'] for v in views_per_day}
+    line_labels = [date.strftime('%d %b') for date in date_range]
+    line_data = [views_dict.get(date, 0) for date in date_range]
+
+    # Pie Chart - Views by Category
+    pie_labels = []
+    pie_data = []
+
+    # Loop through each category and get its total views
+    for category in categories:
+        total_views = News.objects.filter(category=category).aggregate(total=Sum('views'))['total'] or 0
+        if total_views > 0:
+            pie_labels.append(category.category_name)
+            pie_data.append(total_views)
+
     context = {
         'total_articles': total_articles,
         'total_views': total_views,
         'total_comments': total_comments,
+        'line_labels': json.dumps(line_labels),
+        'line_data': json.dumps(line_data),
+        'pie_labels': json.dumps(pie_labels),
+        'pie_data': json.dumps(pie_data),
+        'bar_labels': json.dumps(bar_labels),
+        'bar_data': json.dumps(bar_data),
     }
-    return render(request,"Admin/Dashboard.html", context)
+
+    return render(request, "Admin/Dashboard.html", context)
 
 def AddNews(request):
     article = News.objects.all()
