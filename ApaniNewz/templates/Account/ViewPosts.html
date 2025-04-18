@@ -13,6 +13,7 @@
         <div class="card-body p-4">
           <style>
             .one h5 {
+              margin-top: 20px;
               text-align: center;
               text-transform: uppercase;
               padding-bottom: 5px;
@@ -48,11 +49,18 @@
                                   <div class="col-lg-6 col-md-6 {{ n.category }}">
                                     <div class="single-what-news mb-100">
                                       <div class="what-img">
-                                        <img src="{{ n.ljnews_image.url }}" height="270px" width="200px" alt="{{ n.title }}" />
+                                        <img src="{{ n.ljnews_image.url }}" alt="{{ n.title }}" />
                                       </div>
                                       <div class="what-cap">
                                         <span class="color1">{{ n.category }}</span>
-                                        <h4><a href="{% url 'details' n.id %}">{{ n.title|truncatechars:25 }}</a></h4>
+                                        <h4 style="margin-left: 15px;"><a href="{% url 'details' n.id %}">{{ n.title|truncatechars:21 }}</a></h4>
+                                      </div>
+                                      <div class="d-flex justify-content-between small mt-4">
+                                        <span></span>
+                                        <span>
+                                          <a href="#" class="text-dark me-3" data-bs-toggle="modal" data-bs-target="#editModel{{ n.id }}"><i class="far fa-edit" style="font-size:20px"></i></a>
+                                          <a href="#" class="text-dark" data-bs-toggle="modal" data-bs-target="#deleteModal{{ n.id }}"><i class="far fa-trash-alt" style="font-size:20px"></i></a>
+                                        </span>
                                       </div>
                                     </div>
                                   </div>
@@ -64,7 +72,6 @@
                           </div>
                         </div>
                       </div>
-                      <!-- End Nav Card -->
                     </div>
                   </div>
                 </div>
@@ -99,4 +106,145 @@
       <!-- End Pagination -->
     </div>
   </div>
+
+  {% comment %}Start Edit Post{% endcomment %}
+  {% if ViewDatafinal %}
+    {% for n in ViewDatafinal %}
+    <div class="modal fade" id="editModel{{ n.id }}" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <form method="POST" action="{% url 'editnews' n.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media|safe }}
+
+            <div class="modal-header text-center flex-column w-100">
+              <h3 class="modal-title w-100">Edit Article</h3>
+              <hr class="w-100 mt-2 mb-0">
+            </div>
+
+            <div class="modal-body">
+              <div class="mb-3 row align-items-center">
+                <label for="title" class="col-md-2 col-form-label">Title</label>
+                <div class="col-md-10">
+                  <input type="text" id="title" name="title" class="form-control form-control-lg" value="{{ n.title }}" required />
+                </div>
+              </div>
+
+              <div class="mb-3 row align-items-center">
+                <label for="sub_title" class="col-md-2 col-form-label">Sub-Title</label>
+                <div class="col-md-10">
+                  <input type="text" id="sub_title" name="sub_title" class="form-control form-control-lg" value="{{ n.sub_title }}" required />
+                </div>
+              </div>
+
+              <div class="mb-3 row align-items-center">
+                <label for="category" class="col-md-2 col-form-label">Category</label>
+                <div class="col-md-10">
+                  <select name="category" class="form-control" required>
+                    <option value="">Choose Category</option>
+                    {% for c in categories %}
+                    <option value="{{ c.id }}" {% if n.category.id == c.id %}selected{% endif %}>{{ c.category_name }}</option>
+                  {% endfor %}
+                  
+                  </select>
+                </div>
+              </div>
+
+              <div class="mb-3 row align-items-center">
+                <label for="author" class="col-md-2 col-form-label">Author</label>
+                <div class="col-md-10">
+                  <input type="text" id="author" name="author" class="form-control form-control-lg" value="{{ n.author }}" required />
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="id_content" class="col-md-2 col-form-label">Content</label>
+                <div class="col-md-10">
+                  <textarea name="content" id="content{{ n.id }}" class="form-control">{{ n.content }}</textarea>
+                </div>
+              </div>
+
+              <div class="mb-3 row align-items-center">
+                <label for="status" class="col-md-2 col-form-label">Status</label>
+                <div class="col-md-10">
+                  <select name="status" class="form-control" required>
+                    <option value="PUBLISH" {% if n.status == 'PUBLISH' %}selected{% endif %}>Publish</option>
+                    <option value="DRAFT" {% if n.status == 'DRAFT' %}selected{% endif %}>Draft</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mb-3 row align-items-center">
+                <label class="col-md-2 col-form-label" for="is_featured">Is Featured</label>
+                <div class="col-md-10">
+                  <input type="checkbox" id="is_featured" name="is_featured" class="form-check-input" {% if n.is_featured %}checked{% endif %} />
+                </div>
+              </div>
+
+              <div class="mb-3 row align-items-center">
+                <label for="news_image" class="col-md-2 col-form-label">Upload Image</label>
+                <div class="col-md-10">
+                  <input type="file" id="news_image" name="news_image" class="form-control" />
+                  {% if n.news_image %}
+                    <img src="{{ n.news_image.url }}" alt="Current Image" class="mt-2" height="100">
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+  {% comment %}End Edit Post{% endcomment %}
+
+  {% comment %}Start Delete Post{% endcomment %}
+  {% if ViewDatafinal %}
+    {% for n in ViewDatafinal %}
+    <div class="modal fade" id="deleteModal{{ n.id }}" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <form method="POST" action="{% url 'deletenews' n.id %}">
+            {% csrf_token %}
+            <div class="modal-header text-center flex-column w-100">
+              <h3 class="modal-title w-100">Delete Confirmation</h3>
+              <hr class="w-100 mt-2 mb-0">
+            </div>
+
+            <div class="modal-body text-center">
+              <p class="fw-bold fs-5 mb-2">Are you sure you want to delete</p>
+              <p><strong>"{{ n.title|truncatechars:50 }}"?</strong></p>
+            </div>
+
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-danger">Delete</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+  {% comment %}End Delete Post{% endcomment %}
+
+
+
+  <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+<script>
+  CKEDITOR.replace('{{ form.content.id_for_label }}');
+</script>
+
+<!-- Initialize CKEditor for Edit Modals -->
+<script>
+  {% for n in ViewDatafinal %}
+    CKEDITOR.replace('content{{ n.id }}');
+  {% endfor %}
+</script>
 {% endblock %}

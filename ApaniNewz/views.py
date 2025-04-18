@@ -735,7 +735,7 @@ def Posts(request):
 
     # केवल लॉगिन किए हुए यूज़र की पोस्ट को फ़िल्टर करें
     ljnews = LJNews.objects.filter(author_id=request.user.email, status='PUBLISH').order_by('-created')
-
+    categories = Category.objects.all()
     
     paginator = Paginator(ljnews, 4)  # Show 2 news per page
     page_number = request.GET.get('page')
@@ -743,5 +743,31 @@ def Posts(request):
     context = {
         'ViewDatafinal': ViewDatafinal,  # केवल पेजिनेटेड डेटा भेजें
         'totalPage': range(1, ViewDatafinal.paginator.num_pages + 1),
+        'categories': categories,
     }
     return render(request, "Account/ViewPosts.html", context)
+
+def EDITUserPost(request, id):
+    ljnews = get_object_or_404(LJNews, id=id)
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        form = LJNewsForm(request.POST, request.FILES, instance=ljnews)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "News updated successfully!")
+            return redirect('posts')
+    else:
+        form = LJNewsForm(instance=ljnews)
+
+    return render(request, 'Account/PostArticle.html', {
+        'form': form,
+        'ljnews': ljnews,
+        'categories': categories
+    })
+    
+def DeleteUserPost(request, id):
+    ljnews = get_object_or_404(LJNews,id=id)
+    if request.method == 'POST':
+        ljnews.delete()
+    messages.success(request, "News/Article deleted successfully!")
+    return redirect("posts")
