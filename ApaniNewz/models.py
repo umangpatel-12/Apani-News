@@ -111,19 +111,29 @@ class LJNews(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def LJtotal_likes(self):
+        count = self.LJNews_likes.count()
+        return count
 
     @staticmethod
     def get_all_ljnews_byID(category_id):
         return LJNews.objects.filter(category=category_id, status='PUBLISH')
+    
+    def total_comments(self):
+        comments_count = Comment.objects.filter(ljnews=self).count()
+        subcomments_count = SubComments.objects.filter(ljnews=self).count()
+        return comments_count + subcomments_count
        
 class Likes(models.Model):
-    article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes')    
+    article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes', blank=True, null=True)
+    news = models.ForeignKey(LJNews, on_delete=models.CASCADE, related_name='LJNews_likes', blank=True, null=True)    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     # is_liked = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('article', 'user')
+        unique_together = ('article','news', 'user')
 
 
 class Profile(models.Model):
@@ -151,7 +161,8 @@ class Profile(models.Model):
 
 
 class Comment(models.Model):
-    news = models.ForeignKey(News, on_delete=models.CASCADE)
+    news = models.ForeignKey(News, on_delete=models.CASCADE, blank=True, null=True)
+    ljnews = models.ForeignKey(LJNews, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -160,7 +171,8 @@ class Comment(models.Model):
         return self.comment
 
 class SubComments(models.Model):
-    news = models.ForeignKey(News, on_delete=models.CASCADE)
+    news = models.ForeignKey(News, on_delete=models.CASCADE, blank=True, null=True)
+    ljnews = models.ForeignKey(LJNews, on_delete=models.CASCADE, blank=True, null=True)
     parent_comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     reply = models.TextField()

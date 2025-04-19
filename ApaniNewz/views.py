@@ -45,7 +45,13 @@ def home(request):
     news = News.objects.filter(is_featured=False,status='PUBLISH').order_by('-created')
     
     # LJ News
-    ljnews = LJNews.objects.filter(status='PUBLISH')
+    ljnews = None
+    catid = request.GET.get('category')
+    if catid:
+        ljnews = LJNews.get_all_ljnews_byID(catid)
+    else:
+        ljnews = LJNews.objects.filter(status='PUBLISH').order_by('-created')
+    
         
     context = {
         'categories':categories,
@@ -327,7 +333,6 @@ def News_Detail(request, id):
     recent = News.objects.filter(status='PUBLISH', is_featured=False).order_by('-created')
 
     news = News.objects.filter(id=id)
-    ljnews = LJNews.objects.filter(id=id)
     article = get_object_or_404(News, id=id)
 
     # 🔥 Increment view count
@@ -369,12 +374,70 @@ def News_Detail(request, id):
         'comments': comments,
         'form': form,
         "total_comments": total_comments,
-        'ljnews': ljnews,
         'recent': recent,
         'category': category
     }
 
     return render(request, "Home/News_Details.html", context)
+
+@login_required(login_url='login')
+def LJNews_Detail(request, id):
+    # Category Wise Show Posts
+    category = Category.objects.annotate(post_count=Count('ljnews'))
+
+    # Recent Post's
+    recents = LJNews.objects.filter(status='PUBLISH', is_featured=False).order_by('-created')
+
+    
+    ljnews = LJNews.objects.filter(id=id)
+    articles = get_object_or_404(LJNews, id=id)
+
+    # 🔥 Increment view count
+    articles.views += 1
+    articles.save(update_fields=['views'])
+
+    # Check if the user liked the article
+    like_this_articles = Likes.objects.filter(user=request.user, news=articles).exists()
+
+    if request.method == 'POST':
+        comment_text = request.POST.get('comment')
+        comm_id = request.POST.get('comm_id')
+
+        if comm_id:
+            # Save as a SubComment (reply)
+            parent_comment = get_object_or_404(Comment, id=int(comm_id))
+            SubComments.objects.create(
+                ljnews=articles,
+                user=request.user,
+                parent_comment=parent_comment,
+                reply=comment_text
+            )
+        else:
+            # Save as a main Comment
+            Comment.objects.create(ljnews=articles, user=request.user, comment=comment_text)
+
+    # Fetch comments along with their replies
+    comments = [(cm, SubComments.objects.filter(parent_comment=cm)) for cm in Comment.objects.filter(ljnews=articles)]
+
+    form = CommentForm()
+
+    # Comment Count
+    total_comments = articles.total_comments()
+
+    context = {
+        'articles': articles,
+        'like_this_articles': like_this_articles,
+        'comments': comments,
+        'form': form,
+        "total_comments": total_comments,
+        'ljnews': ljnews,
+        'recents': recents,
+        'category': category
+    }
+
+    return render(request, "Home/LJNews_Details.html", context)
+
+   
 
 @login_required(login_url='login')
 def like_post(request, id):
@@ -391,6 +454,22 @@ def unlike_post(request, id):
         Likes.objects.filter(user=request.user, article=article).delete()
         return redirect(request.META.get('HTTP_REFERER') or 'details')
     return redirect('details', id=id)
+
+@login_required(login_url='login')
+def LJlike_post(request, id):
+    if request.method == "POST":
+        article = get_object_or_404(LJNews, id=id)
+        Likes.objects.get_or_create(user=request.user, news=article)
+        return redirect(request.META.get('HTTP_REFERER') or 'details')
+    return redirect('detail', id=id)
+
+@login_required(login_url='login')
+def LJunlike_post(request, id):
+    if request.method == "POST":
+        article = get_object_or_404(LJNews, id=id)
+        Likes.objects.filter(user=request.user, news=article).delete()
+        return redirect(request.META.get('HTTP_REFERER') or 'details')
+    return redirect('detail', id=id)
 
 # Search Functionality
 @login_required(login_url='login')

@@ -108,12 +108,12 @@
               <div class="weekly-news dot-style d-flex dot-style">
                 {% for lj in ljnews %}
                   <div class="weekly-single">
-                    <div class="weekly-img">
+                    <div class="weekly-img" style="width: 370px; height: 432px;">
                       <img src="{{ lj.ljnews_image.url }}" height="432" width="370" alt="" />
                     </div>
                     <div class="weekly-caption" style="width: 320px;">
                       <span class="color1">{{ lj.category }}</span>
-                      <h4><a href="{% url 'details' lj.id %}">{{ lj.title|truncatechars:35 }}</a></h4>
+                      <h4><a href="{% url 'detail' lj.id %}">{{ lj.title|truncatechars:35 }}</a></h4>
                     </div>
                   </div>
                 {% endfor %}
@@ -163,8 +163,9 @@
                         {% if cat_news %}
                           {% for c in cat_news %}
                             <div class="col-lg-4 col-md-6 {{ c.category }}">
-                              <div class="single-what-news mb-100">
+                              <div class="single-what-news mb-80" style="width: 380px; height: 300px;">
                                 <div class="what-img">
+                                  <!-- Set height and width consistently for all articles -->
                                   <img src="{{ c.news_image.url }}" height="300" width="380" alt="" />
                                 </div>
                                 <div class="what-cap">
@@ -183,57 +184,6 @@
               </div>
             </div>
           </div>
-          {% comment %} <div class="col-lg-4">
-            <!-- Section Tittle -->
-            <div class="section-tittle mb-40">
-              <h3>Follow Us</h3>
-            </div>
-            <!-- Flow Socail -->
-            <div class="single-follow mb-45">
-              <div class="single-box">
-                <div class="follow-us d-flex align-items-center">
-                  <div class="follow-social">
-                    <a href="#"><img src="{% static 'assets/img/news/ico -fb.pngn' %}" alt="" /></a>
-                  </div>
-                  <div class="follow-count">
-                    <span>8,045</span>
-                    <p>Fans</p>
-                  </div>
-                </div>
-                <div class="follow-us d-flex align-items-center">
-                  <div class="follow-social">
-                    <a href="#"><img src="{% static 'assets/img/news/ico -tw.pngn' %}" alt="" /></a>
-                  </div>
-                  <div class="follow-count">
-                    <span>8,045</span>
-                    <p>Fans</p>
-                  </div>
-                </div>
-                <div class="follow-us d-flex align-items-center">
-                  <div class="follow-social">
-                    <a href="#"><img src="{% static 'assets/img/news/icon-ins.png' %} " alt="" /></a>
-                  </div>
-                  <div class="follow-count">
-                    <span>8,045</span>
-                    <p>Fans</p>
-                  </div>
-                </div>
-                <div class="follow-us d-flex align-items-center">
-                  <div class="follow-social">
-                    <a href="#"><img src="{% static 'assets/img/news/ico-yo.pngn' %}" alt="" /></a>
-                  </div>
-                  <div class="follow-count">
-                    <span>8,045</span>
-                    <p>Fans</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- New Poster -->
-            <div class="news-poster d-none d-lg-block">
-              <img src="{% static 'assets/img/news/news_card.jpg' %} " alt="" />
-            </div>
-          </div> {% endcomment %}
         </div>
       </div>
     </section>

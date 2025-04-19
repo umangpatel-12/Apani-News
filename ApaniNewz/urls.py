@@ -13,6 +13,7 @@ urlpatterns = [
     path('resend-otp', ResendOTP),
     
     path('Details/<int:id>', views.News_Detail, name= 'details'),
+    path('Detail/<int:id>/', views.LJNews_Detail, name='detail'),
     path('Contact', views.Contacts, name= 'contact'),
     path('About', views.About, name= 'about'),
     path('Category/', views.Categories, name= 'category'),
@@ -28,6 +29,8 @@ urlpatterns = [
     path('View-Posts/', views.Posts, name= 'posts'),
     path('like/<int:id>/', views.like_post, name='like_post'),
     path('unlike/<int:id>/', views.unlike_post, name='unlike_post'),
+    path('LJlike/<int:id>/', views.LJlike_post, name='ljlike_post'),
+    path('LJunlike/<int:id>/', views.LJunlike_post, name='ljunlike_post'),
     path('Article/Search/', views.Search_View,name='search'),
     
 
