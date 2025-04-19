@@ -1,0 +1,274 @@
+{% extends 'Admin/main.html' %}
+{% block ljnews_active %}
+  selected
+{% endblock %}
+{% load static %}
+
+{% block admin %}
+
+  <div class="body-wrapper">
+    <div class="container-fluid">
+      <!-- News Table -->
+        <div class="row mt-4">
+            <div class="col-lg-12 d-flex align-items-stretch">
+            <div class="card w-100">
+                {% include 'Alert/alert.html' %}
+                <div class="card-body p-4">
+                <h5 class="card-title fw-semibold mb-4">News List</h5>
+                <div class="table-responsive">
+                    <table class="table text-nowrap mb-0 align-middle">
+                    <thead class="text-dark fs-4">
+                        <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Visibility</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if ljnews %}
+                        {% for a in ljnews %}
+                            <tr>
+                            <td>{{ a.id }}</td>
+                            <td>
+                                {% if a.ljnews_image %}
+                                <img src="{{ a.ljnews_image.url }}" style="height: 50px; width: 50px;" alt="{{ a.title }}">
+                                {% else %}
+                                <p>No Image</p>
+                                {% endif %}
+                            </td>
+                            <td>{{ a.title|truncatechars:25 }}</td>
+                            <td>{{ a.category }}</td>
+                            <td>{{ a.author }}</td>
+                            <td>
+                                {% if a.status == 'PUBLISH' %}
+                                  <span style="background-color: #d4edda; color: #155724; padding: 4px 8px; border-radius: 5px;">Public</span>
+                                {% elif a.status == 'DRAFT' %}
+                                  <span style="background-color: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 5px;">Draft</span>
+                                {% else %}
+                                  <span>{{ a.status }}</span>
+                                {% endif %}
+                              </td>
+                              
+                              <td>
+                                {% if a.visibility == 'PENDING' %}
+                                  <span style="background-color: #fff3cd; color: #856404; padding: 4px 8px; border-radius: 5px;">Pending</span>
+                                {% elif a.visibility == 'APPROVED' %}
+                                  <span style="background-color: #d4edda; color: #155724; padding: 4px 8px; border-radius: 5px;">Approved</span>
+                                {% elif a.visibility == 'REJECTED' %}
+                                  <span style="background-color: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 5px;">Rejected</span>
+                                {% else %}
+                                  <span>{{ a.visibility }}</span>
+                                {% endif %}
+                              </td>
+                              
+                            <td>
+                                <!-- Edit -->
+                                <a href="#" class="text-dark me-3" data-bs-toggle="modal" data-bs-target="#editModel{{ a.id }}">
+
+
+                                <i class="far fa-edit" style="font-size:20px"></i>
+                                </a>
+    
+                                <!-- Delete -->
+                                <a href="#" class="text-dark me-3" data-bs-toggle="modal" data-bs-target="#deleteModal{{ a.id }}">
+
+                                <i class="far fa-trash-alt" style="font-size:20px"></i>
+                                </a>
+                                
+                            </td>
+                            </tr>
+    
+                            
+                            <!-- Start Edit Modal -->
+                            <div class="modal fade" id="editModel{{ a.id }}" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                    <form method="POST" action="{% url 'editljnews' a.id %}" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {{ form.media|safe }}
+        
+                                        <div class="modal-header text-center flex-column w-100">
+                                        <h3 class="modal-title w-100">Edit Article</h3>
+                                        
+                                        <hr class="w-100 mt-2 mb-0">
+                                        </div>
+        
+                                        <div class="modal-body">
+        
+                                        <div class="mb-3 row align-items-center">
+                                            <label for="title" class="col-md-2 col-form-label">Title</label>
+                                            <div class="col-md-10">
+                                            <input type="text" id="title" name="title" class="form-control form-control-lg"
+                                                value="{{ a.title }}" required />
+                                            </div>
+                                        </div>
+        
+                                        <div class="mb-3 row align-items-center">
+                                            <label for="sub_title" class="col-md-2 col-form-label">Sub-Title</label>
+                                            <div class="col-md-10">
+                                            <input type="text" id="sub_title" name="sub_title" class="form-control form-control-lg"
+                                                value="{{ a.sub_title }}" required />
+                                            </div>
+                                        </div>
+        
+                                        <div class="mb-3 row align-items-center">
+                                            <label for="category" class="col-md-2 col-form-label">Category</label>
+                                            <div class="col-md-10">
+                                            <select name="category" class="form-control" required>
+                                                <option value="">Choose Category</option>
+                                                {% for c in categories %}
+                                                <option value="{{ c.id }}" {% if a.category.id == c.id %}selected{% endif %}>{{ c.category_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            </div>
+                                        </div>
+        
+                                        <div class="mb-3 row align-items-center">
+                                            <label for="author" class="col-md-2 col-form-label">Author</label>
+                                            <div class="col-md-10">
+                                            <input type="text" id="author" name="author" class="form-control form-control-lg"
+                                                value="{{ a.author }}" required />
+                                            </div>
+                                        </div>
+        
+                                        <div class="mb-3 row">
+                                            <label for="id_content" class="col-md-2 col-form-label">Content</label>
+                                            <div class="col-md-10">
+                                            <textarea name="content" id="content{{ a.id }}" class="form-control">{{ a.content }}</textarea> 
+                                            </div>
+                                        </div>
+                                        
+                                        
+        
+                                        <div class="mb-3 row align-items-center">
+                                            <label for="status" class="col-md-2 col-form-label">Status</label>
+                                            <div class="col-md-10">
+                                                <select name="status" class="form-control" required disabled>
+                                                    <option value="PUBLISH" {% if a.status == 'PUBLISH' %}selected{% endif %}>Publish</option>
+                                                    <option value="DRAFT" {% if a.status == 'DRAFT' %}selected{% endif %}>Draft</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <div class="mb-3 row align-items-center">
+                                            <label for="status" class="col-md-2 col-form-label">Visibility</label>
+                                            <div class="col-md-10">
+                                            <select name="visibility" class="form-control" required>
+                                                <option value="PENDING" {% if a.visibility == 'PENDING' %}selected{% endif %}>Pending</option>
+                                                <option value="APPROVED" {% if a.visibility == 'APPROVED' %}selected{% endif %}>Approved</option>
+                                                <option value="REJECTED" {% if a.visibility == 'REJECTED' %}selected{% endif %}>Rejected</option>
+                                            </select>
+                                            </div>
+                                        </div>
+        
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-md-2 col-form-label" for="is_featured">Is Featured</label>
+                                            <div class="col-md-10">
+                                            <input type="checkbox" id="is_featured" name="is_featured" class="form-check-input"
+                                                {% if a.is_featured %}checked{% endif %} />
+                                            </div>
+                                        </div>
+        
+                                        <div class="mb-3 row align-items-center">
+                                            <label for="ljnews_image" class="col-md-2 col-form-label">Upload Image</label>
+                                            <div class="col-md-10">
+                                            <input type="file" id="ljnews_image" name="ljnews_image" class="form-control" />
+                                            {% if a.ljnews_image %}
+                                            <img src="{{ a.ljnews_image.url }}" alt="Current Image" class="mt-2" height="100">
+                                            {% endif %}
+                                            </div>
+                                        </div>
+        
+                                        </div>
+        
+                                        <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                        </div>
+                                    </form>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Edit Modal -->
+    
+                            <!-- start Delete Modal -->
+                            <div class="modal fade" id="deleteModal{{ a.id }}" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                    <form method="POST" action="{% url 'deleteljnews' a.id %}">
+                                        {% csrf_token %}
+                                        <div class="modal-header text-center flex-column w-100">
+                                        <h3 class="modal-title w-100">Delete Confirmation</h3>
+                                        
+                                        <hr class="w-100 mt-2 mb-0">
+                                    </div>
+                                    
+                                    <div class="modal-body text-center">
+                                        <p class="fw-bold fs-5 mb-2">Are you sure you want to delete</p>
+                                        <p><strong>"{{ a.title|truncatechars:50 }}"?</strong></p>
+                                    </div>
+                                    
+                                        <div class="modal-footer">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Delete Modal -->
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                    </table>
+    
+                    <!-- Pagination -->
+                    {% comment %} <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center mt-3">
+                            {% if NewsData.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ NewsData.previous_page_number }}">Previous</a>
+                            </li>
+                            {% endif %}
+                            {% for num in totalPagelist %}
+                            <li class="page-item {% if num == NewsData.number %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endfor %}
+                            {% if NewsData.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ NewsData.next_page_number }}">Next</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav> {% endcomment %}
+    
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+<script>
+  CKEDITOR.replace('{{ form.content.id_for_label }}');
+</script>
+
+<!-- Initialize CKEditor for Edit Modals -->
+<script>
+  {% for a in ljnews %}
+    CKEDITOR.replace('content{{ a.id }}');
+  {% endfor %}
+</script>
+
+{% endblock %}

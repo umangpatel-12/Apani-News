@@ -422,10 +422,19 @@ class LJNewsForm(forms.ModelForm):
     )
 
     status = forms.ChoiceField(
-        choices=News.STATUS,
+        choices=LJNews.STATUS,
         widget=forms.Select(attrs={
             'id': 'status',
             'name': 'status',
+            'class': 'form-select form-select-lg'
+        })
+    )
+    
+    visibility = forms.ChoiceField(
+        choices=LJNews.VISIBILITY_CHOICES,
+        widget=forms.Select(attrs={
+            'id': 'visibility',
+            'name': 'visibility',
             'class': 'form-select form-select-lg'
         })
     )
@@ -451,7 +460,7 @@ class LJNewsForm(forms.ModelForm):
 
     class Meta:
         model = LJNews
-        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status', 'ljnews_image','is_featured']
+        fields = ['title', 'sub_title', 'category', 'author', 'content', 'status','visibility', 'ljnews_image','is_featured']
         widgets = {
             'category': forms.Select(attrs={
                 'id': 'category',

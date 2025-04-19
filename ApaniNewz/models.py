@@ -89,7 +89,11 @@ class News(models.Model):
 
 class LJNews(models.Model):
     STATUS = ('PUBLISH', 'PUBLISH'),('DRAFT', 'DRAFT')
-
+    VISIBILITY_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+    ]
     title = models.CharField(max_length=255,unique=True)
     sub_title = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -97,6 +101,7 @@ class LJNews(models.Model):
     author_id = models.EmailField(max_length=255)  # Auto-stored user email
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, max_length=255)
+    visibility = models.CharField(max_length=255, choices=VISIBILITY_CHOICES)
     is_featured = models.BooleanField(default=False)
     ljnews_image = models.ImageField(upload_to="media/ljnews/",blank=True, null=True)
     views = models.IntegerField(default=0)

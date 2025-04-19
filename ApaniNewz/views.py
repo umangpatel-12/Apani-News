@@ -50,7 +50,7 @@ def home(request):
     if catid:
         ljnews = LJNews.get_all_ljnews_byID(catid)
     else:
-        ljnews = LJNews.objects.filter(status='PUBLISH').order_by('-created')
+        ljnews = LJNews.objects.filter(status='PUBLISH',visibility='APPROVED').order_by('-created')
     
         
     context = {
@@ -753,6 +753,47 @@ def ManageContact(request):
     }
     return render(request,"Admin/ManageContact.html",context)
 
+def ManageLJNews(request):
+    ljnews = LJNews.objects.all().order_by('-created')  # Latest LJNews first
+    
+    categories = Category.objects.all()
+    
+    context = {
+        'ljnews': ljnews,
+        'categories': categories,
+    }
+    
+    return render(request,"Admin/ManageLJNews.html",context)
+
+def EditLJNews(request, id):
+    ljnews = get_object_or_404(LJNews, id=id)
+    categories = Category.objects.all()
+
+    if request.method == 'POST':
+        form = LJNewsForm(request.POST, request.FILES, instance=ljnews)
+        if form.is_valid():
+            print(form.errors)
+            form.save()
+            messages.success(request, "LJNews updated successfully!")
+            return redirect('ljnews')  # Redirect after successful update
+    else:
+        form = LJNewsForm(instance=ljnews)
+
+    return render(request, 'Admin/ManageLJNews.html', {
+        'form': form,
+        'ljnews': ljnews,
+        'categories': categories
+    })
+
+    
+def DeleteLJNews(request, id):
+    ljnews = get_object_or_404(LJNews, id=id)
+    if request.method == 'POST':
+        ljnews.delete()
+        messages.success(request, "LJNews/Article deleted successfully!")
+    return redirect("ljnews")
+        
+
 # Account's Details
 def ProfilePage(request):
     try:
@@ -813,7 +854,7 @@ def Posts(request):
         return redirect('login')  # Redirect to login page if not authenticated
 
     # केवल लॉगिन किए हुए यूज़र की पोस्ट को फ़िल्टर करें
-    ljnews = LJNews.objects.filter(author_id=request.user.email, status='PUBLISH').order_by('-created')
+    ljnews = LJNews.objects.filter(author_id=request.user.email).order_by('-id')
     categories = Category.objects.all()
     
     paginator = Paginator(ljnews, 4)  # Show 2 news per page

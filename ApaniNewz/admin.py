@@ -29,9 +29,13 @@ class NewsAdmin(admin.ModelAdmin):
 # Register LJNews
 @admin.register(LJNews)
 class LJNewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'category', 'status', 'created')
+    list_display = ('title', 'author', 'category', 'status','visibility','created')
     list_filter = ('status', 'category')
     search_fields = ('title', 'author')
+    
+    def approve_news(self, request, queryset):
+        queryset.update(status='approved')
+    approve_news.short_description = "Approve selected News"
 
 # Register Likes
 @admin.register(Likes)
