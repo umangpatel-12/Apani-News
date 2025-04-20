@@ -35,7 +35,7 @@
               <div class="row">
                 <div class="col-8">
                   <h5 class="card-title mb-9 fw-semibold">Total Views</h5>
-                  <h4 class="fw-semibold mb-3">{{ total_views }}</h4>
+                  <h4 class="fw-semibold mb-3">{{ total_view }}</h4>
                 </div>
                 <div class="col-4">
                   <div class="d-flex justify-content-end">
@@ -138,29 +138,68 @@
       }
     })
     
-    // Line Chart
+    // Line Chart - All-Time Views
+    
     new Chart(document.getElementById('lineChart').getContext('2d'), {
       type: 'line',
       data: {
-        labels: lineLabels,
+        labels: lineLabels, // List of dates like ["01 Jan 2024", "02 Jan 2024", ...]
         datasets: [
           {
-            label: 'Views',
-            data: lineData,
+            label: 'Total Views Per Day',
+            data: lineData, // Corresponding views like [120, 90, 50, ...]
             fill: false,
             borderColor: '#36A2EB',
-            tension: 0.4
+            backgroundColor: '#36A2EB',
+            tension: 0.4,
+            pointRadius: 4,
+            pointHoverRadius: 6
           }
         ]
       },
       options: {
         responsive: true,
         plugins: {
-          legend: { display: false },
-          title: { display: false }
+          legend: {
+            display: true,
+            labels: {
+              color: '#333',
+              font: {
+                size: 14
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'All-Time Daily Views',
+            font: {
+              size: 16
+            }
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          }
+        },
+        interaction: {
+          mode: 'nearest',
+          axis: 'x',
+          intersect: false
         },
         scales: {
-          y: { beginAtZero: true }
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Views'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Date'
+            }
+          }
         }
       }
     })

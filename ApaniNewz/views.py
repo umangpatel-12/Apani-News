@@ -548,9 +548,10 @@ def dashboard(request):
     total_ljnews_articles = LJNews.objects.count()
     total_articles = total_news_articles + total_ljnews_articles
 
-    total_news_views = News.objects.aggregate(total=Sum('views'))['total'] or 0
-    total_ljnews_views = LJNews.objects.aggregate(total=Sum('views'))['total'] or 0
-    total_views = total_news_views + total_ljnews_views
+    news_views = News.objects.aggregate(total=Sum('views'))['total'] or 0
+    ljnews_views = LJNews.objects.aggregate(total=Sum('views'))['total'] or 0
+    total_view = news_views + ljnews_views
+
 
     total_comments = Comment.objects.count()
 
@@ -566,7 +567,7 @@ def dashboard(request):
 
     # Line Chart - Views for last 7 days
     today = now().date()
-    seven_days_ago = today - timedelta(days=6)
+    seven_days_ago = today - timedelta()
     date_range = [seven_days_ago + timedelta(days=i) for i in range(7)]
 
     views_per_day = (
@@ -581,13 +582,17 @@ def dashboard(request):
     line_labels = [date.strftime('%d %b') for date in date_range]
     line_data = [views_dict.get(date, 0) for date in date_range]
 
+
     # Pie Chart - Views by Category
     pie_labels = []
     pie_data = []
 
     # Loop through each category and get its total views
     for category in categories:
-        total_views = News.objects.filter(category=category).aggregate(total=Sum('views'))['total'] or 0
+        news_views = News.objects.filter(category=category).aggregate(total=Sum('views'))['total'] or 0
+        ljnews_views = LJNews.objects.filter(category=category).aggregate(total=Sum('views'))['total'] or 0
+        total_views = news_views + ljnews_views
+
         if total_views > 0:
             pie_labels.append(category.category_name)
             pie_data.append(total_views)
@@ -595,6 +600,7 @@ def dashboard(request):
     context = {
         'total_articles': total_articles,
         'total_views': total_views,
+        'total_view':total_view,
         'total_comments': total_comments,
         'line_labels': json.dumps(line_labels),
         'line_data': json.dumps(line_data),
@@ -754,44 +760,44 @@ def ManageContact(request):
     return render(request,"Admin/ManageContact.html",context)
 
 def ManageLJNews(request):
-    ljnews = LJNews.objects.all().order_by('-created')  # Latest LJNews first
+    # Fetch all the LJNews objects, sorted by the latest first
+    ljnews = LJNews.objects.all()
     
+    # Fetch all categories
     categories = Category.objects.all()
-    
+
     context = {
         'ljnews': ljnews,
         'categories': categories,
     }
-    
-    return render(request,"Admin/ManageLJNews.html",context)
+
+    return render(request, "Admin/ManageLJNews.html", context)
 
 def EditLJNews(request, id):
     ljnews = get_object_or_404(LJNews, id=id)
-    categories = Category.objects.all()
 
     if request.method == 'POST':
         form = LJNewsForm(request.POST, request.FILES, instance=ljnews)
         if form.is_valid():
-            print(form.errors)
-            form.save()
-            messages.success(request, "LJNews updated successfully!")
-            return redirect('ljnews')  # Redirect after successful update
-    else:
-        form = LJNewsForm(instance=ljnews)
+            obj = form.save(commit=False)
+            obj.status = ljnews.status  # 👈 preserve original status
+            obj.save()
+            messages.success(request, "News updated successfully!")
+        else:
+            print("Form Errors:", form.errors)
+            messages.error(request, "Failed to update. Check the form.")
+    return redirect('manageljnews')
 
-    return render(request, 'Admin/ManageLJNews.html', {
-        'form': form,
-        'ljnews': ljnews,
-        'categories': categories
-    })
-
-    
 def DeleteLJNews(request, id):
+    # Fetch the article to delete
     ljnews = get_object_or_404(LJNews, id=id)
+
+    # Handle POST request for deletion
     if request.method == 'POST':
-        ljnews.delete()
-        messages.success(request, "LJNews/Article deleted successfully!")
-    return redirect("ljnews")
+        ljnews.delete()  # Delete the article
+        messages.success(request, "LJNews/Article deleted successfully!")  # Success message
+
+    return redirect("manageljnews")  # Redirect to the page displaying all LJNews
         
 
 # Account's Details
@@ -854,7 +860,7 @@ def Posts(request):
         return redirect('login')  # Redirect to login page if not authenticated
 
     # केवल लॉगिन किए हुए यूज़र की पोस्ट को फ़िल्टर करें
-    ljnews = LJNews.objects.filter(author_id=request.user.email).order_by('-id')
+    ljnews = LJNews.objects.filter(author_id=request.user.email, status='PUBLISH').order_by('-created')
     categories = Category.objects.all()
     
     paginator = Paginator(ljnews, 4)  # Show 2 news per page

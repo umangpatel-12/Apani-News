@@ -47,7 +47,7 @@ urlpatterns = [
     path('Comments',views.Comments,name='comments'),
     path('Manage-Contacts',views.ManageContact,name='contacts'),
     path('Manage-Users',views.ManageUsers,name='users'),
-    path('Manage-LJ-News',views.ManageLJNews,name='ljnews'),
+    path('Manage-LJ-News',views.ManageLJNews,name='manageljnews'),
     path('Edit-LJ-News/<int:id>', views.EditLJNews, name='editljnews'),
     path('Delete-LJ-News/<int:id>', views.DeleteLJNews, name='deleteljnews'),
 

@@ -124,7 +124,11 @@
                 <div class="single-comment justify-content-between d-flex">
                   <div class="user justify-content-between d-flex">
                     <div class="thumb">
-                      <img src="{{ comment.user.profile.profile_image.url }}" alt="" style="width: 65px; height: 65px; border-radius: 50%;" />
+                      {% if comment.user.profile.profile_image %}
+                        <img src="{{ comment.user.profile.profile_image.url }}" alt="" style="width: 65px; height: 65px; border-radius: 50%;" />
+                      {% else %}
+                        <img src="{% static 'images/default-profile.png' %}" alt="" style="width: 65px; height: 65px; border-radius: 50%;" />
+                      {% endif %}
                     </div>
                     <div class="desc" style="margin-left: 18px;">
                       <h5>@{{ comment.user.username }}</h5>

@@ -26,10 +26,13 @@
                         <h6 class="fw-semibold mb-0">Comment</h6>
                       </th>
                       <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Replies</h6>
+                        <h6 class="fw-semibold mb-0">Article</h6>
                       </th>
                       <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Date</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">View Replies</h6>
                       </th>
                     </tr>
                   </thead>
@@ -46,7 +49,10 @@
                           <p class="mb-0 fw-normal">{{ c.comment }}</p>
                         </td>
                         <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
+                          <p class="mb-0 fw-normal">{{ c.news|truncatechars:20 }}</p>
+                        </td>
+                        <td class="border-bottom-0">
+                          <p class="mb-0 fw-normal">{{ c.created }}</p>
                         </td>
                         <td class="border-bottom-0">
                           <button class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#replies{{ c.id }}">View Replies</button>
