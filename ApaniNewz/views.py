@@ -543,6 +543,7 @@ def LatestNewz(request):
     return render(request, "Home/LatestNewz.html", context)
 
 # Admin Dashbord's
+@login_required(login_url='login')
 def dashboard(request):
     total_news_articles = News.objects.count()
     total_ljnews_articles = LJNews.objects.count()
@@ -566,7 +567,7 @@ def dashboard(request):
     bar_data = list(category_article_counts.values())
 
     # Line Chart - Views for last 7 days
-    today = now().date()
+    today = now().date( )
     seven_days_ago = today - timedelta()
     date_range = [seven_days_ago + timedelta(days=i) for i in range(7)]
 
@@ -612,6 +613,7 @@ def dashboard(request):
 
     return render(request, "Admin/Dashboard.html", context)
 
+@login_required(login_url='login')
 def AddNews(request):
     article = News.objects.all()
     categories = Category.objects.all()
@@ -685,6 +687,7 @@ def AddNews(request):
 #     }
 #     return render(request, 'Admin/AddNews.html', context)
 
+@login_required(login_url='login')
 def EDITNews(request, id):
     news = get_object_or_404(News, id=id)
     categories = Category.objects.all()
@@ -704,12 +707,14 @@ def EDITNews(request, id):
         'categories': categories
     })
 
+@login_required(login_url='login')
 def deletenews(request, id):
     news = News.objects.filter(id=id)
     news.delete()
     messages.success(request, "News/Article deleted successfully!")
     return redirect("addnews")
 
+@login_required(login_url='login')
 def AddCategory(request):
     form = CategoryForm()
     categories = Category.objects.filter()
@@ -719,6 +724,7 @@ def AddCategory(request):
         return redirect("addcategory")
     return render(request,"Admin/AddCategory.html",{'form':form ,'categories':categories})
 
+@login_required(login_url='login')
 def EditCategory(request, id):
     categories = get_object_or_404(Category, pk=id)
     if request.method == 'POST':
@@ -732,6 +738,7 @@ def EditCategory(request, id):
         return redirect('addcategory')
     return render(request, "Admin/AddCategory.html", {'categories':categories})
 
+@login_required(login_url='login')
 def DeleteCategory(request, id):
     categories = get_object_or_404(Category, pk=id)
     if request.method == 'POST':
@@ -739,6 +746,7 @@ def DeleteCategory(request, id):
         messages.success(request, 'Category deleted successfully.')
     return redirect("addcategory")
 
+@login_required(login_url='login')
 def Comments(request):
     comments = Comment.objects.all().order_by('-created')  # Latest comments first
 
@@ -747,11 +755,13 @@ def Comments(request):
     }
     return render(request,"Admin/ManageComment.html",context)
 
+@login_required(login_url='login')
 def ManageUsers(request):
     user_data = User.objects.all()
     user_profile = Profile.objects.all()
     return render(request,"Admin/ManageUsers.html",{'user_data':user_data,'user_profile':user_profile})
 
+@login_required(login_url='login')
 def ManageContact(request):
     contact = Contact.objects.all()
     context = {
@@ -759,6 +769,7 @@ def ManageContact(request):
     }
     return render(request,"Admin/ManageContact.html",context)
 
+@login_required(login_url='login')
 def ManageLJNews(request):
     # Fetch all the LJNews objects, sorted by the latest first
     ljnews = LJNews.objects.all()
@@ -772,7 +783,7 @@ def ManageLJNews(request):
     }
 
     return render(request, "Admin/ManageLJNews.html", context)
-
+@login_required(login_url='login')
 def EditLJNews(request, id):
     ljnews = get_object_or_404(LJNews, id=id)
 
@@ -788,6 +799,7 @@ def EditLJNews(request, id):
             messages.error(request, "Failed to update. Check the form.")
     return redirect('manageljnews')
 
+@login_required(login_url='login')
 def DeleteLJNews(request, id):
     # Fetch the article to delete
     ljnews = get_object_or_404(LJNews, id=id)
@@ -801,6 +813,7 @@ def DeleteLJNews(request, id):
         
 
 # Account's Details
+
 def ProfilePage(request):
     try:
         profile = request.user.profile

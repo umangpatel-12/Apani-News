@@ -87,29 +87,19 @@
                   <div class="main-menu">
                     <nav>
                       <ul id="navigation">
-                        <li class="nav-item {% block home_active %}
-
-                          {% endblock %}">
+                        <li class="nav-item {% block home_active %}{% endblock %}">
                           <a href="{% url 'index' %}" class="nav-link">Home</a>
                         </li>
-                        <li class="nav-item {% block category_active %}
-
-                          {% endblock %}">
+                        <li class="nav-item {% block category_active %}{% endblock %}">
                           <a href="{% url 'category' %}" class="nav-link">Category</a>
                         </li>
-                        <li class="nav-item {% block latestnews_active %}
-
-                          {% endblock %}">
+                        <li class="nav-item {% block latestnews_active %} {% endblock %}">
                           <a href="{% url 'latestnews' %}" class="nav-link">Latest News</a>
                         </li>
-                        <li class="nav-item {% block about_active %}
-
-                          {% endblock %}">
+                        <li class="nav-item {% block about_active %}{% endblock %}">
                           <a href="{% url 'about' %}" class="nav-link">About</a>
                         </li>
-                        <li class="nav-item {% block contact_active %}
-
-                          {% endblock %}">
+                        <li class="nav-item {% block contact_active %}{% endblock %}">
                           <a href="{% url 'contact' %}" class="nav-link">Contact</a>
                         </li>
                       </ul>
@@ -165,17 +155,17 @@
 
     <footer>
       <!-- Footer Start -->
-      <div class="footer-area footer-padding fix" style="background: #232323; color: #fff; padding: 40px 0;">
+      <div class="footer-area footer-padding fix" style="background:#f0f0f0; color: #000; padding: 10px 0;">
         <div class="container">
           <div class="row d-flex justify-content-between">
             <!-- Logo and Description -->
             <div class="col-xl-5 col-lg-5 col-md-7 col-sm-12">
               <div class="single-footer-caption">
                 <div class="footer-logo">
-                  <a href="index.html"><img src="{% static 'assets/img/logo/logo2_footer.png' %}" alt="Logo" /></a>
+                  <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/logos.png' %}" alt="" height="98px" width="183px" /></a>
                 </div>
-                <div class="footer-pera">
-                  <p style="text-align: justify; font-size: 14px; line-height: 1.8;">ApaniNewz is the official platform for sharing news and updates from LJ University. We aim to provide a space where students and staff can share their achievements, ideas, and experiences, helping foster a vibrant and connected community.</p>
+                <div class="footer-pera" style="margin-top: -20px;">
+                  <p style="text-align: justify; font-size: 14px; line-height: 1.8; color: #333;">ApaniNewz is the official platform for sharing news and updates from LJ University. We aim to provide a space where students and staff can share their achievements, ideas, and experiences, helping foster a vibrant and connected community.</p>
                 </div>
                 <!-- Social Links -->
                 <div class="footer-social">
@@ -191,13 +181,13 @@
               <div class="single-footer-caption mt-60">
                 <div class="footer-tittle">
                   <h4 style="font-size: 18px; color: #ff6219;">Newsletter</h4>
-                  <p style="font-size: 14px; color: #aaa;">Stay updated with the latest news from ApaniNewz.</p>
+                  <p style="font-size: 14px; color: #555;">Stay updated with the latest news from ApaniNewz.</p>
                 </div>
                 <!-- Form -->
                 <div class="footer-form">
                   <form action="#" method="post" class="subscribe_form relative">
-                    <input type="email" name="email" placeholder="Enter your email" class="footer-input" />
-                    <button type="submit" class="newsletter-submit"><i class="fas fa-arrow-right"></i></button>
+                    <input class="footer-input" type="email" name="keyword" placeholder="Enter your email" style="margin-top: 5px;width: 69%;" />
+                    <button class="newsletter-submit" type="submit"><i class="fas fa-arrow-right special-tag"></i></button>
                   </form>
                 </div>
               </div>
@@ -238,42 +228,51 @@
       </div>
 
       <!-- Footer Bottom Area -->
-      <div class="footer-bottom-area" style="background: #1f1f1f; padding: 20px 0; color: #aaa;">
+      <div class="footer-bottom-area" style="background:#e0e0e0; color: #555;height: 70px;">
         <div class="container">
-          <div class="footer-border">
-            <div class="row d-flex align-items-center justify-content-between">
-              <div class="col-lg-6">
-                <div class="footer-copy-right">
-                  <p>
-                    &copy; <script>
-                             document.write(new Date().getFullYear())
-                           </script>ApaniNewz. All rights reserved.
-                  </p>
-                </div>
+          <!-- Updated line below -->
+
+          <div class="row d-flex align-items-center justify-content-between">
+            <div class="col-lg-6" style="margin-top: 18px;font-weight: 800;">
+              <div class="footer-copy-right">
+                <p>
+                  &copy;<script>
+                          document.write(new Date().getFullYear())
+                        </script>ApaniNewz. All rights reserved.
+                </p>
               </div>
-              <div class="col-lg-6">
-                <div class="footer-menu f-right">
-                  <ul>
-                    <li>
-                      <a href="{% url 'contact' %}" style="color: #ff6219;">Contact</a>
-                    </li>
-                    <li>
-                      <a href="#" style="color: #ff6219;">Privacy Policy</a>
-                    </li>
-                    <li>
-                      <a href="#" style="color: #ff6219;">Terms of Use</a>
-                    </li>
-                  </ul>
-                </div>
+            </div>
+            <div class="col-lg-6" style="margin-top: 18px;">
+              <div class="footer-menu f-right">
+                <ul>
+                  <li>
+                    <a href="{% url 'contact' %}" style="color: #ff6219;">Contact</a>
+                  </li>
+                  {% comment %}
+                  <li>
+                    <a href="#" style="color: #ff6219;">Privacy Policy</a>
+                  </li>
+                  <li>
+                    <a href="#" style="color: #ff6219;">Terms of Use</a>
+                  </li>
+                  {% endcomment %}
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <!-- Footer End -->
     </footer>
 
     <style>
+      .nav-item.active > .nav-link {
+        color: #ff6219;
+        font-weight: bold;
+      }
+
+
       .footer-social a {
         color: #fff;
         margin: 0 10px;
