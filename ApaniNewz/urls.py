@@ -19,6 +19,8 @@ urlpatterns = [
     path('Category/', views.Categories, name= 'category'),
     path('Latest-News', views.LatestNewz, name= 'latestnews'),
     path('Category/Search/', views.CategorySearch, name= 'category_search'),
+    path('LJ-News', views.LJNEWS, name= 'ljnews'),
+    path('Gallery', views.Gallery, name= 'gallery'),
 
     # Account's
     path('Profile', views.ProfilePage, name= 'profile'),
@@ -50,6 +52,7 @@ urlpatterns = [
     path('Manage-LJ-News',views.ManageLJNews,name='manageljnews'),
     path('Edit-LJ-News/<int:id>', views.EditLJNews, name='editljnews'),
     path('Delete-LJ-News/<int:id>', views.DeleteLJNews, name='deleteljnews'),
+    path('Manage-Sliders',views.ManageSliders,name='managesliders')
 
 
 

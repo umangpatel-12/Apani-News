@@ -8,9 +8,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
-
-# Custom User Model
-
 # Create your models here.
 class Registration(AbstractUser):
 
@@ -129,6 +126,20 @@ class LJNews(models.Model):
         comments_count = Comment.objects.filter(ljnews=self).count()
         subcomments_count = SubComments.objects.filter(ljnews=self).count()
         return comments_count + subcomments_count
+ 
+class Slider(models.Model):
+    STATUS = ('PUBLISH', 'PUBLISH'),('DRAFT', 'DRAFT')
+    
+    title = models.CharField(max_length=255)
+    sub_title = models.CharField(max_length=255)
+    content = RichTextField(blank=True, null=True)
+    status = models.CharField(choices=STATUS, max_length=255)
+    slider_image = models.ImageField(upload_to="media/slider/")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title 
        
 class Likes(models.Model):
     article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes', blank=True, null=True)
@@ -139,7 +150,6 @@ class Likes(models.Model):
 
     class Meta:
         unique_together = ('article','news', 'user')
-
 
 class Profile(models.Model):
     GENDER_CHOICES = [
@@ -163,7 +173,6 @@ class Profile(models.Model):
     location = models.CharField(max_length=30, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
 
 class Comment(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE, blank=True, null=True)

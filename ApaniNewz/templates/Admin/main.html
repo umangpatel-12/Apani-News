@@ -81,6 +81,16 @@
                 </a>
               </li>
               <li class="sidebar-item">
+                <a class="sidebar-link {% block slider_active %}
+
+                  {% endblock %}"
+                  href="{% url 'managesliders' %}"
+                  aria-expanded="false">
+                  <span><i class="fas fa-sliders"></i></span>
+                  <span class="hide-menu">Slider</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
                 <a class="sidebar-link {% block ljnews_active %}
 
                   {% endblock %}"

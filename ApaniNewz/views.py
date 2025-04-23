@@ -5,8 +5,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 
 from ApaniNews import settings
-from ApaniNewz.forms import CategoryForm, CommentForm, ContactForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SubCommentForm, UserUpdate
-from .models import Category, Contact, LJNews, Likes, News, Registration, Profile,Comment,SubComments, UserOTP
+from ApaniNewz.forms import CategoryForm, CommentForm, ContactForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SliderForm, SubCommentForm, UserUpdate
+from .models import Category, Contact, LJNews, Likes, News, Registration, Profile,Comment, Slider,SubComments, UserOTP
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -24,6 +24,9 @@ from collections import defaultdict
 # Create your views here.
 @login_required(login_url='login')
 def home(request):  
+    
+    # Slider
+    slider = LJNews.objects.filter(status='PUBLISH', visibility='APPROVED')
     
     # Featured News
     featured = News.objects.filter(is_featured=True, status='PUBLISH')
@@ -59,7 +62,8 @@ def home(request):
         'ljnews':ljnews,
         'trending':trending,
         'featured':featured,
-        'cat_news':cat_news
+        'cat_news':cat_news,
+        'slider':slider
     }
     return render(request, 'Home/index.html',context)
 
@@ -542,6 +546,19 @@ def LatestNewz(request):
     
     return render(request, "Home/LatestNewz.html", context)
 
+def LJNEWS(request):
+    
+    ljnews = LJNews.objects.filter(status='PUBLISH',visibility='APPROVED')
+    
+    context = {
+        'ljnews':ljnews
+    }
+    
+    return render(request, "Home/LJNewz.html", context)
+
+def Gallery(request):
+    return render(request, "Home/Gallery.html")
+
 # Admin Dashbord's
 @login_required(login_url='login')
 def dashboard(request):
@@ -811,6 +828,46 @@ def DeleteLJNews(request, id):
 
     return redirect("manageljnews")  # Redirect to the page displaying all LJNews
         
+def ManageSliders(request):
+    if request.method == 'POST':
+        form = SliderForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            slider = form.save(commit=False)  # ✅ Get model instance but don't save yet
+            slider.save()
+            messages.success(request, "Slider/Banner added successfully!")
+            return redirect("managesliders")
+        else:
+            messages.error(request, "Form validation failed. Please check your input.")
+    else:
+        form = SliderForm()
+    
+    context = {
+        'form': form,
+    }
+    
+    return render(request, "Admin/ManageSlider.html", context)
+
+def DeleteSlider(request, id):
+    slider = Slider.objects.filter(id=id)
+    slider.delete()
+    messages.success(request, "Slider/Banner deleted successfully!")
+    return redirect("managesliders")
+
+def EditSlider(request, id):
+    slider = get_object_or_404(Slider, pk=id)
+
+    if request.method == 'POST':
+        form = SliderForm(request.POST, request.FILES, instance=slider)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.status = slider.status  # 👈 preserve original status
+            obj.save()
+            messages.success(request, "Slider/Banner updated successfully!")
+        else:
+            print("Form Errors:", form.errors)
+            messages.error(request, "Failed to update. Check the form.")
+    return redirect('managesliders')
 
 # Account's Details
 

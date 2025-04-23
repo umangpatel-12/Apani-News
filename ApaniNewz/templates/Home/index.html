@@ -1,40 +1,54 @@
 {% extends 'Home/main.html' %}
-{% block home_active %}active{% endblock %}
+{% block home_active %}
+  active
+{% endblock %}
 {% load static %}
 
 {% block main %}
+  <!-- AOS Animation CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
   <main>
+    {% comment %}start Banner{% endcomment %}
+
     <!-- Trending Area Start -->
-    <div class="trending-area fix">
+    <div class="trending-area fix" data-aos="fade-up">
       <div class="container">
         <div class="trending-main">
-          <!-- Trending Tittle -->
           <div class="row">
             <div class="col-lg-12">
-              <div class="trending-tittle">
+              <div class="trending-tittle" data-aos="fade-down">
                 <strong>Trending now</strong>
-                <!-- <p>Rem ipsum dolor sit amet, consectetur adipisicing elit.</p> -->
                 <div class="trending-animated">
                   <ul id="js-news" class="js-hidden">
                     {% for t in trending %}
                       <li class="news-item">{{ t.title }}</li>
                     {% endfor %}
-
-                    <li class="news-item">Spondon IT sit amet, consectetur.......</li>
-                    <li class="news-item">Rem ipsum dolor sit amet, consectetur adipisicing elit.</li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
 
-          {% comment %}Trending News{% endcomment %}
-          <div class="row">
+          <div class="swiper" style="border-radius: 15px; overflow: hidden;">
+            <div class="swiper-wrapper">
+              {% for slide in slider %}
+                <div class="swiper-slide" style="background-image: url('{{ slide.ljnews_image.url }}')">
+                  <div class="slide-content">
+                    <div class="slide-title">{{ slide.title|truncatechars:20 }}</div>
+                    <p class="slide-subtitle">{{ slide.sub_title }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+
+          <div class="row" style="margin-top: 45px;">
             <div class="col-lg-8">
-              <!-- Trending Top -->
               {% for a in news %}
                 {% if forloop.first %}
-                  <div class="trending-top mb-30">
+                  <div class="trending-top mb-30" data-aos="zoom-in">
                     <div class="trend-top-img">
                       <img src="{{ a.news_image.url }}" alt="" height="411" width="770" />
                       <div class="trend-top-cap">
@@ -45,37 +59,34 @@
                   </div>
                 {% endif %}
               {% endfor %}
-              <!-- Trending Bottom -->
               <div class="trending-bottom">
                 <div class="row">
                   {% for a in news|slice:'3:7' %}
-                    {% if not forloop.first %}
-                      <div class="col-lg-4">
-                        <div class="single-bottom mb-35">
-                          <div class="trend-bottom-img mb-30">
-                            <img src="{{ a.news_image.url }}" height="157" width="236" alt="" />
-                          </div>
-                          <div class="trend-bottom-cap">
-                            <span class="color1">{{ a.category }}</span>
-                            <h4><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:40 }}</a></h4>
-                          </div>
+                    <div class="col-lg-4" data-aos="fade-up">
+                      <div class="single-bottom mb-35">
+                        <div class="trend-bottom-img mb-30">
+                          <img src="{{ a.news_image.url }}" height="157" width="236" alt="" />
+                        </div>
+                        <div class="trend-bottom-cap">
+                          <span class="color1" style="background-color:rgb(210, 240, 253);">{{ a.category }}</span>
+                          <h4><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:40 }}</a></h4>
                         </div>
                       </div>
-                    {% endif %}
+                    </div>
                   {% endfor %}
                 </div>
               </div>
             </div>
-            <!-- Riht content -->
+
             <div class="col-lg-4">
               {% for a in news|slice:'4' %}
                 {% if not forloop.first %}
-                  <div class="trand-right-single d-flex">
+                  <div class="trand-right-single d-flex" data-aos="fade-left">
                     <div class="trand-right-img">
-                      <img src="{{ a.news_image.url }} " height="100" width="120" alt="" />
+                      <img src="{{ a.news_image.url }}" height="100" width="120" alt="" />
                     </div>
                     <div class="trand-right-cap">
-                      <span class="color1">{{ a.category }}</span>
+                      <span class="color1" style="background-color:rgb(210, 240, 253);">{{ a.category }}</span>
                       <h4><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:40 }}</a></h4>
                     </div>
                   </div>
@@ -83,29 +94,49 @@
               {% endfor %}
             </div>
           </div>
-          {% comment %}End Trending News{% endcomment %}
         </div>
       </div>
     </div>
     <!-- Trending Area End -->
 
     <!-- LJ-News start -->
-    <div class="weekly-news-area pt-50">
+    <div class="weekly-news-area pt-50" data-aos="fade-up">
       <div class="container">
         <div class="weekly-wrapper">
-          <!-- section Tittle -->
           <div class="row">
             <div class="col-lg-12">
-              <div class="section-tittle mb-30">
-                <h3 style="color: #ff6219;">LJ News</h3>
+              <div class="section-tittle mb-30 text-center">
+                <h3 class="section-heading">LJ News</h3>
+                <style>
+                  .section-heading {
+                    color: #03a9f4;
+                    font-size: 32px;
+                    text-transform: uppercase;
+                    font-weight: 700;
+                    position: relative;
+                    display: inline-block;
+                    padding-bottom: 10px;
+                  }
+                  .section-heading::after {
+                    content: '';
+                    position: absolute;
+                    width: 60px;
+                    height: 3px;
+                    background-color: #03a9f4;
+                    bottom: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border-radius: 5px;
+                  }
+                </style>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <div class="weekly-news dot-style d-flex dot-style">
+              <div class="weekly-news dot-style d-flex">
                 {% for lj in ljnews %}
-                  <div class="weekly-single">
+                  <div class="weekly-single" data-aos="flip-left">
                     <div class="weekly-img" style="width: 370px; height: 432px;">
                       <img src="{{ lj.ljnews_image.url }}" height="432" width="370" alt="" />
                     </div>
@@ -124,61 +155,50 @@
     <!-- LJ-News end -->
 
     <!-- Whats New Start -->
-    <section class="whats-news-area pt-50 pb-20">
+    <section class="whats-news-area pt-50 pb-20" data-aos="fade-up">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="row d-flex justify-content-between">
-              <div class="col-lg-3 col-md-3">
-                <div class="section-tittle mb-30">
-                  <h3 style="color: #ff6219;">Whats New</h3>
-                </div>
-              </div>
-              <div class="col-lg-9 col-md-9">
-                <div class="properties__button">
-                  <!-- Nav Button -->
-                  <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                      <a class="nav-item nav-link {% if not request.GET.category %}active{% endif %}" href="/" role="tab" aria-controls="nav-home" aria-selected="true">All</a>
-
-                      {% for i in categories %}
-                        <a href="/?category={{ i.id }}" class="nav-item nav-link {% if request.GET.category|slugify == i.id|slugify %}active{% endif %}" role="tab" aria-controls="nav-profile" aria-selected="false">{{ i.category_name }}</a>
-                      {% endfor %}
-                    </div>
-                  </nav>
-                  <!-- End Nav Button -->
-                </div>
-              </div>
+        <div class="row d-flex justify-content-between">
+          <div class="col-lg-3 col-md-3">
+            <div class="section-tittle mb-30">
+              <h3 style="color: #ff6219;">Whats New</h3>
             </div>
-            <div class="row">
-              <div class="col-12">
-                <!-- Nav Card -->
-                <div class="tab-content d-flex" id="nav-tabContent">
-                  <!-- card one -->
-                  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div class="whats-news-caption">
-                      <div class="row">
-                        {% if cat_news %}
-                          {% for c in cat_news %}
-                            <div class="col-lg-4 col-md-6 {{ c.category }}">
-                              <div class="single-what-news mb-80" style="width: 380px; height: 300px;">
-                                <div class="what-img">
-                                  <!-- Set height and width consistently for all articles -->
-                                  <img src="{{ c.news_image.url }}" height="300" width="380" alt="" />
-                                </div>
-                                <div class="what-cap">
-                                  <span class="color1">{{ c.category }}</span>
-                                  <h4><a href="{% url 'details' c.id %}">{{ c.title|truncatechars:28 }}</a></h4>
-                                </div>
-                              </div>
+          </div>
+          <div class="col-lg-9 col-md-9">
+            <div class="properties__button">
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <a class="nav-item nav-link {% if not request.GET.category %}active{% endif %}" href="/" role="tab">All</a>
+                  {% for i in categories %}
+                    <a href="/?category={{ i.id }}" class="nav-item nav-link {% if request.GET.category|slugify == i.id|slugify %}active{% endif %}">{{ i.category_name }}</a>
+                  {% endfor %}
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="tab-content d-flex" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-home">
+                <div class="whats-news-caption">
+                  <div class="row">
+                    {% if cat_news %}
+                      {% for c in cat_news %}
+                        <div class="col-lg-4 col-md-6 {{ c.category }}" data-aos="fade-up">
+                          <div class="single-what-news mb-80" style="width: 380px; height: 300px;">
+                            <div class="what-img">
+                              <img src="{{ c.news_image.url }}" height="300" width="380" alt="" />
                             </div>
-                          {% endfor %}
-                        {% endif %}
-                      </div>
-                    </div>
+                            <div class="what-cap">
+                              <span class="color1">{{ c.category }}</span>
+                              <h4><a href="{% url 'details' c.id %}">{{ c.title|truncatechars:28 }}</a></h4>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    {% endif %}
                   </div>
                 </div>
-                <!-- End Nav Card -->
               </div>
             </div>
           </div>
@@ -188,10 +208,9 @@
     <!-- Whats New End -->
 
     <!-- Recent Articles start -->
-    <div class="recent-articles" style="margin-top: 50px;">
+    <div class="recent-articles" style="margin-top: 50px;" data-aos="fade-up">
       <div class="container">
         <div class="recent-wrapper">
-          <!-- section Tittle -->
           <div class="row">
             <div class="col-lg-12">
               <div class="section-tittle mb-30">
@@ -201,10 +220,10 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <div class="recent dot-style d-flex dot-style">
+              <div class="recent dot-style d-flex">
                 {% if featured %}
                   {% for f in featured %}
-                    <div class="single-recent mb-100">
+                    <div class="single-recent mb-100" data-aos="zoom-in">
                       <div class="what-img">
                         <img src="{{ f.news_image.url }}" height="350px" width="370px" alt="" />
                       </div>
@@ -223,36 +242,107 @@
     </div>
     <!-- Recent Articles End -->
 
-    <!-- Start pagination -->
-    <div class="pagination-area pb-45 text-center">
+    <!-- Pagination -->
+    <div class="pagination-area pb-45 text-center" data-aos="fade-up">
       <div class="container">
-        <div class="row">
-          <div class="col-xl-12">
-            <div class="single-wrap d-flex justify-content-center">
-              <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-start">
-                  <li class="page-item">
-                    <a class="page-link" href="#"><span class="flaticon-arrow roted"></span></a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">01</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">02</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">03</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#"><span class="flaticon-arrow right-arrow"></span></a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
+        <div class="single-wrap d-flex justify-content-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+              <li class="page-item">
+                <a class="page-link" href="#"><span class="flaticon-arrow roted"></span></a>
+              </li>
+              <li class="page-item active">
+                <a class="page-link" href="#">01</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">02</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">03</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#"><span class="flaticon-arrow right-arrow"></span></a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
-    <!-- End pagination -->
   </main>
+
+  <!-- AOS Animation JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      once: false
+    })
+  </script>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      effect: 'fade',
+      autoplay: {
+        delay: 3000, // Slide change after 3 seconds
+        disableOnInteraction: false // Keep autoplay running even after user interaction
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
+      on: {
+        slideChangeTransitionStart: () => animateText()
+      }
+    })
+    
+    function animateText() {
+      const activeSlide = document.querySelector('.swiper-slide-active .slide-content')
+      gsap.fromTo(activeSlide.querySelector('.slide-title'), { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power2.out' })
+    
+      gsap.fromTo(activeSlide.querySelector('.slide-subtitle'), { x: -100, opacity: 0 }, { x: 0, opacity: 1, delay: 0.3, duration: 1, ease: 'power1.out' })
+    
+      gsap.fromTo(activeSlide.querySelector('p'), { y: 50, opacity: 0 }, { y: 0, opacity: 1, delay: 0.6, duration: 1, ease: 'sine.out' })
+    }
+    
+    // First load animation
+    window.addEventListener('load', animateText)
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+  <style>
+    .swiper {
+      width: 100%;
+      height: 580px;
+    }
+    .swiper-slide {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+    .slide-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      text-align: center;
+      z-index: 10;
+    }
+    .slide-title {
+      font-size: 4rem;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+    .slide-subtitle {
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+    .swiper-pagination-bullets .swiper-pagination-bullet {
+      background: #fff;
+    }
+  </style>
 {% endblock %}

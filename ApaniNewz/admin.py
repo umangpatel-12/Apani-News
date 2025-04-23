@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Registration, Category, News, LJNews, Likes, 
-    Profile, Comment, SubComments, Contact, UserOTP
+    Profile, Comment, Slider, SubComments, Contact, UserOTP
 )
 
 # Register Registration model (custom user)
@@ -36,6 +36,10 @@ class LJNewsAdmin(admin.ModelAdmin):
     def approve_news(self, request, queryset):
         queryset.update(status='approved')
     approve_news.short_description = "Approve selected News"
+
+@admin.register(Slider)
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ('title', 'sub_title','content','slider_image','status', 'created')
 
 # Register Likes
 @admin.register(Likes)
