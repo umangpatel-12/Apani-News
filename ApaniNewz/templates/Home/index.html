@@ -30,10 +30,40 @@
             </div>
           </div>
 
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+          <style>
+            .slide-content {
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              height: 50%; /* covers bottom half */
+              background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+              color: white;
+              padding: 15px;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-end;
+              box-sizing: border-box;
+            }
+            
+            .slide-title {
+              font-size: 20px;
+              font-weight: 600;
+              margin: 0;
+            }
+            
+            .slide-subtitle {
+              font-size: 14px;
+              opacity: 0.85;
+              margin: 4px 0 0 0;
+            }
+          </style>
+
           <div class="swiper" style="border-radius: 15px; overflow: hidden;">
             <div class="swiper-wrapper">
               {% for slide in slider %}
-                <div class="swiper-slide" style="background-image: url('{{ slide.ljnews_image.url }}')">
+                <div class="swiper-slide" style="background-image: url('{{ slide.ljnews_image.url }}'); background-size: cover; background-position: center;">
                   <div class="slide-content">
                     <div class="slide-title">{{ slide.title|truncatechars:20 }}</div>
                     <p class="slide-subtitle">{{ slide.sub_title }}</p>
@@ -42,7 +72,25 @@
               {% endfor %}
             </div>
             <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
           </div>
+
+          <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+          <script>
+            const swiper = new Swiper('.swiper', {
+              loop: true,
+              speed: 800, // <-- this controls the animation duration in ms
+              pagination: {
+                el: '.swiper-pagination',
+                clickable: true
+              },
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+              }
+            })
+          </script>
 
           <div class="row" style="margin-top: 45px;">
             <div class="col-lg-8">
@@ -136,13 +184,16 @@
             <div class="col-12">
               <div class="weekly-news dot-style d-flex">
                 {% for lj in ljnews %}
-                  <div class="weekly-single" data-aos="flip-left">
-                    <div class="weekly-img" style="width: 370px; height: 432px;">
-                      <img src="{{ lj.ljnews_image.url }}" height="432" width="370" alt="" />
+                  <div class="weekly-single card shadow" data-aos="flip-left">
+                    <!-- Image Section -->
+                    <div class="weekly-img" style="width: 300px; height: 412px;overflow: hidden;">
+                      <img src="{{ lj.ljnews_image.url }}" alt="News Image" style="width: 100%; height: 100%; object-fit: cover;" />
                     </div>
-                    <div class="weekly-caption" style="width: 320px;">
-                      <span class="color1">{{ lj.category }}</span>
-                      <h4><a href="{% url 'detail' lj.id %}">{{ lj.title|truncatechars:35 }}</a></h4>
+
+                    <!-- Content Section -->
+                    <div class="weekly-caption p-3">
+                      <span class="badge bg-primary text-uppercase mb-2">{{ lj.category }}</span>
+                      <h4 class="card-title mb-1"><a href="{% url 'detail' lj.id %}" class="text-dark text-decoration-none">{{ lj.title|truncatechars:35 }}</a></h4>
                     </div>
                   </div>
                 {% endfor %}
