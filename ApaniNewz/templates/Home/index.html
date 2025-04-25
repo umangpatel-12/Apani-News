@@ -30,7 +30,7 @@
             </div>
           </div>
 
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+          {% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
           <style>
             .slide-content {
               position: absolute;
@@ -90,7 +90,58 @@
                 prevEl: '.swiper-button-prev'
               }
             })
-          </script>
+          </script> {% endcomment %}
+
+          <!-- MDB CSS -->
+          <!-- MDB CSS -->
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
+
+          <!-- Custom Carousel Image Styling -->
+          <style>
+            .carousel-item img {
+              height: 500px;
+              object-fit: cover;
+              box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+              border-radius: 12px;
+              margin: 20px auto; /* spacing */
+            }
+          </style>
+
+          <!-- Carousel wrapper -->
+          <div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-ride="carousel" data-mdb-carousel-init>
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+              {% for slide in slider %}
+                <button type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-current="{% if forloop.first %}true{% endif %}" aria-label="Slide {{ forloop.counter }}"></button>
+              {% endfor %}
+            </div>
+
+            <!-- Inner -->
+            <div class="carousel-inner">
+              {% for slide in slider %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  <img src="{{ slide.ljnews_image.url }}" class="d-block w-100" alt="{{ slide.title }}" />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ slide.title|truncatechars:20 }}</h5>
+                    <p>{{ slide.sub_title|truncatechars:30 }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <!-- MDB JS -->
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
 
           <div class="row" style="margin-top: 45px;">
             <div class="col-lg-8">

@@ -557,7 +557,8 @@ def LJNEWS(request):
     return render(request, "Home/LJNewz.html", context)
 
 def Gallery(request):
-    return render(request, "Home/Gallery.html")
+    news = News.objects.filter(status='PUBLISH')
+    return render(request, "Home/Gallery.html", {'news':news})
 
 # Admin Dashbord's
 @login_required(login_url='login')
@@ -869,6 +870,8 @@ def EditSlider(request, id):
             messages.error(request, "Failed to update. Check the form.")
     return redirect('managesliders')
 
+def ManageGallery(request):
+    return render(request, "Admin/ManageGallery.html")
 # Account's Details
 
 def ProfilePage(request):

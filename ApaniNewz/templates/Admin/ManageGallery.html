@@ -1,0 +1,39 @@
+{% extends 'Admin/main.html' %}
+{% block gallery_active %}
+  selected
+{% endblock %}
+{% load static %}
+
+{% block admin %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Manage Gallery</h1>
+        <a href="" class="btn btn-primary">Add New Image</a>
+        <table class="table table-bordered table-striped mt-3">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% comment %} {% for image in images %}
+              <tr>
+                <td>{{ image.id }}</td>
+                <td>
+                  <img src="{{ image.image.url }}" alt="Image" width="100" />
+                </td>
+                <td>
+                  <a href="{% url 'edit_gallery' image.id %}" class="btn btn-warning">Edit</a>
+                  <a href="{% url 'delete_gallery' image.id %}" class="btn btn-danger">Delete</a>
+                </td>
+              </tr>
+            {% endfor %} {% endcomment %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

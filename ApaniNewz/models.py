@@ -140,6 +140,15 @@ class Slider(models.Model):
 
     def __str__(self):
         return self.title 
+    
+class Gallery(models.Model):
+    title = models.CharField(max_length=255)
+    gallery_image = models.ImageField(upload_to="media/gallery/")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
        
 class Likes(models.Model):
     article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes', blank=True, null=True)

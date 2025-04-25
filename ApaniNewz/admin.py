@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-    Registration, Category, News, LJNews, Likes, 
+    Gallery, Registration, Category, News, LJNews, Likes, 
     Profile, Comment, Slider, SubComments, Contact, UserOTP
 )
 
@@ -40,6 +40,11 @@ class LJNewsAdmin(admin.ModelAdmin):
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
     list_display = ('title', 'sub_title','content','slider_image','status', 'created')
+    
+@admin.register(Gallery)
+class GalleryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'gallery_image', 'created')
+    search_fields = ('title',)
 
 # Register Likes
 @admin.register(Likes)
