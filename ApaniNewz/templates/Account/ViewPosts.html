@@ -52,7 +52,7 @@
                                         <img src="{{ n.ljnews_image.url }}" alt="{{ n.title }}" />
                                       </div>
                                       <div class="what-cap">
-                                        <span class="color1">{{ n.category }}</span>
+                                        <span class="color1" style="background-color:rgb(210, 240, 253);">{{ n.category }}</span>
                                         <h4 style="margin-left: 15px;"><a href="{% url 'detail' n.id %}">{{ n.title|truncatechars:21 }}</a></h4>
                                       </div>
                                       <div class="d-flex justify-content-between small mt-4">
@@ -193,8 +193,9 @@
             </div>
 
             <style>
-  /* Base button style */
+              /* Base button style */
             .btn-purple,
+            .btn-blue,
             .btn-red {
               font-family: inherit;
               display: inline-block;
@@ -227,6 +228,19 @@
               color: #fff;
             }
 
+            /* Blue Button */
+            .btn-blue {
+              --color: #3a0ca3;
+              color: var(--color);
+              border: 2px solid var(--color);
+            }
+            .btn-blue:before {
+              background: var(--color);
+            }
+            .btn-blue:hover {
+              color: #fff;
+            }
+
             /* Red Button */
             .btn-red {
               --color: #d00000;
@@ -244,6 +258,7 @@
 
             /* Shared pseudo-element styles */
             .btn-purple:before,
+            .btn-blue:before,
             .btn-red:before {
               content: "";
               position: absolute;
@@ -257,6 +272,7 @@
             }
 
             .btn-purple:hover:before,
+            .btn-blue:hover:before,
             .btn-red:hover:before {
               top: -30px;
               left: -30px;
@@ -269,6 +285,11 @@
 
             .btn-red:active:before {
               background: #9b0000;
+              transition: background 0s;
+            }
+
+            .btn-blue:active:before {
+              background: #560bad;
               transition: background 0s;
             }
 
@@ -315,8 +336,8 @@
             </div>
 
             <div class="modal-footer">
-              <button type="submit" class="btn btn-danger">Delete</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn-red">Delete</button>
+              <button type="button" class="btn-blue" data-bs-dismiss="modal">Cancel</button>
             </div>
           </form>
         </div>

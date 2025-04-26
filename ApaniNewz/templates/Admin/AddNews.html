@@ -84,7 +84,7 @@
 
                 <div class="row">
                   <div class="col-md-5 offset-md-1">
-                    <button type="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
+                    <button type="submit" name="submit" class="btn-blue">Submit</button>
                   </div>
                 </div>
               </form>
@@ -236,8 +236,8 @@
                               </div>
 
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn-blue">Save changes</button>
+                                <button type="button" class="btn-red" data-bs-dismiss="modal">Cancel</button>
                               </div>
                             </form>
                             
@@ -264,8 +264,8 @@
                             </div>
                             
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn-purple">Delete</button>
+                                <button type="button" class="btn-red" data-bs-dismiss="modal">Cancel</button>
                               </div>
                             </form>
                           </div>
@@ -323,5 +323,115 @@
     CKEDITOR.replace('content{{ a.id }}');
   {% endfor %}
 </script>
+
+<style>
+    /* Base button style */
+    .btn-purple,
+    .btn-blue,
+    .btn-red {
+      font-family: inherit;
+      display: inline-block;
+      width: 8em;
+      height: 2.6em;
+      line-height: 2.5em;
+      margin: 20px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: color 0.5s;
+      z-index: 1;
+      font-size: 17px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    
+    /* Purple Button */
+    .btn-purple {
+      --color: #560bad;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-purple:before {
+      background: var(--color);
+    }
+    
+    .btn-purple:hover {
+      color: #fff;
+    }
+    
+    /* Blue Button */
+    .btn-blue {
+      --color: #03a9f4;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    .btn-blue:before {
+      background: var(--color);
+    }
+    .btn-blue:hover {
+      color: white;
+    }
+    
+    /* Red Button */
+    .btn-red {
+      --color: #d00000;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-red:before {
+      background: var(--color);
+    }
+    
+    .btn-red:hover {
+      color: #fff;
+    }
+    
+    /* Shared pseudo-element styles */
+    .btn-purple:before,
+    .btn-blue:before,
+    .btn-red:before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      height: 150px;
+      width: 200px;
+      border-radius: 50%;
+      top: 100%;
+      left: 100%;
+      transition: all 0.7s;
+    }
+    
+    .btn-purple:hover:before,
+    .btn-blue:hover:before,
+    .btn-red:hover:before {
+      top: -30px;
+      left: -30px;
+    }
+    
+    .btn-purple:active:before {
+      background: #3a0ca3;
+      transition: background 0s;
+    }
+    
+    .btn-red:active:before {
+      background: #9b0000;
+      transition: background 0s;
+    }
+    
+    .btn-blue:active:before {
+      background: #560bad;
+      transition: background 0s;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 1rem;
+      background-color: #f8f9fa;
+    }
+  </style>
 
 {% endblock %}
