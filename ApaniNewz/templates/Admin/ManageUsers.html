@@ -34,6 +34,9 @@
                       <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Active</h6>
                       </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Action</h6>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -64,7 +67,39 @@
                               <span class="badge bg-danger rounded-3 fw-semibold">Active</span>
                             </div>
                           </td>
+                          <td class="border-bottom-0">
+                            <a href="#" class="text-dark" data-toggle="modal" data-target="#deleteModal{{ user.id }}"><i class="far fa-trash-alt" style="font-size:20px"></i></a>
+                          </td>
                         </tr>
+
+                        <!-- start Delete Modal -->
+                        <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" role="dialog">
+                          <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                              <form method="POST" action="{% url 'deleteuser' user.id %}">
+                                {% csrf_token %}
+                                <div class="modal-header text-center flex-column w-100">
+                                  <h3 class="modal-title w-100">Delete Confirmation</h3>
+
+                                  <hr class="w-100 mt-2 mb-0" />
+                                </div>
+
+                                <div class="modal-body text-center">
+                                  <p class="fw-bold fs-5 mb-2">Are you sure you want to delete</p>
+                                  <p>
+                                    <strong>"{{ user.email }}"?</strong>
+                                  </p>
+                                </div>
+
+                                <div class="modal-footer">
+                                  <button type="submit" class="btn-purple">Delete</button>
+                                  <button type="button" class="btn-red" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Delete Modal -->
                       {% endfor %}
                     {% endif %}
 
@@ -97,4 +132,113 @@
       </div>
     </div>
   </div>
+  <style>
+    /* Base button style */
+    .btn-purple,
+    .btn-blue,
+    .btn-red {
+      font-family: inherit;
+      display: inline-block;
+      width: 8em;
+      height: 2.6em;
+      line-height: 2.5em;
+      margin: 20px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: color 0.5s;
+      z-index: 1;
+      font-size: 17px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    
+    /* Purple Button */
+    .btn-purple {
+      --color: #560bad;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-purple:before {
+      background: var(--color);
+    }
+    
+    .btn-purple:hover {
+      color: #fff;
+    }
+    
+    /* Blue Button */
+    .btn-blue {
+      --color: #03a9f4;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    .btn-blue:before {
+      background: var(--color);
+    }
+    .btn-blue:hover {
+      color: white;
+    }
+    
+    /* Red Button */
+    .btn-red {
+      --color: #d00000;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-red:before {
+      background: var(--color);
+    }
+    
+    .btn-red:hover {
+      color: #fff;
+    }
+    
+    /* Shared pseudo-element styles */
+    .btn-purple:before,
+    .btn-blue:before,
+    .btn-red:before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      height: 150px;
+      width: 200px;
+      border-radius: 50%;
+      top: 100%;
+      left: 100%;
+      transition: all 0.7s;
+    }
+    
+    .btn-purple:hover:before,
+    .btn-blue:hover:before,
+    .btn-red:hover:before {
+      top: -30px;
+      left: -30px;
+    }
+    
+    .btn-purple:active:before {
+      background: #3a0ca3;
+      transition: background 0s;
+    }
+    
+    .btn-red:active:before {
+      background: #9b0000;
+      transition: background 0s;
+    }
+    
+    .btn-blue:active:before {
+      background: #560bad;
+      transition: background 0s;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 1rem;
+      background-color: #f8f9fa;
+    }
+  </style>
 {% endblock %}

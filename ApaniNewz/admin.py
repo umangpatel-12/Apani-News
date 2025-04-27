@@ -39,7 +39,7 @@ class LJNewsAdmin(admin.ModelAdmin):
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
-    list_display = ('title', 'sub_title','content','slider_image','status', 'created')
+    list_display = ('title', 'author','content','slider_image','status', 'created')
     
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):

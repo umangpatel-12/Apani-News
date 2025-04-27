@@ -490,16 +490,17 @@ class SliderForm(forms.ModelForm):
         required=True
     )
 
-    sub_title = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'id': 'sub_title',
-            'name': 'sub_title',
-            'class': 'form-control form-control-lg',
-            'placeholder': 'Enter Sub Title'
-        }),
-        max_length=255,
-        required=True
-    )
+    author = forms.CharField(
+            widget=forms.TextInput(attrs={
+                'id': 'author',
+                'name': 'author',
+                'class': 'form-control form-control-lg',
+                'placeholder': 'Author Name'
+            }),
+            max_length=50,
+            required=True
+        )
+
 
     content = forms.CharField(
         widget=CKEditorWidget(attrs={
@@ -531,7 +532,7 @@ class SliderForm(forms.ModelForm):
 
     class Meta:
         model = Slider
-        fields = ['title', 'sub_title', 'content', 'status', 'slider_image']
+        fields = ['title', 'author', 'content', 'status', 'slider_image']
 
 class CategoryForm(forms.ModelForm):
     category_name = forms.CharField(

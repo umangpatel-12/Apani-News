@@ -773,11 +773,23 @@ def Comments(request):
     }
     return render(request,"Admin/ManageComment.html",context)
 
+def DeleteComment(request, id):
+    comment = Comment.objects.filter(id=id)
+    comment.delete()
+    messages.error(request, "Comment deleted successfully!")
+    return redirect("comments")
+
 @login_required(login_url='login')
 def ManageUsers(request):
     user_data = User.objects.all()
     user_profile = Profile.objects.all()
     return render(request,"Admin/ManageUsers.html",{'user_data':user_data,'user_profile':user_profile})
+
+def DeleteUser(request, id):
+    user = User.objects.filter(id=id)
+    user.delete()
+    messages.error(request, "User deleted successfully!")
+    return redirect("manageusers")
 
 @login_required(login_url='login')
 def ManageContact(request):
@@ -786,6 +798,12 @@ def ManageContact(request):
         'contact':contact
     }
     return render(request,"Admin/ManageContact.html",context)
+
+def DeleteContact(request, id):
+    contact = Contact.objects.filter(id=id)
+    contact.delete()
+    messages.error(request, "Contact deleted successfully!")
+    return redirect("managecontact")
 
 @login_required(login_url='login')
 def ManageLJNews(request):
@@ -801,6 +819,7 @@ def ManageLJNews(request):
     }
 
     return render(request, "Admin/ManageLJNews.html", context)
+
 @login_required(login_url='login')
 def EditLJNews(request, id):
     ljnews = get_object_or_404(LJNews, id=id)
@@ -872,6 +891,9 @@ def EditSlider(request, id):
 
 def ManageGallery(request):
     return render(request, "Admin/ManageGallery.html")
+
+
+
 # Account's Details
 
 def ProfilePage(request):

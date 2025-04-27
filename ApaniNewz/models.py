@@ -131,7 +131,7 @@ class Slider(models.Model):
     STATUS = ('PUBLISH', 'PUBLISH'),('DRAFT', 'DRAFT')
     
     title = models.CharField(max_length=255)
-    sub_title = models.CharField(max_length=255)
+    author = models.CharField(max_length=50)
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, max_length=255)
     slider_image = models.ImageField(upload_to="media/slider/")
