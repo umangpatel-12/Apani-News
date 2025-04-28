@@ -99,7 +99,7 @@
           <!-- Custom Carousel Image Styling -->
           <style>
             .carousel-item img {
-              height: 500px;
+              height: 600px;
               object-fit: cover;
               box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
               border-radius: 12px;
@@ -120,7 +120,13 @@
             <div class="carousel-inner">
               {% for slide in slider %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                  <img src="{{ slide.ljnews_image.url }}" class="d-block w-100" alt="{{ slide.title }}" />
+                  {% if slide.slider_image %}
+                    <img src="{{ slide.slider_image.url }}" class="d-block w-100" alt="{{ slide.title }}" />
+                  {% else %}
+                    <img src="/static/default-image.jpg" class="d-block w-100" alt="No image available" />
+                    {# ✅ या आप कोई default image दिखा सकते हो जब slider_image नहीं हो #}
+                  {% endif %}
+
                   <div class="carousel-caption d-none d-md-block">
                     <h5>{{ slide.title|truncatechars:20 }}</h5>
                     <p>{{ slide.sub_title|truncatechars:30 }}</p>

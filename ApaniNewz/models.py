@@ -134,7 +134,7 @@ class Slider(models.Model):
     author = models.CharField(max_length=50)
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, max_length=255)
-    slider_image = models.ImageField(upload_to="media/slider/")
+    slider_image = models.ImageField(upload_to="media/slider/",blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

@@ -26,7 +26,8 @@ from collections import defaultdict
 def home(request):  
     
     # Slider
-    slider = LJNews.objects.filter(status='PUBLISH', visibility='APPROVED')
+    # slider = LJNews.objects.filter(status='PUBLISH', visibility='APPROVED')
+    slider = Slider.objects.filter(status='PUBLISH').order_by('-created')  # Get the latest 5 sliders
     
     # Featured News
     featured = News.objects.filter(is_featured=True, status='PUBLISH')
@@ -849,6 +850,9 @@ def DeleteLJNews(request, id):
     return redirect("manageljnews")  # Redirect to the page displaying all LJNews
         
 def ManageSliders(request):
+    
+    sliders = Slider.objects.all().order_by('-created')
+    
     if request.method == 'POST':
         form = SliderForm(request.POST, request.FILES)
 
@@ -864,6 +868,7 @@ def ManageSliders(request):
     
     context = {
         'form': form,
+        'sliders':sliders
     }
     
     return render(request, "Admin/ManageSlider.html", context)
@@ -891,7 +896,6 @@ def EditSlider(request, id):
 
 def ManageGallery(request):
     return render(request, "Admin/ManageGallery.html")
-
 
 
 # Account's Details

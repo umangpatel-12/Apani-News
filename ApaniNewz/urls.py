@@ -56,6 +56,8 @@ urlpatterns = [
     path('Edit-LJ-News/<int:id>', views.EditLJNews, name='editljnews'),
     path('Delete-LJ-News/<int:id>', views.DeleteLJNews, name='deleteljnews'),
     path('Manage-Sliders',views.ManageSliders,name='managesliders'),
+    path('Delete-Slider/<int:id>', views.DeleteSlider, name='deleteslider'),
+    path('Edit-Slider/<int:id>', views.EditSlider, name='editslider'),
     path('Manage-Gallery',views.ManageGallery,name='managelgallery'),
 
 

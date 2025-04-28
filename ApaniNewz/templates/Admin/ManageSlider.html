@@ -52,7 +52,7 @@
                 <div class="mb-3 row align-items-center">
                   <label for="image" class="col-md-1 col-form-label">Upload Image</label>
                   <div class="col-md-10">
-                    <input type="file" id="news_image" name="news_image" class="form-control" />
+                    <input type="file" id="slider_image" name="slider_image" class="form-control" />
                   </div>
                 </div>
 
@@ -87,13 +87,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% if NewsData %}
-                    {% for a in NewsData %}
+                  {% if sliders %}
+                    {% for a in sliders %}
                       <tr>
                         <td>{{ a.id }}</td>
                         <td>
-                          {% if a.news_image %}
-                            <img src="{{ a.news_image.url }}" style="height: 50px; width: 50px;" alt="{{ a.title }}">
+                          {% if a.slider_image %}
+                            <img src="{{ a.slider_image.url }}" style="height: 50px; width: 50px;" alt="{{ a.title }}">
                           {% else %}
                             <p>No Image</p>
                           {% endif %}
@@ -120,7 +120,7 @@
                       <div class="modal fade" id="editModel{{ a.id }}" tabindex="-1" role="dialog">
                         <div class="modal-dialog modal-lg" role="document">
                           <div class="modal-content">
-                            <form method="POST" action="{% url 'editnews' a.id %}" enctype="multipart/form-data">
+                            <form method="POST" action="{% url 'editslider' a.id %}" enctype="multipart/form-data">
                               {% csrf_token %}
                               {{ form.media|safe }}
 
@@ -140,13 +140,13 @@
                                   </div>
                                 </div>
 
-                                <div class="mb-3 row align-items-center">
+                                {% comment %} <div class="mb-3 row align-items-center">
                                   <label for="sub_title" class="col-md-2 col-form-label">Sub-Title</label>
                                   <div class="col-md-10">
                                     <input type="text" id="sub_title" name="sub_title" class="form-control form-control-lg"
                                       value="{{ a.sub_title }}" required />
                                   </div>
-                                </div>
+                                </div> {% endcomment %}
 
                                
 
@@ -178,11 +178,11 @@
                                 </div>
 
                                 <div class="mb-3 row align-items-center">
-                                  <label for="news_image" class="col-md-2 col-form-label">Upload Image</label>
+                                  <label for="slider_image" class="col-md-2 col-form-label">Upload Image</label>
                                   <div class="col-md-10">
-                                    <input type="file" id="news_image" name="news_image" class="form-control" />
-                                    {% if a.news_image %}
-                                    <img src="{{ a.news_image.url }}" alt="Current Image" class="mt-2" height="100">
+                                    <input type="file" id="slider_image" name="slider_image" class="form-control" />
+                                    {% if a.slider_image %}
+                                    <img src="{{ a.slider_image.url }}" alt="Current Image" class="mt-2" height="100">
                                     {% endif %}
                                   </div>
                                 </div>
@@ -190,7 +190,7 @@
                               </div>
 
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="submit" class="btn-blue">Save changes</button>
                                 <button type="button" class="btn-red" data-bs-dismiss="modal">Cancel</button>
                               </div>
                             </form>
@@ -204,7 +204,7 @@
                       <div class="modal fade" id="deleteModal{{ a.id }}" tabindex="-1" role="dialog">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                           <div class="modal-content">
-                            <form method="POST" action="{% url 'deletenews' a.id %}">
+                            <form method="POST" action="{% url 'deleteslider' a.id %}">
                               {% csrf_token %}
                               <div class="modal-header text-center flex-column w-100">
                                 <h3 class="modal-title w-100">Delete Confirmation</h3>
@@ -218,8 +218,8 @@
                             </div>
                             
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn-purple">Delete</button>
+                                <button type="button" class="btn-red" data-bs-dismiss="modal">Cancel</button>
                               </div>
                             </form>
                           </div>
@@ -273,7 +273,7 @@
 
 <!-- Initialize CKEditor for Edit Modals -->
 <script>
-  {% for a in NewsData %}
+  {% for a in sliders %}
     CKEDITOR.replace('content{{ a.id }}');
   {% endfor %}
 </script>
