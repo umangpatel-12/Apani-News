@@ -30,69 +30,6 @@
             </div>
           </div>
 
-          {% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
-          <style>
-            .slide-content {
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              width: 100%;
-              height: 50%; /* covers bottom half */
-              background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-              color: white;
-              padding: 15px;
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-end;
-              box-sizing: border-box;
-            }
-            
-            .slide-title {
-              font-size: 20px;
-              font-weight: 600;
-              margin: 0;
-            }
-            
-            .slide-subtitle {
-              font-size: 14px;
-              opacity: 0.85;
-              margin: 4px 0 0 0;
-            }
-          </style>
-
-          <div class="swiper" style="border-radius: 15px; overflow: hidden;">
-            <div class="swiper-wrapper">
-              {% for slide in slider %}
-                <div class="swiper-slide" style="background-image: url('{{ slide.ljnews_image.url }}'); background-size: cover; background-position: center;">
-                  <div class="slide-content">
-                    <div class="slide-title">{{ slide.title|truncatechars:20 }}</div>
-                    <p class="slide-subtitle">{{ slide.sub_title }}</p>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-          </div>
-
-          <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-          <script>
-            const swiper = new Swiper('.swiper', {
-              loop: true,
-              speed: 800, // <-- this controls the animation duration in ms
-              pagination: {
-                el: '.swiper-pagination',
-                clickable: true
-              },
-              navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev'
-              }
-            })
-          </script> {% endcomment %}
-
-          <!-- MDB CSS -->
           <!-- MDB CSS -->
           <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
 
@@ -210,31 +147,47 @@
         <div class="weekly-wrapper">
           <div class="row">
             <div class="col-lg-12">
-              <div class="section-tittle mb-30 text-center">
-                <h3 class="section-heading">LJ News</h3>
-                <style>
-                  .section-heading {
-                    color: #03a9f4;
-                    font-size: 32px;
-                    text-transform: uppercase;
-                    font-weight: 700;
-                    position: relative;
-                    display: inline-block;
-                    padding-bottom: 10px;
-                  }
-                  .section-heading::after {
-                    content: '';
-                    position: absolute;
-                    width: 60px;
-                    height: 3px;
-                    background-color: #03a9f4;
-                    bottom: 0;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    border-radius: 5px;
-                  }
-                </style>
+              <div class="text-center py-5">
+                <h3 class="section-title mb-2">LJ News</h3>
+                <div class="section-underline mb-2 mx-auto"></div>
               </div>
+
+              <style>
+                .section-title {
+                  color: rgb(91, 91, 91);
+                  font-size: 2.5rem;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 1.5px;
+                  position: relative;
+                  transition: all 0.3s ease-in-out;
+                }
+                
+                .section-title:hover {
+                  transform: scale(1.05);
+                  color: #03a9f4; /* Darker orange on hover */
+                }
+                
+                .section-underline {
+                  width: 80px;
+                  height: 4px;
+                  background-color: #03a9f4;
+                  border-radius: 4px;
+                  transition: width 0.4s ease-in-out;
+                }
+                
+                .section-title:hover + .section-underline {
+                  width: 100px;
+                }
+                
+                .section-subtitle {
+                  font-size: 1rem;
+                  color: #666;
+                  max-width: 500px;
+                  margin: 0 auto;
+                  font-style: italic;
+                }
+              </style>
             </div>
           </div>
           <div class="row">
@@ -249,7 +202,8 @@
 
                     <!-- Content Section -->
                     <div class="weekly-caption p-3">
-                      <span class="badge bg-primary text-uppercase mb-2">{{ lj.category }}</span>
+                      <span class="color1" style="background-color:rgb(210, 240, 253);">{{ lj.category }}</span>
+
                       <h4 class="card-title mb-1"><a href="{% url 'detail' lj.id %}" class="text-dark text-decoration-none">{{ lj.title|truncatechars:35 }}</a></h4>
                     </div>
                   </div>
@@ -268,7 +222,7 @@
         <div class="row d-flex justify-content-between">
           <div class="col-lg-3 col-md-3">
             <div class="section-tittle mb-30">
-              <h3 style="color: #ff6219;">Whats New</h3>
+              <h3 style="color: #03a9f4;">Whats New</h3>
             </div>
           </div>
           <div class="col-lg-9 col-md-9">
@@ -298,7 +252,7 @@
                               <img src="{{ c.news_image.url }}" height="300" width="380" alt="" />
                             </div>
                             <div class="what-cap">
-                              <span class="color1">{{ c.category }}</span>
+                              <span class="color1" class="color1" style="background-color:rgb(210, 240, 253);">{{ c.category }}</span>
                               <h4><a href="{% url 'details' c.id %}">{{ c.title|truncatechars:28 }}</a></h4>
                             </div>
                           </div>
@@ -321,9 +275,48 @@
         <div class="recent-wrapper">
           <div class="row">
             <div class="col-lg-12">
-              <div class="section-tittle mb-30">
-                <h3 style="color: #ff6219;">Articles</h3>
+              <div class="text-center py-5">
+                <h3 class="section-title mb-2">Articles</h3>
+                <div class="section-underline mb-2 mx-auto"></div>
+                <p class="section-subtitle">Discover the latest insights, updates, and featured stories</p>
               </div>
+
+              <style>
+                .section-title {
+                  color: rgb(91, 91, 91);
+                  font-size: 2.5rem;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 1.5px;
+                  position: relative;
+                  transition: all 0.3s ease-in-out;
+                }
+                
+                .section-title:hover {
+                  transform: scale(1.05);
+                  color: #03a9f4; /* Darker orange on hover */
+                }
+                
+                .section-underline {
+                  width: 80px;
+                  height: 4px;
+                  background-color: #03a9f4;
+                  border-radius: 4px;
+                  transition: width 0.4s ease-in-out;
+                }
+                
+                .section-title:hover + .section-underline {
+                  width: 100px;
+                }
+                
+                .section-subtitle {
+                  font-size: 1rem;
+                  color: #666;
+                  max-width: 500px;
+                  margin: 0 auto;
+                  font-style: italic;
+                }
+              </style>
             </div>
           </div>
           <div class="row">
@@ -336,7 +329,7 @@
                         <img src="{{ f.news_image.url }}" height="350px" width="370px" alt="" />
                       </div>
                       <div class="what-cap">
-                        <span class="color1">{{ f.category }}</span>
+                        <span class="color1" class="color1" style="background-color:rgb(210, 240, 253);">{{ f.category }}</span>
                         <h4><a href="{% url 'details' f.id %}">{{ f.title|truncatechars:35 }}</a></h4>
                       </div>
                     </div>
@@ -349,33 +342,6 @@
       </div>
     </div>
     <!-- Recent Articles End -->
-
-    <!-- Pagination -->
-    <div class="pagination-area pb-45 text-center" data-aos="fade-up">
-      <div class="container">
-        <div class="single-wrap d-flex justify-content-center">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-start">
-              <li class="page-item">
-                <a class="page-link" href="#"><span class="flaticon-arrow roted"></span></a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" href="#">01</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">02</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">03</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#"><span class="flaticon-arrow right-arrow"></span></a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </div>
   </main>
 
   <!-- AOS Animation JS -->

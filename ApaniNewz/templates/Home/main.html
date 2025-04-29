@@ -204,10 +204,6 @@
                   <div class="main-menu d-none d-md-block" id="navbar-menu">
                     <ul id="navigation">
                       {% if user.is_authenticated %}
-                        <!-- Mobile Menu -->
-                        {% comment %} <div class="col-12">
-                          <div class="mobile_menu d-block d-md-none"></div>
-                        </div> {% endcomment %}
                         <li>
                           <a href="#" class="trending-animated" style="color: #03A9F4; font-size: 18px;">Hi, {{ user.first_name|default:'User' }}</a>
                           <ul class="submenu">
@@ -238,6 +234,11 @@
               </div>
             </div>
           </div>
+          <style>
+            .header-bottom {
+              height: 100px;
+            }
+          </style>
         </div>
       </div>
       <!-- Header End -->
@@ -260,12 +261,6 @@
                 </div>
                 <div class="footer-pera" style="margin-top: -20px;">
                   <p style="text-align: justify; font-size: 14px; line-height: 1.8; color: #333;">ApaniNewz is the official platform for sharing news and updates from LJ University. We aim to provide a space where students and staff can share their achievements, ideas, and experiences, helping foster a vibrant and connected community.</p>
-                </div>
-                <!-- Social Links -->
-                <div class="footer-social">
-                  <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                  <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                  <a href="#" class="social-icon"><i class="fab fa-pinterest-p"></i></a>
                 </div>
               </div>
             </div>
@@ -291,32 +286,43 @@
             <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6">
               <div class="single-footer-caption mb-50 mt-60">
                 <div class="footer-tittle">
-                  <h4 style="font-size: 18px; color: #03A9F4;">Instagram Feed</h4>
+                  <h4 style="font-size: 18px; color: #03A9F4;">Follow Us</h4>
                 </div>
-                <div class="instagram-gellay">
-                  <ul class="insta-feed">
-                    <li>
-                      <a href="#"><img src="{% static 'assets/img/post/instra1.jpg' %}" alt="Instagram" /></a>
-                    </li>
-                    <li>
-                      <a href="#"><img src="{% static 'assets/img/post/instra2.jpg' %}" alt="Instagram" /></a>
-                    </li>
-                    <li>
-                      <a href="#"><img src="{% static 'assets/img/post/instra3.jpg' %}" alt="Instagram" /></a>
-                    </li>
-                    <li>
-                      <a href="#"><img src="{% static 'assets/img/post/instra4.jpg' %}" alt="Instagram" /></a>
-                    </li>
-                    <li>
-                      <a href="#"><img src="{% static 'assets/img/post/instra5.jpg' %}" alt="Instagram" /></a>
-                    </li>
-                    <li>
-                      <a href="#"><img src="{% static 'assets/img/post/instra6.jpg' %}" alt="Instagram" /></a>
-                    </li>
-                  </ul>
+                <div class="footer-social-modern">
+                  <a href="#" class="social-icon-modern"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="social-icon-modern"><i class="fab fa-instagram"></i></a>
+                  <a href="#" class="social-icon-modern"><i class="fa fa-envelope"></i></a>
+                  <a href="#" class="social-icon-modern"><i class="fa fa-phone-square" aria-hidden="true"></i></a>
                 </div>
               </div>
             </div>
+            <style>
+              .footer-social-modern {
+                display: flex;
+                gap: 15px;
+                margin-top: 15px;
+              }
+              
+              .social-icon-modern {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                background-color: #f1f1f1;
+                color: #03a9f4;
+                font-size: 18px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              }
+              
+              .social-icon-modern:hover {
+                background-color: #03a9f4;
+                color: white;
+                transform: scale(1.1);
+              }
+            </style>
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@
           <div class="row d-flex justify-content-between">
             <div class="col-lg-6 col-md-6">
               <div class="section-tittle mb-30">
-                <h3>Search Keyword: <span style="color: red;">{{ keyword }}</span></h3>
+                <h3>Search Keyword: <span style="color: #03a9f4;">{{ keyword }}</span></h3>
               </div>
             </div>
             <div class="col-lg-9 col-md-9"></div>
@@ -39,7 +39,9 @@
                         {% endfor %}
                       {% else %}
                         <tr>
-                          <td colspan="6" class="center">Search Keyword Not found</td>
+                          <td colspan="6">
+                            <div style="text-align: center; padding: 20px; color: #999; font-size: 18px; font-weight: 500;">🔍 Search Keyword Not Found</div>
+                          </td>
                         </tr>
                       {% endif %}
                     </div>
