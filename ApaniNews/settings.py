@@ -54,6 +54,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ApaniNews.urls'
 
+# settings.py
+# AUTH_USER_MODEL = 'ApaniNewz.CustomUser'  # This is where the custom user model is defined
+
+
 
 
 TEMPLATES = [
@@ -101,6 +105,7 @@ DATABASES = {
 }
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

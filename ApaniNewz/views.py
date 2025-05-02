@@ -22,6 +22,8 @@ from django.db.models.functions import TruncDate
 from django.utils.timezone import now, timedelta
 from collections import defaultdict
 # Create your views here.
+
+
 @login_required(login_url='login')
 def home(request):  
     
@@ -110,12 +112,15 @@ def login_view(request):
 
             user = authenticate(request, username=user.username, password=password)
             if user is not None:
-                login(request, user)
-                messages.info(request, f"You are now logged in as {email}.")
-                request.session['user_id'] = user.id
-                request.session['email'] = email
-                return redirect('index')
+                
+                    login(request, user)
+                    messages.info(request, f"You are now logged in as {email}.")
+                    request.session['user_id'] = user.id
+                    request.session['email'] = email
+                    return redirect('index')
+                
             else:
+                print(form.errors)
                 messages.error(request, 'Invalid email or password.')
     else:
         form = LoginForm()
@@ -223,10 +228,11 @@ def register_view(request):
                 
                 if user_otp and int(otp_input) == user_otp.OTP:
                     user.is_active = True
+                    user.approved = 'NOT APPROVED'  # Ensure user is 'NOT APPROVED' until verified
                     user.save()
                     login(request, user)
                     messages.success(request, "Your account has been successfully verified and logged in.")
-                    return redirect('index')
+                    return redirect('login')
                 else:
                     messages.error(request, "Invalid OTP. Please try again.")
             except User.DoesNotExist:
@@ -238,7 +244,8 @@ def register_view(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
-            user.is_active = False
+            user.is_active = False  # Account not active until OTP verification
+            user.approved = 'NOT APPROVED'  # Default to 'NOT APPROVED'
             user.save()
 
             otp_code = random.randint(100000, 999999)
@@ -268,7 +275,7 @@ def register_view(request):
                 message.strip(),
                 settings.EMAIL_HOST_USER,
                 [user.email],
-                fail_silently = False,
+                fail_silently=False,
             )
 
             role = form.cleaned_data['role']
@@ -281,6 +288,15 @@ def register_view(request):
                 phone=form.cleaned_data['phone'],
                 profile_image=form.cleaned_data.get('profile_image')
             )
+            # Registration.objects.create(
+            #     user=user,
+            #     department=department,
+            #     enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
+            #     phone=form.cleaned_data['phone'],
+            #     profile_image=form.cleaned_data.get('profile_image'),
+            #     role=form.cleaned_data.get('role'),
+            #     approved=form.cleaned_data.get('approved')
+            # )
 
             messages.info(request, "We’ve sent you an OTP to your email. Please enter it below to verify your account.")
             return render(request, "Home/Registration.html", {'OTP': True, 'user': user.email})

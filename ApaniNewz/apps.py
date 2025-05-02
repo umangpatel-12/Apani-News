@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
-class ApaniNewzConfig(AppConfig):
+class ApnaiNewzConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'ApaniNewz'  # Ensure this matches `AUTH_USER_MODEL`
+    name = 'ApaniNewz'

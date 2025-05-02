@@ -42,6 +42,19 @@ class RegistrationForm(forms.ModelForm):
         ('Student', 'Student'),
         ('Faculty/Staff', 'Faculty/Staff'),
     ]
+    
+    APPROVED_CHOICES = [('APPROVED','APPROVED'),('NOT APPROVED','NOT APPROVED')]
+    
+    approved = forms.ChoiceField(
+        choices=APPROVED_CHOICES,
+        widget=forms.Select(attrs={
+            'id': 'approved',
+            'name': 'approved',
+            'class': 'form-select form-select-lg'
+        }),
+        required=False  # Make this field required
+    )
+    
     role = forms.ChoiceField(
         choices=ROLE_CHOICES,
         widget=forms.Select(attrs={
@@ -155,6 +168,23 @@ class RegistrationForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 'phone', 'profile_image', 'enrollment_number','department', 'role']
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+
+            # Save additional registration data
+            Registration.objects.create(
+                user=user,
+                phone=self.cleaned_data['phone'],
+                profile_image=self.cleaned_data['profile_image'],
+                enrollment_number=self.cleaned_data['enrollment_number'],
+                department=self.cleaned_data['department'],
+                role=self.cleaned_data['role'],
+                approved=self.cleaned_data['approved']
+            )
+        return user
 
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)

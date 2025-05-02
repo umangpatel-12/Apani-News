@@ -16,6 +16,7 @@ class Registration(AbstractUser):
         ('Student', 'Student'),
         ('Faculty/Staff', 'Faculty/Staff'),
     ]
+    APPROVED_CHOICES = [('APPROVED','APPROVED'),('NOT APPROVED','NOT APPROVED')]
     
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -23,6 +24,7 @@ class Registration(AbstractUser):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=10, null=True)
     profile_image = models.ImageField(upload_to='media/profile/')
+    approved = models.CharField(max_length=255, choices=APPROVED_CHOICES,null=True, blank=True)
     enrollment_number = models.CharField(max_length=12, unique=True,null=True, blank=True)  # Add unique enrollment number
     department = models.CharField(max_length=100, blank=True, null=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Choose Role')  # Dropdown list
@@ -34,6 +36,8 @@ class Registration(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+    
     
 #Category
 class Category(models.Model):
@@ -98,7 +102,7 @@ class LJNews(models.Model):
     author_id = models.EmailField(max_length=255)  # Auto-stored user email
     content = RichTextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, max_length=255)
-    visibility = models.CharField(max_length=255, choices=VISIBILITY_CHOICES)
+    visibility = models.CharField(max_length=255, choices=VISIBILITY_CHOICES,null=True, blank=True)
     is_featured = models.BooleanField(default=False)
     ljnews_image = models.ImageField(upload_to="media/ljnews/",blank=True, null=True)
     views = models.IntegerField(default=0)

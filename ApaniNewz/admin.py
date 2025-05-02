@@ -3,12 +3,20 @@ from .models import (
     Gallery, Registration, Category, News, LJNews, Likes, 
     Profile, Comment, Slider, SubComments, Contact, UserOTP
 )
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 
 # Register Registration model (custom user)
-@admin.register(Registration)
-class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('email', 'username', 'role', 'department')
-    search_fields = ('email', 'username', 'role', 'department')
+# @admin.register(Registration)
+class CustomUserAdmin(UserAdmin):
+    model = Registration
+    fieldsets = UserAdmin.fieldsets + (
+        ("Additional Info", {
+            'fields': ('phone', 'profile_image', 'approved', 'enrollment_number', 'department', 'role')
+        }),
+    )
+
+admin.site.register(Registration, CustomUserAdmin)
 
 # Register Profile model
 @admin.register(Profile)
