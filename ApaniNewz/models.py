@@ -31,7 +31,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
-
 #Category
 class Category(models.Model):
     category_name = models.CharField(max_length=100)
