@@ -1,0 +1,320 @@
+{% extends 'Admin/main.html' %}
+{% block ljnews_active %}
+  selected
+{% endblock %}
+
+{% load static %}
+
+{% block admin %}
+  <div class="body-wrapper">
+    <div class="container-fluid">
+      <!-- News Table -->
+      <div class="row mt-4">
+        <div class="col-lg-12 d-flex align-items-stretch">
+          <div class="card w-100">
+            {% include 'Alert/alert.html' %}
+            <div class="card-body p-4">
+              <h5 class="card-title fw-semibold mb-4">News List</h5>
+              <div class="table-responsive">
+                <table class="table text-nowrap mb-0 align-middle">
+                  <thead class="text-dark fs-4">
+                    <tr>
+                      <th>ID</th>
+                      <th>Image</th>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th>Author</th>
+                      <th>Status</th>
+                      <th>Visibility</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for a in ljnews %}
+                      <tr>
+                        <td>{{ a.id }}</td>
+                        <td>
+                          {% if a.ljnews_image %}
+                            <img src="{{ a.ljnews_image.url }}" style="height: 50px; width: 50px;" alt="{{ a.title }}" />
+                          {% else %}
+                            <p>No Image</p>
+                          {% endif %}
+                        </td>
+                        <td>{{ a.title|truncatechars:25 }}</td>
+                        <td>{{ a.category }}</td>
+                        <td>{{ a.author }}</td>
+                        <td>
+                          {% if a.status == 'PUBLISH' %}
+                            <span class="badge bg-success">Public</span>
+                          {% elif a.status == 'DRAFT' %}
+                            <span class="badge bg-danger">Draft</span>
+                          {% else %}
+                            <span>{{ a.status }}</span>
+                          {% endif %}
+                        </td>
+                        <td>
+                          {% if a.visibility == 'PENDING' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                          {% elif a.visibility == 'APPROVED' %}
+                            <span class="badge bg-success">Approved</span>
+                          {% elif a.visibility == 'REJECTED' %}
+                            <span class="badge bg-danger">Rejected</span>
+                          {% else %}
+                            <span>{{ a.visibility }}</span>
+                          {% endif %}
+                        </td>
+                        <td>
+                          <!-- Edit -->
+                          <a href="#" class="text-dark me-3" data-bs-toggle="modal" data-bs-target="#editModel{{ a.id }}"><i class="far fa-edit" style="font-size:20px"></i></a>
+                          <!-- Delete -->
+                          <a href="#" class="text-dark me-3" data-bs-toggle="modal" data-bs-target="#deleteModal{{ a.id }}"><i class="far fa-trash-alt" style="font-size:20px"></i></a>
+                        </td>
+                      </tr>
+                      <!-- Start Edit Modal -->
+                      <div class="modal fade" id="editModel{{ a.id }}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+                            <form method="POST" action="{% url 'editljnews' a.id %}" enctype="multipart/form-data">
+                              {% csrf_token %}
+                              {{ form.media|safe }}
+                              <div class="modal-header text-center flex-column w-100">
+                                <h3 class="modal-title w-100">Edit Article</h3>
+                                <hr class="w-100 mt-2 mb-0">
+                              </div>
+                              <div class="modal-body">
+                                <div class="mb-3 row">
+                                  <label for="title" class="col-md-2 col-form-label">Title</label>
+                                  <div class="col-md-10">
+                                    <input type="text" id="title" name="title" class="form-control form-control-lg" value="{{ a.title }}" required />
+                                  </div>
+                                </div>
+                                <div class="mb-3 row">
+                                  <label for="sub_title" class="col-md-2 col-form-label">Sub-Title</label>
+                                  <div class="col-md-10">
+                                    <input type="text" id="sub_title" name="sub_title" class="form-control form-control-lg" value="{{ a.sub_title }}" required />
+                                  </div>
+                                </div>
+                                <div class="mb-3 row">
+                                  <label for="category" class="col-md-2 col-form-label">Category</label>
+                                  <div class="col-md-10">
+                                    <select name="category" class="form-control" required>
+                                      <option value="">Choose Category</option>
+                                      {% for c in categories %}
+                                        <option value="{{ c.id }}" {% if a.category.id == c.id %}selected{% endif %}>{{ c.category_name }}</option>
+                                      {% endfor %}
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="mb-3 row">
+                                  <label for="author" class="col-md-2 col-form-label">Author</label>
+                                  <div class="col-md-10">
+                                    <input type="text" id="author" name="author" class="form-control form-control-lg" value="{{ a.author }}" required />
+                                  </div>
+                                </div>
+                                <div class="mb-3 row">
+                                  <label for="content" class="col-md-2 col-form-label">Content</label>
+                                  <div class="col-md-10">
+                                    <textarea name="content" id="content{{ a.id }}" class="form-control">{{ a.content }}</textarea>
+                                  </div>
+                                </div>
+
+                                <div class="mb-3 row">
+                                    <label for="status" class="col-md-2 col-form-label">Status</label>
+                                    <div class="col-md-10">
+                                      <!-- Hidden input to pass the actual value to Django -->
+                                      <input type="hidden" name="status" value="{{ a.status }}">
+                                      
+                                      <!-- Disabled dropdown just for display -->
+                                      <select class="form-control" disabled>
+                                        <option value="PUBLISH" {% if a.status == 'PUBLISH' %}selected{% endif %}>Publish</option>
+                                        <option value="DRAFT" {% if a.status == 'DRAFT' %}selected{% endif %}>Draft</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+
+                                <div class="mb-3 row">
+                                  <label for="visibility" class="col-md-2 col-form-label">Visibility</label>
+                                  <div class="col-md-10">
+                                    <select name="visibility" class="form-control" required>
+                                      <option value="PENDING" {% if a.visibility == 'PENDING' %}selected{% endif %}>Pending</option>
+                                      <option value="APPROVED" {% if a.visibility == 'APPROVED' %}selected{% endif %}>Approved</option>
+                                      <option value="REJECTED" {% if a.visibility == 'REJECTED' %}selected{% endif %}>Rejected</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="mb-3 row">
+                                  <label for="is_featured" class="col-md-2 col-form-label">Is Featured</label>
+                                  <div class="col-md-10">
+                                    <input type="checkbox" id="is_featured" name="is_featured" class="form-check-input" {% if a.is_featured %}checked{% endif %} />
+                                  </div>
+                                </div>
+                                <div class="mb-3 row">
+                                  <label for="ljnews_image" class="col-md-2 col-form-label">Upload Image</label>
+                                  <div class="col-md-10">
+                                    <input type="file" id="ljnews_image" name="ljnews_image" class="form-control" />
+                                    {% if a.ljnews_image %}
+                                      <img src="{{ a.ljnews_image.url }}" alt="Current Image" class="mt-2" height="100">
+                                    {% endif %}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn-blue">Save changes</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- End Edit Modal -->
+
+                      <!-- Start Delete Modal -->
+                      <div class="modal fade" id="deleteModal{{ a.id }}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                            <form method="POST" action="{% url 'deleteljnews' a.id %}">
+                              {% csrf_token %}
+                              <div class="modal-header text-center flex-column w-100">
+                                <h3 class="modal-title w-100">Delete Confirmation</h3>
+                                <hr class="w-100 mt-2 mb-0">
+                              </div>
+                              <div class="modal-body text-center">
+                                <p class="fw-bold fs-5 mb-2">Are you sure you want to delete</p>
+                                <p><strong>"{{ a.title|truncatechars:50 }}"?</strong></p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn-red">Delete</button>
+                                <button type="button" class="btn-purple" data-bs-dismiss="modal">Cancel</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- End Delete Modal -->
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+  <script>
+    {% for a in ljnews %}
+      CKEDITOR.replace('content{{ a.id }}');
+    {% endfor %}
+  </script>
+  <style>
+    /* Base button style */
+    .btn-purple,
+    .btn-blue,
+    .btn-red {
+      font-family: inherit;
+      display: inline-block;
+      width: 8em;
+      height: 2.6em;
+      line-height: 2.5em;
+      margin: 20px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: color 0.5s;
+      z-index: 1;
+      font-size: 17px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    
+    /* Purple Button */
+    .btn-purple {
+      --color: #560bad;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-purple:before {
+      background: var(--color);
+    }
+    
+    .btn-purple:hover {
+      color: #fff;
+    }
+    
+    /* Blue Button */
+    .btn-blue {
+      --color: #03a9f4;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    .btn-blue:before {
+      background: var(--color);
+    }
+    .btn-blue:hover {
+      color: white;
+    }
+    
+    /* Red Button */
+    .btn-red {
+      --color: #d00000;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-red:before {
+      background: var(--color);
+    }
+    
+    .btn-red:hover {
+      color: #fff;
+    }
+    
+    /* Shared pseudo-element styles */
+    .btn-purple:before,
+    .btn-blue:before,
+    .btn-red:before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      height: 150px;
+      width: 200px;
+      border-radius: 50%;
+      top: 100%;
+      left: 100%;
+      transition: all 0.7s;
+    }
+    
+    .btn-purple:hover:before,
+    .btn-blue:hover:before,
+    .btn-red:hover:before {
+      top: -30px;
+      left: -30px;
+    }
+    
+    .btn-purple:active:before {
+      background: #3a0ca3;
+      transition: background 0s;
+    }
+    
+    .btn-red:active:before {
+      background: #9b0000;
+      transition: background 0s;
+    }
+    
+    .btn-blue:active:before {
+      background: #560bad;
+      transition: background 0s;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 1rem;
+      background-color: #f8f9fa;
+    }
+  </style>
+{% endblock %}

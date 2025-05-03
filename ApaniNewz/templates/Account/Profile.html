@@ -1,0 +1,304 @@
+{% extends 'Home/main.html' %}
+{% load static %}
+
+{% block main %}
+  <style>
+    .profile {
+      text-align: center;
+      padding: 15px;
+    }
+    
+    .profile-img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ddd; /* Optional border */
+    }
+    
+    .profile-name {
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      font-size: 25px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      color: #333;
+    }
+  </style>
+
+  <section class="blog_area" style="margin-top: 100px;margin-bottom: 100px;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="blog_right_sidebar">
+            <aside class="single_sidebar_widget search_widget">
+              <div class="profile">
+                {% if request.user.profile.profile_image %}
+                  <img src="{{ request.user.profile.profile_image.url }}" alt="Profile Image" class="profile-img" />
+                {% else %}
+                  <p>No profile image uploaded.</p>
+                {% endif %}
+
+                <p class="profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</p> <!-- Replace with email if needed -->
+                <p style="font-size: large;font-family:Arial, Helvetica, sans-serif;">{{ request.user.email }}</p> <!-- Replace with email if needed -->
+              </div>
+            </aside>
+
+            <aside class="single_sidebar_widget post_category_widget">
+              <h4 class="widget_title">Information</h4>
+              <ul class="list cat-list">
+                <li class="nav-item {% block editprofile_active %}
+
+                  {% endblock %}">
+                  <a href="{% url 'profile' %}" class="d-flex"><p style="font-weight: 500;">Edit Profile</p></a>
+                </li>
+                <li class="nav-item {% block postarticle_active %}
+
+                  {% endblock %}">
+                  <a href="{% url 'post_article' %}" class="d-flex">
+                    <p style="font-weight: 500;">Post Article</p>
+                    <p></p>
+                  </a>
+                </li>
+                <li class="nav-item {% block posts_active %}
+
+                  {% endblock %}">
+                  <a href="{% url 'posts' %}" class="d-flex">
+                    <p style="font-weight: 500;">Posts</p>
+                    <p>(03)</p>
+                  </a>
+                </li>
+              </ul>
+            </aside>
+
+            <aside class="single_sidebar_widget popular_post_widget">
+              <h3 class="widget_title">Recent Post</h3>
+              <div class="media post_item">
+                <img src=" {% static 'assets/img/post/post_2.png' %} " alt="post" />
+                <div class="media-body">
+                  <a href="single-blog.html"><h3>The Amazing Hubble</h3></a>
+                  <p>02 Hours ago</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        {% block profile %}
+          <div class="col-lg-8 mb-5 mb-lg-0">
+            <div class="blog_left_sidebar">
+              {% comment %} <article class="blog_item">
+                {% endcomment %}
+                <div class="blog_details">
+                  <div class="text-center mb-4">
+                    <h3 class="fw-bold">Edit Profile</h3>
+                  </div>
+                  <form action="{% url 'profile' %}" id="profile" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="p-3">
+                      <!-- Header -->
+                      {% comment %} <div class="d-flex justify-content-center align-items-center mb-4">
+                        <h3 class="fw-bold text-center">Edit Profile</h3>
+                      </div> {% endcomment %}
+
+                      <!-- Username -->
+                      <div class="row mb-3">
+                        <div class="col-md-12">
+                          {{ u_form.username.label_tag }}
+                          {{ u_form.username }}
+                          <div class="text-danger">{{ u_form.username.errors }}</div>
+                        </div>
+                      </div>
+
+                      <!-- First Name & Last Name -->
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          {{ u_form.first_name.label_tag }}
+                          {{ u_form.first_name }}
+                          <div class="text-danger">{{ u_form.first_name.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                          {{ u_form.last_name.label_tag }}
+                          {{ u_form.last_name }}
+                          <div class="text-danger">{{ u_form.last_name.errors }}</div>
+                        </div>
+                      </div>
+
+                      <!-- Email & Phone -->
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          {{ u_form.email.label_tag }}
+                          {{ u_form.email }}
+                          <div class="text-danger">{{ u_form.email.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                          {{ p_form.phone.label_tag }}
+                          {{ p_form.phone }}
+                          <div class="text-danger">{{ p_form.phone.errors }}</div>
+                        </div>
+                      </div>
+
+                      <!-- Gender & Location -->
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          {{ p_form.gender.label_tag }}
+                          {{ p_form.gender }}
+                          <div class="text-danger">{{ p_form.gender.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                          {{ p_form.location.label_tag }}
+                          {{ p_form.location }}
+                          <div class="text-danger">{{ p_form.location.errors }}</div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          {{ p_form.profile_image.label_tag }}
+                          {{ p_form.profile_image }}
+                          <div class="text-danger">{{ p_form.profile_image.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                          {{ p_form.role.label_tag }}
+                          {{ p_form.role }}
+                          <div class="text-danger">{{ p_form.role.errors }}</div>
+                        </div>
+                      </div>
+
+                      <!-- Bio -->
+                      <div class="row mb-3">
+                        <div class="col-md-12">
+                          {{ p_form.bio.label_tag }}
+                          {{ p_form.bio }}
+                          <div class="text-danger">{{ p_form.bio.errors }}</div>
+                        </div>
+                      </div>
+
+                      <!-- Submit Button -->
+                      <div class="text-center mt-4">
+                        <button class="btn-blue" type="submit">Save Profile</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                {% comment %}
+              </article> {% endcomment %}
+            </div>
+          </div>
+        {% endblock %}
+      </div>
+    </div>
+  </section>
+  <!-- Bootstrap JS Bundle (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    /* Base button style */
+    .btn-purple,
+    .btn-blue,
+    .btn-red {
+      font-family: inherit;
+      display: inline-block;
+      width: 8em;
+      height: 2.6em;
+      line-height: 2.5em;
+      margin: 20px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: color 0.5s;
+      z-index: 1;
+      font-size: 17px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    
+    /* Purple Button */
+    .btn-purple {
+      --color: #560bad;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-purple:before {
+      background: var(--color);
+    }
+    
+    .btn-purple:hover {
+      color: #fff;
+    }
+    
+    /* Blue Button */
+    .btn-blue {
+      --color: #03a9f4;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    .btn-blue:before {
+      background: var(--color);
+    }
+    .btn-blue:hover {
+      color: white;
+    }
+    
+    /* Red Button */
+    .btn-red {
+      --color: #d00000;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-red:before {
+      background: var(--color);
+    }
+    
+    .btn-red:hover {
+      color: #fff;
+    }
+    
+    /* Shared pseudo-element styles */
+    .btn-purple:before,
+    .btn-blue:before,
+    .btn-red:before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      height: 150px;
+      width: 200px;
+      border-radius: 50%;
+      top: 100%;
+      left: 100%;
+      transition: all 0.7s;
+    }
+    
+    .btn-purple:hover:before,
+    .btn-blue:hover:before,
+    .btn-red:hover:before {
+      top: -30px;
+      left: -30px;
+    }
+    
+    .btn-purple:active:before {
+      background: #3a0ca3;
+      transition: background 0s;
+    }
+    
+    .btn-red:active:before {
+      background: #9b0000;
+      transition: background 0s;
+    }
+    
+    .btn-blue:active:before {
+      background: #560bad;
+      transition: background 0s;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 1rem;
+      background-color: #f8f9fa;
+    }
+  </style>
+{% endblock %}

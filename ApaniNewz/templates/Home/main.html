@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Apnai Newz</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %} " />
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.min.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/ticker-style.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/flaticon.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/slicknav.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/animate.min.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/magnific-popup.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome-all.min.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/themify-icons.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/slick.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/nice-select.css' %} " />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %} " />
+
+    <style>
+      .blog_area a:hover,
+      .blog_area a :hover {
+        background: -webkit-linear-gradient(131deg, #03a9f4 0%, #03a9f4 99%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-decoration: none;
+        transition: 0.4s;
+      }
+      .trending-area .trending-main .trending-bottom .single-bottom .trend-bottom-cap h4 a:hover {
+        color: #03a9f4;
+      }
+      .whats-news-area .whats-news-caption .single-what-news .what-cap h4 a:hover,
+      .about-area .whats-news-caption .single-what-news .what-cap h4 a:hover,
+      .contact-section .whats-news-caption .single-what-news .what-cap h4 a:hover {
+        color: #03a9f4;
+      }
+      .recent-articles .single-recent .what-cap h4 a:hover {
+        color: #03a9f4;
+      }
+      .trending-area .trending-main .trand-right-single .trand-right-cap h4 a:hover {
+        color: #03a9f4;
+      }
+      #scrollUp {
+        background: #03a9f4;
+        height: 50px;
+        width: 50px;
+        right: 31px;
+        bottom: 18px;
+        color: #fff;
+        font-size: 20px;
+        text-align: center;
+        border-radius: 50%;
+        line-height: 48px;
+        border: 2px solid transparent;
+      }
+      .trending-tittle strong {
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+        background: #0bb6ff;
+        padding: 11px 0px;
+        line-height: 1;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        display: inline-block;
+        min-width: 146px;
+        text-align: center;
+      }
+      .main-header .main-menu ul ul.submenu {
+        position: absolute;
+        width: 170px;
+        background: #fff;
+        left: 0;
+        top: 120%;
+        visibility: hidden;
+        opacity: 0;
+        box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.05);
+        padding: 17px 0;
+        border-top: 5px solid #03a9f4;
+        -webkit-transition: all 0.3s ease-out 0s;
+        -moz-transition: all 0.3s ease-out 0s;
+        -ms-transition: all 0.3s ease-out 0s;
+        -o-transition: all 0.3s ease-out 0s;
+        transition: all 0.3s ease-out 0s;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include 'Alert/alert.html' %}
+
+    <header>
+      <!-- Header Start -->
+      <div class="header-area">
+        <div class="main-header">
+          <div class="header-mid d-none d-md-block" style="margin-top: -10px;">
+            <div class="container">
+              <div class="row d-flex align-items-center">
+                <!-- Logo -->
+                <div class="col-xl-3 col-lg-3 col-md-3">
+                  <div class="logo">
+                    <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/apaninews.png' %}" alt="" height="85px" width="290px" /></a>
+                  </div>
+                </div>
+                <style>
+                  .buttn {
+                    background-color: #03a9f4;
+                    border-radius: 8px;
+                    border: 2px;
+                    color: white;
+                    height: 38px;
+                    width: 45px;
+                    text-align: center;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    opacity: 0.6;
+                    transition: 0.3s;
+                    display: inline-block;
+                    text-decoration: none;
+                    cursor: pointer;
+                  }
+                  
+                  .buttn:hover {
+                    opacity: 1;
+                  }
+                </style>
+                <div class="col-md-9">
+                  <div class="d-flex justify-content-end align-items-center">
+                    <form class="d-flex w-50" action="{% url 'search' %}" method="get" style="margin-top: 10px;">
+                      <input class="form-control border shadow-none" type="text" name="keyword" placeholder="Search anything..." style="margin-top: 5px;" />
+                      <button class="buttn" type="submit"><i class="fas fa-search special-tag"></i></button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="header-bottom header-sticky">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
+                  <!-- sticky -->
+                  <div class="sticky-logo">
+                    <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/navlogo.png' %}" alt="" height="50px" width="200px" style="margin-top: 8px;" /></a>
+                  </div>
+
+                  <style>
+                    .nav-item .nav-link:hover {
+                      color: #03a9f4 !important;
+                    }
+                  </style>
+
+                  <div class="main-menu">
+                    <nav>
+                      <ul id="navigation">
+                        <li class="nav-item {% block home_active %}
+
+                          {% endblock %}">
+                          <a href="{% url 'index' %}" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item {% block category_active %}
+
+                          {% endblock %}">
+                          <a href="{% url 'category' %}" class="nav-link">Category</a>
+                        </li>
+                        <li class="nav-item {% block latestnews_active %}
+
+                          {% endblock %}">
+                          <a href="{% url 'latestnews' %}" class="nav-link">Latest News</a>
+                        </li>
+                        <li class="nav-item {% block ljnews_active %}
+
+                          {% endblock %}">
+                          <a href="{% url 'ljnews' %}" class="nav-link">LJ News</a>
+                        </li>
+                        <li class="nav-item {% block gallery_active %}
+
+                          {% endblock %}">
+                          <a href="{% url 'gallery' %}" class="nav-link">Gallery</a>
+                        </li>
+                        <li class="nav-item {% block about_active %}
+
+                          {% endblock %}">
+                          <a href="{% url 'about' %}" class="nav-link">About</a>
+                        </li>
+                        <li class="nav-item {% block contact_active %}
+
+                          {% endblock %}">
+                          <a href="{% url 'contact' %}" class="nav-link">Contact</a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-4" style="left: 110px;">
+                  <div class="main-menu d-none d-md-block" id="navbar-menu">
+                    <ul id="navigation">
+                      {% if user.is_authenticated %}
+                        <li>
+                          <a href="#" class="trending-animated" style="color: #03A9F4; font-size: 18px;">Hi, {{ user.first_name|default:'User' }}</a>
+                          <ul class="submenu">
+                            <li>
+                              <a href="{% url 'profile' %}">Profile</a>
+                            </li>
+                            <li>
+                              <a href="{% url 'logout' %}">Logout</a>
+                            </li>
+                          </ul>
+                        </li>
+                      {% else %}
+                        <li>
+                          <a href="#"><i class="fas fa-user" style="color: black;"></i></a>
+                          <ul class="submenu">
+                            <li>
+                              <a href="#">Guest</a>
+                            </li>
+                            <li>
+                              <a href="{% url 'login' %}">Login</a>
+                            </li>
+                          </ul>
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <style>
+            .header-bottom {
+              height: 100px;
+            }
+          </style>
+        </div>
+      </div>
+      <!-- Header End -->
+    </header>
+
+    {% block main %}
+
+    {% endblock %}
+
+    <footer>
+      <!-- Footer Start -->
+      <div class="footer-area footer-padding fix" style="background:#f0f0f0; color: #000; padding: 10px 0;">
+        <div class="container">
+          <div class="row d-flex justify-content-between">
+            <!-- Logo and Description -->
+            <div class="col-xl-5 col-lg-5 col-md-7 col-sm-12">
+              <div class="single-footer-caption">
+                <div class="footer-logo">
+                  <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/navlogo.png' %}" alt="" height="60px" width="220px" style="margin-top: 34px;" /></a>
+                </div>
+                <div class="footer-pera" style="margin-top: -20px;">
+                  <p style="text-align: justify; font-size: 14px; line-height: 1.8; color: #333;">ApaniNewz is the official platform for sharing news and updates from LJ University. We aim to provide a space where students and staff can share their achievements, ideas, and experiences, helping foster a vibrant and connected community.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+              <div class="single-footer-caption mt-60">
+                <div class="footer-tittle">
+                  <h4 style="font-size: 18px; color: #03A9F4;">Newsletter</h4>
+                  <p style="font-size: 14px; color: #555;">Stay updated with the latest news from ApaniNewz.</p>
+                </div>
+                <!-- Form -->
+                <div class="footer-form">
+                  <form action="#" method="post" class="subscribe_form relative">
+                    <input class="footer-input" type="email" name="keyword" placeholder="Enter your email" style="margin-top: 5px;width: 69%;" />
+                    <button class="newsletter-submit" type="submit"><i class="fas fa-arrow-right special-tag"></i></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instagram Feed -->
+            <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6">
+              <div class="single-footer-caption mb-50 mt-60">
+                <div class="footer-tittle">
+                  <h4 style="font-size: 18px; color: #03A9F4;">Follow Us</h4>
+                </div>
+                <div class="footer-social-modern">
+                  <a href="#" class="social-icon-modern"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="social-icon-modern"><i class="fab fa-instagram"></i></a>
+                  <a href="#" class="social-icon-modern"><i class="fa fa-envelope"></i></a>
+                  <a href="#" class="social-icon-modern"><i class="fa fa-phone-square" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </div>
+            <style>
+              .footer-social-modern {
+                display: flex;
+                gap: 15px;
+                margin-top: 15px;
+              }
+              
+              .social-icon-modern {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                background-color: #f1f1f1;
+                color: #03a9f4;
+                font-size: 18px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              }
+              
+              .social-icon-modern:hover {
+                background-color: #03a9f4;
+                color: white;
+                transform: scale(1.1);
+              }
+            </style>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Area -->
+      <div class="footer-bottom-area" style="background:#e0e0e0; color: #555;height: 70px;">
+        <div class="container">
+          <!-- Updated line below -->
+
+          <div class="row d-flex align-items-center justify-content-between">
+            <div class="col-lg-6" style="margin-top: 18px;font-weight: 800;">
+              <div class="footer-copy-right">
+                <p>
+                  &copy;<script>
+                          document.write(new Date().getFullYear())
+                        </script>ApaniNewz. All rights reserved.
+                </p>
+              </div>
+            </div>
+            <div class="col-lg-6" style="margin-top: 18px;">
+              <div class="footer-menu f-right">
+                <ul>
+                  <li>
+                    <a href="{% url 'contact' %}" style="color: #03A9F4;">Contact</a>
+                  </li>
+                  {% comment %}
+                  <li>
+                    <a href="#" style="color: #ff6219;">Privacy Policy</a>
+                  </li>
+                  <li>
+                    <a href="#" style="color: #ff6219;">Terms of Use</a>
+                  </li>
+                  {% endcomment %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer End -->
+    </footer>
+
+    <style>
+      .nav-item.active > .nav-link {
+        color: #03a9f4;
+        font-weight: bold;
+      }
+      
+      .footer-social a {
+        color: #fff;
+        margin: 0 10px;
+        font-size: 24px;
+        transition: all 0.3s ease;
+      }
+      
+      .footer-social a:hover {
+        color: #03a9f4;
+      }
+      
+      .footer-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #03a9f4;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        background-color: #fff;
+        color: #333;
+      }
+      
+      .footer-form .newsletter-submit {
+        background-color: #03a9f4;
+        border: none;
+        padding: 12px 20px;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .footer-form .newsletter-submit:hover {
+        background-color: #03a9f4;
+      }
+      
+      .footer-tittle h4 {
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #fff;
+      }
+    </style>
+
+    <!-- JS here -->
+
+    <!-- All JS Custom Plugins Link Here here -->
+    <script src="{% static 'assets/js/vendor/modernizr-3.5.0.min.js' %} "></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script src="{% static 'assets/js/vendor/jquery-1.12.4.min.js' %} "></script>
+    <script src="{% static 'assets/js/popper.min.js' %} "></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %} "></script>
+    <!-- Jquery Mobile Menu -->
+    <script src="{% static 'assets/js/jquery.slicknav.min.js' %} "></script>
+
+    <!-- Jquery Slick , Owl-Carousel Plugins -->
+    <script src="{% static 'assets/js/owl.carousel.min.js' %} "></script>
+    <script src="{% static 'assets/js/slick.min.js' %} "></script>
+    <!-- Date Picker -->
+    <script src="{% static 'assets/js/gijgo.min.js' %} "></script>
+    <!-- One Page, Animated-HeadLin -->
+    <script src="{% static 'assets/js/wow.min.js' %} "></script>
+    <script src="{% static 'assets/js/animated.headline.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.magnific-popup.js' %} "></script>
+
+    <!-- Breaking New Pluging -->
+    <script src="{% static 'assets/js/jquery.ticker.js' %} "></script>
+    <script src="{% static 'assets/js/site.js' %} "></script>
+
+    <!-- Scrollup, nice-select, sticky -->
+    <script src="{% static 'assets/js/jquery.scrollUp.min.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.nice-select.min.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.sticky.js' %} "></script>
+
+    <!-- contact js -->
+    <script src="{% static 'assets/js/contact.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.form.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.validate.min.js' %} "></script>
+    <script src="{% static 'assets/js/mail-script.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.ajaxchimp.min.js' %} "></script>
+
+    <!-- Jquery Plugins, main Jquery -->
+    <script src="{% static 'assets/js/plugins.js' %} "></script>
+    <script src="{% static 'assets/js/main.js' %} "></script>
+    <style>
+      /* Typing animation */
+      .typing-animation {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid black;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        animation: typing 3s steps(20, end), blink 0.5s step-end infinite;
+      }
+      
+      /* Typing effect */
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+      
+      /* Blinking cursor */
+      @keyframes blink {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: black;
+        }
+      }
+    </style>
+  </body>
+</html>

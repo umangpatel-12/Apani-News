@@ -1,0 +1,422 @@
+{% extends 'Home/main.html' %}
+{% block home_active %}
+  active
+{% endblock %}
+{% load static %}
+
+{% block main %}
+  <!-- AOS Animation CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+  <main>
+    {% comment %}start Banner{% endcomment %}
+
+    <!-- Trending Area Start -->
+    <div class="trending-area fix" data-aos="fade-up">
+      <div class="container">
+        <div class="trending-main">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="trending-tittle" data-aos="fade-down">
+                <strong>Trending now</strong>
+                <div class="trending-animated">
+                  <ul id="js-news" class="js-hidden">
+                    {% for t in trending %}
+                      <li class="news-item">{{ t.title }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MDB CSS -->
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
+
+          <!-- Custom Carousel Image Styling -->
+          <style>
+            .carousel-item img {
+              height: 600px;
+              object-fit: cover;
+              box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+              border-radius: 12px;
+              margin: 20px auto; /* spacing */
+            }
+          </style>
+
+          <!-- Carousel wrapper -->
+          <div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-ride="carousel" data-mdb-carousel-init>
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+              {% for slide in slider %}
+                <button type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-current="{% if forloop.first %}true{% endif %}" aria-label="Slide {{ forloop.counter }}"></button>
+              {% endfor %}
+            </div>
+
+            <!-- Inner -->
+            <div class="carousel-inner">
+              {% for slide in slider %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  {% if slide.slider_image %}
+                    <img src="{{ slide.slider_image.url }}" class="d-block w-100" alt="{{ slide.title }}" />
+                  {% else %}
+                    <img src="/static/default-image.jpg" class="d-block w-100" alt="No image available" />
+                    {# ✅ या आप कोई default image दिखा सकते हो जब slider_image नहीं हो #}
+                  {% endif %}
+
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ slide.title|truncatechars:20 }}</h5>
+                    <p>{{ slide.sub_title|truncatechars:30 }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <!-- MDB JS -->
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+
+          <div class="row" style="margin-top: 45px;">
+            <div class="col-lg-8">
+              {% for a in news %}
+                {% if forloop.first %}
+                  <div class="trending-top mb-30" data-aos="zoom-in">
+                    <div class="trend-top-img">
+                      <img src="{{ a.news_image.url }}" alt="" height="411" width="770" />
+                      <div class="trend-top-cap">
+                        <span>{{ a.category }}</span>
+                        <h2><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:30 }}</a></h2>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+              <div class="trending-bottom">
+                <div class="row">
+                  {% for a in news|slice:'3:7' %}
+                    <div class="col-lg-4" data-aos="fade-up">
+                      <div class="single-bottom mb-35">
+                        <div class="trend-bottom-img mb-30">
+                          <img src="{{ a.news_image.url }}" height="157" width="236" alt="" />
+                        </div>
+                        <div class="trend-bottom-cap">
+                          <span class="color1" style="background-color:rgb(210, 240, 253);">{{ a.category }}</span>
+                          <h4><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:40 }}</a></h4>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              {% for a in news|slice:'4' %}
+                {% if not forloop.first %}
+                  <div class="trand-right-single d-flex" data-aos="fade-left">
+                    <div class="trand-right-img">
+                      <img src="{{ a.news_image.url }}" height="100" width="120" alt="" />
+                    </div>
+                    <div class="trand-right-cap">
+                      <span class="color1" style="background-color:rgb(210, 240, 253);">{{ a.category }}</span>
+                      <h4><a href="{% url 'details' a.id %}">{{ a.title|truncatechars:40 }}</a></h4>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Trending Area End -->
+
+    <!-- LJ-News start -->
+    <div class="weekly-news-area pt-50" data-aos="fade-up">
+      <div class="container">
+        <div class="weekly-wrapper">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="text-center py-5">
+                <h3 class="section-title mb-2">LJ News</h3>
+                <div class="section-underline mb-2 mx-auto"></div>
+              </div>
+
+              <style>
+                .section-title {
+                  color: rgb(91, 91, 91);
+                  font-size: 2.5rem;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 1.5px;
+                  position: relative;
+                  transition: all 0.3s ease-in-out;
+                }
+                
+                .section-title:hover {
+                  transform: scale(1.05);
+                  color: #03a9f4; /* Darker orange on hover */
+                }
+                
+                .section-underline {
+                  width: 80px;
+                  height: 4px;
+                  background-color: #03a9f4;
+                  border-radius: 4px;
+                  transition: width 0.4s ease-in-out;
+                }
+                
+                .section-title:hover + .section-underline {
+                  width: 100px;
+                }
+                
+                .section-subtitle {
+                  font-size: 1rem;
+                  color: #666;
+                  max-width: 500px;
+                  margin: 0 auto;
+                  font-style: italic;
+                }
+              </style>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="weekly-news dot-style d-flex">
+                {% for lj in ljnews %}
+                  <div class="weekly-single card shadow" data-aos="flip-left">
+                    <!-- Image Section -->
+                    <div class="weekly-img" style="width: 300px; height: 412px;overflow: hidden;">
+                      <img src="{{ lj.ljnews_image.url }}" alt="News Image" style="width: 100%; height: 100%; object-fit: cover;" />
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="weekly-caption p-3">
+                      <span class="color1" style="background-color:rgb(210, 240, 253);">{{ lj.category }}</span>
+
+                      <h4 class="card-title mb-1"><a href="{% url 'detail' lj.id %}" class="text-dark text-decoration-none">{{ lj.title|truncatechars:35 }}</a></h4>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- LJ-News end -->
+
+    <!-- Whats New Start -->
+    <section class="whats-news-area pt-50 pb-20" data-aos="fade-up">
+      <div class="container">
+        <div class="row d-flex justify-content-between">
+          <div class="col-lg-3 col-md-3">
+            <div class="section-tittle mb-30">
+              <h3 style="color: #03a9f4;">Whats New</h3>
+            </div>
+          </div>
+          <div class="col-lg-9 col-md-9">
+            <div class="properties__button">
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <a class="nav-item nav-link {% if not request.GET.category %}active{% endif %}" href="/" role="tab">All</a>
+                  {% for i in categories %}
+                    <a href="/?category={{ i.id }}" class="nav-item nav-link {% if request.GET.category|slugify == i.id|slugify %}active{% endif %}">{{ i.category_name }}</a>
+                  {% endfor %}
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="tab-content d-flex" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-home">
+                <div class="whats-news-caption">
+                  <div class="row">
+                    {% if cat_news %}
+                      {% for c in cat_news %}
+                        <div class="col-lg-4 col-md-6 {{ c.category }}" data-aos="fade-up">
+                          <div class="single-what-news mb-80" style="width: 380px; height: 300px;">
+                            <div class="what-img">
+                              <img src="{{ c.news_image.url }}" height="300" width="380" alt="" />
+                            </div>
+                            <div class="what-cap">
+                              <span class="color1" class="color1" style="background-color:rgb(210, 240, 253);">{{ c.category }}</span>
+                              <h4><a href="{% url 'details' c.id %}">{{ c.title|truncatechars:28 }}</a></h4>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Whats New End -->
+
+    <!-- Recent Articles start -->
+    <div class="recent-articles" style="margin-top: 50px;" data-aos="fade-up">
+      <div class="container">
+        <div class="recent-wrapper">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="text-center py-5">
+                <h3 class="section-title mb-2">Articles</h3>
+                <div class="section-underline mb-2 mx-auto"></div>
+                <p class="section-subtitle">Discover the latest insights, updates, and featured stories</p>
+              </div>
+
+              <style>
+                .section-title {
+                  color: rgb(91, 91, 91);
+                  font-size: 2.5rem;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 1.5px;
+                  position: relative;
+                  transition: all 0.3s ease-in-out;
+                }
+                
+                .section-title:hover {
+                  transform: scale(1.05);
+                  color: #03a9f4; /* Darker orange on hover */
+                }
+                
+                .section-underline {
+                  width: 80px;
+                  height: 4px;
+                  background-color: #03a9f4;
+                  border-radius: 4px;
+                  transition: width 0.4s ease-in-out;
+                }
+                
+                .section-title:hover + .section-underline {
+                  width: 100px;
+                }
+                
+                .section-subtitle {
+                  font-size: 1rem;
+                  color: #666;
+                  max-width: 500px;
+                  margin: 0 auto;
+                  font-style: italic;
+                }
+              </style>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="recent dot-style d-flex">
+                {% if featured %}
+                  {% for f in featured %}
+                    <div class="single-recent mb-100" data-aos="zoom-in">
+                      <div class="what-img">
+                        <img src="{{ f.news_image.url }}" height="350px" width="370px" alt="" />
+                      </div>
+                      <div class="what-cap">
+                        <span class="color1" class="color1" style="background-color:rgb(210, 240, 253);">{{ f.category }}</span>
+                        <h4><a href="{% url 'details' f.id %}">{{ f.title|truncatechars:35 }}</a></h4>
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Recent Articles End -->
+  </main>
+
+  <!-- AOS Animation JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      once: false
+    })
+  </script>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      effect: 'fade',
+      autoplay: {
+        delay: 3000, // Slide change after 3 seconds
+        disableOnInteraction: false // Keep autoplay running even after user interaction
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
+      on: {
+        slideChangeTransitionStart: () => animateText()
+      }
+    })
+    
+    function animateText() {
+      const activeSlide = document.querySelector('.swiper-slide-active .slide-content')
+      gsap.fromTo(activeSlide.querySelector('.slide-title'), { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power2.out' })
+    
+      gsap.fromTo(activeSlide.querySelector('.slide-subtitle'), { x: -100, opacity: 0 }, { x: 0, opacity: 1, delay: 0.3, duration: 1, ease: 'power1.out' })
+    
+      gsap.fromTo(activeSlide.querySelector('p'), { y: 50, opacity: 0 }, { y: 0, opacity: 1, delay: 0.6, duration: 1, ease: 'sine.out' })
+    }
+    
+    // First load animation
+    window.addEventListener('load', animateText)
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+  <style>
+    .swiper {
+      width: 100%;
+      height: 580px;
+    }
+    .swiper-slide {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+    .slide-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      text-align: center;
+      z-index: 10;
+    }
+    .slide-title {
+      font-size: 4rem;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+    .slide-subtitle {
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+    .swiper-pagination-bullets .swiper-pagination-bullet {
+      background: #fff;
+    }
+  </style>
+{% endblock %}
