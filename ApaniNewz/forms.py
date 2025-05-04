@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import requests
 from django.core.exceptions import ValidationError
-from ApaniNewz.models import Comment, Contact, CustomUser, LJNews, Profile,News,Category, Slider, SubComments
-from ApaniNewz.models import Comment, Contact, LJNews, Profile,News,Category, Slider, SubComments
+from ApaniNewz.models import Comment, Contact, CustomUser, LJNews,News,Category, Profile, Slider, SubComments
+from ApaniNewz.models import Comment, Contact, LJNews, News,Category, Slider, SubComments
 from ckeditor.widgets import CKEditorWidget
 
 class LoginForm(forms.Form):
@@ -667,7 +667,9 @@ class ProfileUpdateForm(forms.ModelForm):
             'id': 'gender',
             'name': 'gender',
             'class': 'form-select form-select-lg'
-        })
+        }),
+        
+        required=False
     )
 
     enrollment_number = forms.CharField(

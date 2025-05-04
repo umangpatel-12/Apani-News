@@ -164,21 +164,30 @@ class Profile(models.Model):
         ('O', 'Other'),
     ]
     ROLE_CHOICES = [
-        ('Choose Role', 'Choose Role'),
         ('Student', 'Student'),
         ('Faculty/Staff', 'Faculty/Staff'),
     ]
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=15, blank=True, null=True)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, null=True, blank=True)
     department = models.CharField(max_length=100, blank=True, null=True)
-    enrollment_number = models.CharField(max_length=12, null=True, blank=True,unique=True)  # Add unique enrollment number
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Choose Role')  # Dropdown list
-    profile_image = models.ImageField(upload_to='media/profile/')
+    enrollment_number = models.CharField(max_length=12, unique=True, blank=True, null=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, blank=True, null=True)
+    profile_image = models.ImageField(upload_to='media/profile/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Profiles'
+
+    def __str__(self):
+        return self.user.email
+
+        
+    
 
 class Comment(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE, blank=True, null=True)

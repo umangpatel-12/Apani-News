@@ -55,11 +55,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'ApaniNews.urls'
 
 # settings.py
-<<<<<<< HEAD
 AUTH_USER_MODEL = 'ApaniNewz.CustomUser'  # This is where the custom user model is defined
-=======
-# AUTH_USER_MODEL = 'ApaniNewz.CustomUser'  # This is where the custom user model is defined
->>>>>>> b32e3409f2d87f193ea8976c0fd0ca6edf64df33
 
 
 

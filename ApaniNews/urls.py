@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """
 URL configuration for mysite project.
 
@@ -22,12 +21,4 @@ from django.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('ApaniNewz.urls'))
-=======
-from django.contrib import admin
-from django.urls import path, include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('ApaniNewz.urls')),
->>>>>>> b32e3409f2d87f193ea8976c0fd0ca6edf64df33
 ]
