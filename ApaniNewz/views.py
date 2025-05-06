@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from ApaniNews import settings
 from ApaniNewz.forms import CategoryForm, CommentForm, ContactForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SliderForm, SubCommentForm, UserUpdate
-from .models import Category, Contact, CustomUser, LJNews, Likes, News, Profile,Comment, Slider,SubComments, UserOTP
+from .models import Category, Contact, CustomUser, LJNews, Likes, News, Profile,Comment, Slider,SubComments, UserOTP,Gallery
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -563,12 +563,12 @@ def LJNEWS(request):
     
     return render(request, "Home/LJNewz.html", context)
 
-def Gallery(request):
-    news = News.objects.filter(status='PUBLISH')
+def Gallerys(request):
+    news = Gallery.objects.filter(status='PUBLISH')
     return render(request, "Home/Gallery.html", {'news':news})
 
 # Admin Dashbord's
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def dashboard(request):
     total_news_articles = News.objects.count()
     total_ljnews_articles = LJNews.objects.count()
@@ -672,45 +672,6 @@ def AddNews(request):
         "totalPagelist": total_pages,
     })
 
-# def EDITNews(request, id):
-#     news = get_object_or_404(News, id=id)
-#     categories = Category.objects.all()
-
-#     if request.method == 'POST':
-#         title = request.POST.get('title')
-#         sub_title = request.POST.get('sub_title')
-#         category_id = request.POST.get('category')
-#         author = request.POST.get('author')
-#         content = request.POST.get('content')
-#         status = request.POST.get('status')
-#         is_featured = request.POST.get('is_featured') == 'on'  # Checkbox handling
-
-#         # Get the category instance
-#         category = get_object_or_404(Category, id=category_id)
-
-#         # Assign values to news object
-#         news.title = title
-#         news.sub_title = sub_title
-#         news.category = category
-#         news.author = author
-#         news.content = content
-#         news.status = status
-#         news.is_featured = is_featured
-
-#         # Image upload check
-#         if 'news_image' in request.FILES:
-#             news.news_image = request.FILES['news_image']
-
-#         # Save updated news
-#         news.save()
-#         messages.success(request, "News updated successfully!")
-#         return redirect('addnews')
-
-#     context = {
-#         'news': news,
-#         'categories': categories
-#     }
-#     return render(request, 'Admin/AddNews.html', context)
 
 @login_required(login_url='login')
 def EDITNews(request, id):
@@ -901,7 +862,8 @@ def EditSlider(request, id):
     return redirect('managesliders')
 
 def ManageGallery(request):
-    return render(request, "Admin/ManageGallery.html")
+    photos = Gallery.objects.all()  # ✅ Gallery should be a model, not a function
+    return render(request, "Admin/ManageGallery.html", {'photos': photos})
 
 
 # Account's Details

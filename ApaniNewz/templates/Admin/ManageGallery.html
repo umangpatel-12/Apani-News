@@ -5,35 +5,321 @@
 {% load static %}
 
 {% block admin %}
+<div class="body-wrapper">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12">
-        <h1>Manage Gallery</h1>
-        <a href="" class="btn btn-primary">Add New Image</a>
-        <table class="table table-bordered table-striped mt-3">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Image</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% comment %} {% for image in images %}
-              <tr>
-                <td>{{ image.id }}</td>
-                <td>
-                  <img src="{{ image.image.url }}" alt="Image" width="100" />
-                </td>
-                <td>
-                  <a href="{% url 'edit_gallery' image.id %}" class="btn btn-warning">Edit</a>
-                  <a href="{% url 'delete_gallery' image.id %}" class="btn btn-danger">Delete</a>
-                </td>
-              </tr>
-            {% endfor %} {% endcomment %}
-          </tbody>
-        </table>
+      <div class="col-lg-12 d-flex align-items-stretch">
+        <div class="card w-100">
+          {% include 'Alert/alert.html' %}
+          <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4">Add Gallery/Photo's</h5>
+            <div class="table-responsive">
+              <form method="POST" action="{% url 'managelgallery' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.media|safe }}
+
+                <div class="mb-3 row align-items-center">
+                  <label for="title" class="col-md-1 col-form-label">Title</label>
+                  <div class="col-md-10">
+                    <input type="text" id="title" name="title" class="form-control form-control-lg" placeholder="Enter News Title" maxlength="255" required />
+                  </div>
+                </div>
+
+
+                <div class="mb-3 row align-items-center">
+                  <label for="author" class="col-md-1 col-form-label">Author</label>
+                  <div class="col-md-10">
+                    <input type="text" id="author" name="author" class="form-control form-control-lg" placeholder="Author Name" maxlength="50" required />
+                  </div>
+                </div>
+
+
+                <div class="mb-3 row align-items-center">
+                  <label for="status" class="col-md-1 col-form-label">Status</label>
+                  <div class="col-md-10">
+                    <select name="status" class="form-control" required>
+                      <option value="">Choose Status</option>
+                      <option value="PUBLISH">Publish</option>
+                      <option value="DRAFT">Draft</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mb-3 row align-items-center">
+                  <label for="image" class="col-md-1 col-form-label">Upload Image</label>
+                  <div class="col-md-10">
+                    <input type="file" id="gallery_image" name="gallery_image" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-5 offset-md-1">
+                    <button type="submit" name="submit" class="btn-blue">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- News Table -->
+    <div class="row mt-4">
+      <div class="col-lg-12 d-flex align-items-stretch">
+        <div class="card w-100">
+          <div class="card-body p-4">
+            <h5 class="card-title fw-semibold mb-4">Gallery's List</h5>
+            <div class="table-responsive">
+              <table class="table text-nowrap mb-0 align-middle">
+                <thead class="text-dark fs-4">
+                  <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for a in photos %}
+                    <tr>
+                      <td>{{ a.id }}</td>
+                      <td>
+                        {% if a.gallery_image %}
+                          <img src="{{ a.gallery_image.url }}" style="height: 50px; width: 50px;" alt="{{ a.title }}">
+                        {% else %}
+                          <p>No Image</p>
+                        {% endif %}
+                      </td>
+                      <td>{{ a.title|truncatechars:25 }}</td>
+                      <td>{{ a.author }}</td>
+                      <td>{{ a.status }}</td>
+                      <td>
+                        <a href="#" class="text-dark me-3" data-bs-toggle="modal" data-bs-target="#editModal{{ a.id }}">
+                          <i class="far fa-edit" style="font-size:20px"></i>
+                        </a>
+                        <a href="#" class="text-dark" data-bs-toggle="modal" data-bs-target="#deleteModal{{ a.id }}">
+                          <i class="far fa-trash-alt" style="font-size:20px"></i>
+                        </a>
+                      </td>
+                    </tr>
+
+                    <!-- Edit Modal -->
+                    <div class="modal fade" id="editModal{{ a.id }}" tabindex="-1">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                          <form method="POST" action="{% url 'editgallery' a.id %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                              <h5 class="modal-title">Edit Gallery</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                              <input type="text" name="title" class="form-control mb-3" placeholder="Title" value="{{ a.title }}" required>
+                              <input type="text" name="author" class="form-control mb-3" placeholder="Author" value="{{ a.author }}" required>
+                              <textarea name="content" class="form-control mb-3" rows="3">{{ a.content }}</textarea>
+                              <input type="file" name="gallery_image" class="form-control mb-3">
+                              {% if a.gallery_image %}
+                                <img src="{{ a.gallery_image.url }}" height="80" class="mb-3">
+                              {% endif %}
+                              <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="is_featured" {% if a.is_featured %}checked{% endif %}>
+                                <label class="form-check-label">Is Featured</label>
+                              </div>
+                              <select name="status" class="form-select mt-3">
+                                <option value="Active" {% if a.status == "Active" %}selected{% endif %}>Active</option>
+                                <option value="Inactive" {% if a.status == "Inactive" %}selected{% endif %}>Inactive</option>
+                              </select>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Save</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal{{ a.id }}" tabindex="-1">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <form method="POST" action="{% url 'deletegallery' a.id %}">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                              <h5 class="modal-title">Confirm Delete</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p>Are you sure you want to delete <strong>"{{ a.title }}"</strong>?</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-danger">Delete</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+
+              <!-- Pagination -->
+              {% comment %} <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center mt-3">
+                  {% if NewsData.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ NewsData.previous_page_number }}">Previous</a>
+                    </li>
+                  {% endif %}
+                  {% for num in totalPagelist %}
+                    <li class="page-item {% if num == NewsData.number %}active{% endif %}">
+                      <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                  {% endfor %}
+                  {% if NewsData.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ NewsData.next_page_number }}">Next</a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </nav> {% endcomment %}
+
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Add this at bottom of page -->
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
+
+<!-- Initialize CKEditor for Edit Modals -->
+{% comment %} <script>
+  {% for a in sliders %}
+    CKEDITOR.replace('content{{ a.id }}');
+  {% endfor %}
+</script> {% endcomment %}
+
+<style>
+    /* Base button style */
+    .btn-purple,
+    .btn-blue,
+    .btn-red {
+      font-family: inherit;
+      display: inline-block;
+      width: 8em;
+      height: 2.6em;
+      line-height: 2.5em;
+      margin: 20px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: color 0.5s;
+      z-index: 1;
+      font-size: 17px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    
+    /* Purple Button */
+    .btn-purple {
+      --color: #560bad;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-purple:before {
+      background: var(--color);
+    }
+    
+    .btn-purple:hover {
+      color: #fff;
+    }
+    
+    /* Blue Button */
+    .btn-blue {
+      --color: #03a9f4;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    .btn-blue:before {
+      background: var(--color);
+    }
+    .btn-blue:hover {
+      color: white;
+    }
+    
+    /* Red Button */
+    .btn-red {
+      --color: #d00000;
+      color: var(--color);
+      border: 2px solid var(--color);
+    }
+    
+    .btn-red:before {
+      background: var(--color);
+    }
+    
+    .btn-red:hover {
+      color: #fff;
+    }
+    
+    /* Shared pseudo-element styles */
+    .btn-purple:before,
+    .btn-blue:before,
+    .btn-red:before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      height: 150px;
+      width: 200px;
+      border-radius: 50%;
+      top: 100%;
+      left: 100%;
+      transition: all 0.7s;
+    }
+    
+    .btn-purple:hover:before,
+    .btn-blue:hover:before,
+    .btn-red:hover:before {
+      top: -30px;
+      left: -30px;
+    }
+    
+    .btn-purple:active:before {
+      background: #3a0ca3;
+      transition: background 0s;
+    }
+    
+    .btn-red:active:before {
+      background: #9b0000;
+      transition: background 0s;
+    }
+    
+    .btn-blue:active:before {
+      background: #560bad;
+      transition: background 0s;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 1rem;
+      background-color: #f8f9fa;
+    }
+</style>
 {% endblock %}

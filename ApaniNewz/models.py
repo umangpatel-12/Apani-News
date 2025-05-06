@@ -4,6 +4,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.core.exceptions import ValidationError
+
+from ApaniNews import settings
 
 
 # Create your models here.
@@ -139,23 +142,28 @@ class Slider(models.Model):
         return self.title 
     
 class Gallery(models.Model):
-    title = models.CharField(max_length=255)
+    STATUS = ('PUBLISH', 'PUBLISH'),('DRAFT', 'DRAFT')
+    
+    title = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(choices=STATUS, max_length=255)
+    author = models.CharField(max_length=50)
     gallery_image = models.ImageField(upload_to="media/gallery/")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return self.title or "Untitled Gallery"
+
        
 class Likes(models.Model):
     article = models.ForeignKey(News, on_delete=models.CASCADE, related_name='Post_likes', blank=True, null=True)
     news = models.ForeignKey(LJNews, on_delete=models.CASCADE, related_name='LJNews_likes', blank=True, null=True)    
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    # is_liked = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('article','news', 'user')
+        unique_together = ('article', 'news', 'user')
+
 
 class Profile(models.Model):
     GENDER_CHOICES = [
@@ -164,6 +172,7 @@ class Profile(models.Model):
         ('O', 'Other'),
     ]
     ROLE_CHOICES = [
+        ('Choose Role', 'Choose Role'),
         ('Student', 'Student'),
         ('Faculty/Staff', 'Faculty/Staff'),
     ]
@@ -173,7 +182,7 @@ class Profile(models.Model):
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, null=True, blank=True)
     department = models.CharField(max_length=100, blank=True, null=True)
     enrollment_number = models.CharField(max_length=12, unique=True, blank=True, null=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, blank=True, null=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, blank=True, null=True,default='Choose Role')
     profile_image = models.ImageField(upload_to='media/profile/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)
@@ -192,7 +201,8 @@ class Profile(models.Model):
 class Comment(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE, blank=True, null=True)
     ljnews = models.ForeignKey(LJNews, on_delete=models.CASCADE, blank=True, null=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    # user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 

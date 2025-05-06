@@ -20,7 +20,7 @@ urlpatterns = [
     path('Latest-News', views.LatestNewz, name= 'latestnews'),
     path('Category/Search/', views.CategorySearch, name= 'category_search'),
     path('LJ-News', views.LJNEWS, name= 'ljnews'),
-    path('Gallery', views.Gallery, name= 'gallery'),
+    path('Gallery', views.Gallerys, name= 'gallery'),
 
     # Account's
     path('Profile', views.ProfilePage, name= 'profile'),

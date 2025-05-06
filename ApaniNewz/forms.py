@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import requests
 from django.core.exceptions import ValidationError
-from ApaniNewz.models import Comment, Contact, CustomUser, LJNews,News,Category, Profile, Slider, SubComments
+from ApaniNewz.models import Comment, Contact, CustomUser, Gallery, LJNews,News,Category, Profile, Slider, SubComments
 from ApaniNewz.models import Comment, Contact, LJNews, News,Category, Slider, SubComments
 from ckeditor.widgets import CKEditorWidget
 
@@ -316,6 +316,51 @@ class RegistrationForm(forms.ModelForm):
             )
 
         return user
+
+class GalleryForm(forms.ModelForm):
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'title',
+            'name': 'title',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Enter Gallery Title'
+        }),
+        max_length=255,
+        required=True
+    )
+    
+    author = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'id': 'author',
+            'name': 'author',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'Author Name'
+        }),
+        max_length=50,
+        required=True
+    )
+    
+    status = forms.ChoiceField(
+        choices=Gallery.STATUS,
+        widget=forms.Select(attrs={
+            'id': 'status',
+            'name': 'status',
+            'class': 'form-select form-select-lg'
+        })
+    )
+
+    gallery_image = forms.ImageField(
+        widget=forms.FileInput(attrs={
+            'id': 'gallery_image',
+            'name': 'gallery_image',
+            'class': 'form-control'
+        }),
+        required=False
+    )
+
+    class Meta:
+        model = Gallery
+        fields = ['title', 'gallery_image']
 
 class NewsForm(forms.ModelForm):
     title = forms.CharField(

@@ -12,7 +12,7 @@
       <div class="row">
         {% for g in news %}
           <div class="col-sm-12 col-md-4">
-            <a class="lightbox" href="{{ g.news_image.url }}"><img src="{{ g.news_image.url }}" alt="{{ g.title|default:'News Image' }}" class="img-fluid" /></a>
+            <a class="lightbox" href="{{ g.gallery_image.url }}"><img src="{{ g.gallery_image.url }}" alt="{{ g.title|default:'Gallery Image' }}" class="img-fluid" /></a>
           </div>
         {% endfor %}
       </div>
