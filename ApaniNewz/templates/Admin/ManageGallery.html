@@ -16,7 +16,7 @@
             <div class="table-responsive">
               <form method="POST" action="{% url 'managelgallery' %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form.media|safe }}
+              
 
                 <div class="mb-3 row align-items-center">
                   <label for="title" class="col-md-1 col-form-label">Title</label>
@@ -83,7 +83,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for a in photos %}
+                  {% for a in NewsData %}
                     <tr>
                       <td>{{ a.id }}</td>
                       <td>
@@ -117,21 +117,40 @@
                               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                              <input type="text" name="title" class="form-control mb-3" placeholder="Title" value="{{ a.title }}" required>
-                              <input type="text" name="author" class="form-control mb-3" placeholder="Author" value="{{ a.author }}" required>
-                              <textarea name="content" class="form-control mb-3" rows="3">{{ a.content }}</textarea>
-                              <input type="file" name="gallery_image" class="form-control mb-3">
+                              
+                              <div class="mb-3 row align-items-center">
+                                <label for="status" class="col-md-2 col-form-label">Title</label>
+                                <div class="col-md-10">
+                                <input type="text" name="title" class="form-control mb-3" placeholder="Title" value="{{ a.title }}" required>
+                                </div>
+                              </div>
+
+                              <div class="mb-3 row align-items-center">
+                                <label for="status" class="col-md-2 col-form-label">Author</label>
+                                <div class="col-md-10">
+                                <input type="text" name="author" class="form-control mb-3" placeholder="Author" value="{{ a.author }}" required>
+                                </div>
+                              </div>
+
+                              <div class="mb-3 row align-items-center">
+                                <label for="status" class="col-md-2 col-form-label">Image</label>
+                                <div class="col-md-10">
+                                <input type="file" name="gallery_image" class="form-control mb-3">
                               {% if a.gallery_image %}
                                 <img src="{{ a.gallery_image.url }}" height="80" class="mb-3">
                               {% endif %}
-                              <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="is_featured" {% if a.is_featured %}checked{% endif %}>
-                                <label class="form-check-label">Is Featured</label>
+                                </div>
                               </div>
-                              <select name="status" class="form-select mt-3">
-                                <option value="Active" {% if a.status == "Active" %}selected{% endif %}>Active</option>
-                                <option value="Inactive" {% if a.status == "Inactive" %}selected{% endif %}>Inactive</option>
-                              </select>
+                              
+                              <div class="mb-3 row align-items-center">
+                                  <label for="status" class="col-md-2 col-form-label">Status</label>
+                                  <div class="col-md-10">
+                                    <select name="status" class="form-control" required>
+                                      <option value="PUBLISH" {% if a.status == 'PUBLISH' %}selected{% endif %}>Publish</option>
+                                      <option value="DRAFT" {% if a.status == 'DRAFT' %}selected{% endif %}>Draft</option>
+                                    </select>
+                                  </div>
+                                </div>
                             </div>
                             <div class="modal-footer">
                               <button type="submit" class="btn btn-primary">Save</button>
@@ -168,8 +187,8 @@
               </table>
 
 
-              <!-- Pagination -->
-              {% comment %} <nav aria-label="Page navigation example">
+              
+              <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center mt-3">
                   {% if NewsData.has_previous %}
                     <li class="page-item">
@@ -187,7 +206,7 @@
                     </li>
                   {% endif %}
                 </ul>
-              </nav> {% endcomment %}
+              </nav>
 
             </div>
           </div>

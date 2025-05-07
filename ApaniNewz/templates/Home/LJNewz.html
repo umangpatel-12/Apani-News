@@ -22,10 +22,7 @@
     }
   </style>
   <div class="container-fluid py-5 text-white text-center banner-content">
-    <video autoplay loop muted class="banner-video">
-      <source src="{% static 'assets/video/effect.mp4' %}" type="video/mp4" />Your browser does not support the video tag.
-    </video>
-    <h1 id="page-title" style="text-align: left; color: white;margin-left: 150px;">Latest News</h1>
+    <h1>LJ News</h1>
   </div>
 
   <style>
@@ -75,9 +72,9 @@
                         <li>
                           <a href="#"><i class="fa fa-user"></i>{{ i.category }}</a>
                         </li>
-                        <li>
-                          <a href="#"><i class="fa fa-comments"></i> 03 Comments</a>
-                        </li>
+                        {% comment %} <li>
+                          <a href="#"><i class="fa fa-comments"></i> {{}}</a>
+                        </li> {% endcomment %}
                       </ul>
                     </div>
                   </article>

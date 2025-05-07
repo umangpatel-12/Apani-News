@@ -360,7 +360,7 @@ class GalleryForm(forms.ModelForm):
 
     class Meta:
         model = Gallery
-        fields = ['title', 'gallery_image']
+        fields = ['title', 'gallery_image','author', 'status']
 
 class NewsForm(forms.ModelForm):
     title = forms.CharField(

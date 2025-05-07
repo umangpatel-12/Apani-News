@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 
 from ApaniNews import settings
-from ApaniNewz.forms import CategoryForm, CommentForm, ContactForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SliderForm, SubCommentForm, UserUpdate
+from ApaniNewz.forms import CategoryForm, CommentForm, ContactForm, GalleryForm, LJNewsForm, LoginForm, NewsForm, ProfileUpdateForm, RegistrationForm, SliderForm, SubCommentForm, UserUpdate
 from .models import Category, Contact, CustomUser, LJNews, Likes, News, Profile,Comment, Slider,SubComments, UserOTP,Gallery
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -749,7 +749,7 @@ def DeleteComment(request, id):
 
 @login_required(login_url='login')
 def ManageUsers(request):
-    user_data = User.objects.all()
+    user_data = CustomUser.objects.all()
     user_profile = Profile.objects.all()
     return render(request,"Admin/ManageUsers.html",{'user_data':user_data,'user_profile':user_profile})
 
@@ -862,9 +862,57 @@ def EditSlider(request, id):
     return redirect('managesliders')
 
 def ManageGallery(request):
-    photos = Gallery.objects.all()  # ✅ Gallery should be a model, not a function
-    return render(request, "Admin/ManageGallery.html", {'photos': photos})
+    
+    if request.method == 'POST':
+        form = GalleryForm(request.POST, request.FILES)
 
+        if form.is_valid():
+            gallry = form.save(commit=False)  # ✅ Get model instance but don't save yet
+            gallry.save()
+            messages.success(request, "Gallery/Photo's added successfully!")
+            return redirect("managelgallery")
+        else:
+            messages.error(request, "Form validation failed. Please check your input.")
+    else:
+        form = GalleryForm()
+    
+    photos_list = Gallery.objects.all()
+    
+    paginator = Paginator(photos_list, 5)  # Show 5 articles per page
+    page_number = request.GET.get('page')  # Get page number from URL
+    page_obj = paginator.get_page(page_number)  # Get the current page
+
+    total_pages = range(1, paginator.num_pages + 1)  # List of all pages
+
+    context = {
+        "photos_list": photos_list,
+        "NewsData": page_obj,  # Pagination info
+        "totalPagelist": total_pages,
+    }
+    # Pass page_obj to the template instead of photos_list
+    return render(request, "Admin/ManageGallery.html", context)
+
+def DeleteGallerys(request, id):
+    photos = Gallery.objects.filter(id=id)
+    photos.delete()
+    messages.success(request, "Gallery/Photo deleted successfully!")
+    return redirect("managelgallery")
+
+def EditGallerys(request, id):
+    photos = get_object_or_404(Gallery, pk=id)
+
+    if request.method == 'POST':
+        form = GalleryForm(request.POST, request.FILES, instance=photos)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.status = photos.status  # 👈 preserve original status
+            obj.save()
+            messages.success(request, "Gallery/Photo updated successfully!")
+        else:
+            print("Form Errors:", form.errors)
+            messages.error(request, "Failed to update. Check the form.")
+    return redirect('managelgallery')
+    
 
 # Account's Details
 
