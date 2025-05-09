@@ -512,7 +512,8 @@ class LJNewsForm(forms.ModelForm):
             'id': 'visibility',
             'name': 'visibility',
             'class': 'form-select form-select-lg'
-        })
+        }),
+        required=False  # Make this field required
     )
 
     ljnews_image = forms.ImageField(

@@ -70,6 +70,63 @@ def home(request):
     }
     return render(request, 'Home/index.html',context)
 
+# def login_view(request):
+#     if request.user.is_authenticated:
+#         return redirect('index')
+
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data.get('email')
+#             password = form.cleaned_data.get('password')
+
+#             # Static admin login
+#             if email == 'admin@gmail.com' and password == 'admin@123':
+#                 try:
+#                     admin_user = CustomUser.objects.get(email=email)
+#                 except CustomUser.DoesNotExist:
+#                     # Create admin user if it doesn't exist
+#                     admin_user = User.objects.create_user(
+#                         username='admin',
+#                         email=email,
+#                         password=password
+#                     )
+#                     admin_user.is_staff = True
+#                     admin_user.is_superuser = True
+#                     admin_user.save()
+
+#                 login(request, admin_user)
+#                 messages.info(request, "You are now logged in as admin.")
+#                 return redirect('dashboard')  # Redirect to admin dashboard
+
+#             # Regular user login flow
+#             try:
+#                 user = CustomUser.objects.get(email=email)
+#             except CustomUser.DoesNotExist:
+#                 messages.error(request, 'This email is not registered.')
+#                 return render(request, 'Home/login.html', {'form': form})
+
+#             if not user.is_active:
+#                 messages.error(request, "Your account isn't active.")
+#                 return render(request, 'Home/login.html', {'form': form})
+
+#             user = authenticate(request, username=user.username, password=password)
+#             if user is not None:
+                
+#                     login(request, user)
+#                     messages.info(request, f"You are now logged in as {email}.")
+#                     request.session['user_id'] = user.id
+#                     request.session['email'] = email
+#                     return redirect('index')
+                
+#             else:
+#                 print(form.errors)
+#                 messages.error(request, 'Invalid email or password.')
+#     else:
+#         form = LoginForm()
+
+#     return render(request, 'Home/login.html', {'form': form})
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('index')
@@ -86,7 +143,7 @@ def login_view(request):
                     admin_user = CustomUser.objects.get(email=email)
                 except CustomUser.DoesNotExist:
                     # Create admin user if it doesn't exist
-                    admin_user = User.objects.create_user(
+                    admin_user = CustomUser.objects.create_user(
                         username='admin',
                         email=email,
                         password=password
@@ -110,17 +167,18 @@ def login_view(request):
                 messages.error(request, "Your account isn't active.")
                 return render(request, 'Home/login.html', {'form': form})
 
+            if user.approved != 'APPROVED':
+                messages.error(request, "Your account is not approved by the admin yet.")
+                return render(request, 'Home/login.html', {'form': form})
+
             user = authenticate(request, username=user.username, password=password)
             if user is not None:
-                
-                    login(request, user)
-                    messages.info(request, f"You are now logged in as {email}.")
-                    request.session['user_id'] = user.id
-                    request.session['email'] = email
-                    return redirect('index')
-                
+                login(request, user)
+                messages.info(request, f"You are now logged in as {email}.")
+                request.session['user_id'] = user.id
+                request.session['email'] = email
+                return redirect('index')
             else:
-                print(form.errors)
                 messages.error(request, 'Invalid email or password.')
     else:
         form = LoginForm()
@@ -289,7 +347,7 @@ def register_view(request):
                 profile_image=form.cleaned_data.get('profile_image')
             )
             messages.info(request, "We’ve sent you an OTP to your email. Please enter it below to verify your account.")
-            return render(request, "Home/Registration.html", {'OTP': True, 'user': user.email})
+            return render(request, "Home/Login.html", {'OTP': True, 'user': user.email})
 
         else:
             messages.error(request, "Please correct the errors in the form.")
@@ -956,6 +1014,7 @@ def PostArticle(request):
             messages.success(request, "News/Article added successfully!")
             return redirect("post_article")
         else:
+            print("Form Errors:", form.errors)  # Debugging line to check form errors
             messages.error(request, "Form validation failed. Please check your input.")
     else:
         # Prepopulate author field with logged-in user's name
