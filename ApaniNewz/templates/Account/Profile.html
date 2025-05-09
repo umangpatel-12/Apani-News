@@ -65,13 +65,13 @@
                   {% endblock %}">
                   <a href="{% url 'posts' %}" class="d-flex">
                     <p style="font-weight: 500;">Posts</p>
-                    <p>(03)</p>
+                    <p></p>
                   </a>
                 </li>
               </ul>
             </aside>
 
-            <aside class="single_sidebar_widget popular_post_widget">
+            {% comment %} <aside class="single_sidebar_widget popular_post_widget">
               <h3 class="widget_title">Recent Post</h3>
               <div class="media post_item">
                 <img src=" {% static 'assets/img/post/post_2.png' %} " alt="post" />
@@ -80,7 +80,7 @@
                   <p>02 Hours ago</p>
                 </div>
               </div>
-            </aside>
+            </aside> {% endcomment %}
           </div>
         </div>
 

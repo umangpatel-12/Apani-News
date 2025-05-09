@@ -70,63 +70,6 @@ def home(request):
     }
     return render(request, 'Home/index.html',context)
 
-# def login_view(request):
-#     if request.user.is_authenticated:
-#         return redirect('index')
-
-#     if request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data.get('email')
-#             password = form.cleaned_data.get('password')
-
-#             # Static admin login
-#             if email == 'admin@gmail.com' and password == 'admin@123':
-#                 try:
-#                     admin_user = CustomUser.objects.get(email=email)
-#                 except CustomUser.DoesNotExist:
-#                     # Create admin user if it doesn't exist
-#                     admin_user = User.objects.create_user(
-#                         username='admin',
-#                         email=email,
-#                         password=password
-#                     )
-#                     admin_user.is_staff = True
-#                     admin_user.is_superuser = True
-#                     admin_user.save()
-
-#                 login(request, admin_user)
-#                 messages.info(request, "You are now logged in as admin.")
-#                 return redirect('dashboard')  # Redirect to admin dashboard
-
-#             # Regular user login flow
-#             try:
-#                 user = CustomUser.objects.get(email=email)
-#             except CustomUser.DoesNotExist:
-#                 messages.error(request, 'This email is not registered.')
-#                 return render(request, 'Home/login.html', {'form': form})
-
-#             if not user.is_active:
-#                 messages.error(request, "Your account isn't active.")
-#                 return render(request, 'Home/login.html', {'form': form})
-
-#             user = authenticate(request, username=user.username, password=password)
-#             if user is not None:
-                
-#                     login(request, user)
-#                     messages.info(request, f"You are now logged in as {email}.")
-#                     request.session['user_id'] = user.id
-#                     request.session['email'] = email
-#                     return redirect('index')
-                
-#             else:
-#                 print(form.errors)
-#                 messages.error(request, 'Invalid email or password.')
-#     else:
-#         form = LoginForm()
-
-#     return render(request, 'Home/login.html', {'form': form})
-
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('index')
@@ -142,19 +85,15 @@ def login_view(request):
                 try:
                     admin_user = CustomUser.objects.get(email=email)
                 except CustomUser.DoesNotExist:
-                    # Create admin user if it doesn't exist
-                    admin_user = CustomUser.objects.create_user(
-                        username='admin',
-                        email=email,
-                        password=password
-                    )
+                    # Create the admin user if it doesn't exist
+                    admin_user = CustomUser.objects.create_user(username='admin', email=email, password=password)
                     admin_user.is_staff = True
                     admin_user.is_superuser = True
                     admin_user.save()
 
                 login(request, admin_user)
                 messages.info(request, "You are now logged in as admin.")
-                return redirect('dashboard')  # Redirect to admin dashboard
+                return redirect('dashboard')
 
             # Regular user login flow
             try:
@@ -167,18 +106,17 @@ def login_view(request):
                 messages.error(request, "Your account isn't active.")
                 return render(request, 'Home/login.html', {'form': form})
 
-            if user.approved != 'APPROVED':
-                messages.error(request, "Your account is not approved by the admin yet.")
-                return render(request, 'Home/login.html', {'form': form})
-
             user = authenticate(request, username=user.username, password=password)
             if user is not None:
-                login(request, user)
-                messages.info(request, f"You are now logged in as {email}.")
-                request.session['user_id'] = user.id
-                request.session['email'] = email
-                return redirect('index')
+                
+                    login(request, user)
+                    messages.info(request, f"You are now logged in as {email}.")
+                    request.session['user_id'] = user.id
+                    request.session['email'] = email
+                    return redirect('index')
+                
             else:
+                print(form.errors)
                 messages.error(request, 'Invalid email or password.')
     else:
         form = LoginForm()
@@ -189,85 +127,6 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
     return redirect("login")
-
-# def register_view(request):
-#     if request.user.is_authenticated:
-#         return redirect('login')
-
-#     if request.method == 'POST':
-#         get_OTP = request.POST.get('OTP')
-#         form = RegistrationForm(request.POST, request.FILES)
-        
-#         if get_OTP:
-#             get_user = request.POST.get('user')
-#             user = User.objects.get(email=get_user)
-            
-#             if int(get_OTP) == UserOTP.objects.filter(user=user).last().OTP:
-#                 user.is_active = True
-#                 login(request, user)
-#                 user.save()
-#                 messages.success(request, "Your account was successfully created.")
-#                 return render(request, 'Home/login.html', {'form': form})
-#             else:
-#                 messages.error(request, "You entered a wrong OTP.")
-#                 return render(request, "Home/Registration.html", {'OTP': True, 'user': user})
-        
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.set_password(form.cleaned_data['password'])
-#             user.is_active = False
-#             user.save()
-#             otp_code = random.randint(100000, 999999)
-#             UserOTP.objects.create(user=user, OTP=otp_code)
-
-#             # Format professional OTP email
-#             subject = "Verify Your Email Address - OTP Code"
-#             message = f"""
-#                         Hi {user.first_name},
-
-#                         Thank you for registering with us!
-
-#                         Please use the One-Time Password (OTP) below to verify your email address and activate your account:
-
-#                         🔐 OTP Code: {otp_code}
-
-#                         This OTP is valid for a limited time and should not be shared with anyone.
-
-#                         If you did not attempt to register, please ignore this email.
-
-#                         Regards,  
-#                         Team Support  
-#                         """
-
-#             send_mail(
-#                 subject,
-#                 message.strip(),
-#                 settings.EMAIL_HOST_USER,
-#                 [user.email],
-#                 fail_silently=False,
-#             )
-
-#             role = form.cleaned_data['role']
-#             enrollment_number = form.cleaned_data.get('enrollment_number') if role == 'Student' else None
-#             department = form.cleaned_data.get('department')
-
-#             # Save profile with or without enrollment_number
-#             Profile.objects.create(
-#                 user=user,
-#                 department=department,
-#                 enrollment_number=enrollment_number if role == 'Student' else None,  # Only save if Student
-#                 phone=form.cleaned_data['phone'],
-#                 profile_image=form.cleaned_data.get('profile_image')
-#             )
-#             messages.info(request, "We’ve sent you an OTP to your email. Please enter it below to verify your account.")
-#             messages.success(request, "Your account was successfully created.")
-#             login(request, user)
-#             return redirect('index')
-
-#     else:
-#         form = RegistrationForm()
-
-#     return render(request, "Home/Registration.html", {'form': form})
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -507,7 +366,6 @@ def LJNews_Detail(request, id):
     return render(request, "Home/LJNews_Details.html", context)
 
    
-
 @login_required(login_url='login')
 def like_post(request, id):
     if request.method == "POST":
@@ -626,7 +484,7 @@ def Gallerys(request):
     return render(request, "Home/Gallery.html", {'news':news})
 
 # Admin Dashbord's
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def dashboard(request):
     total_news_articles = News.objects.count()
     total_ljnews_articles = LJNews.objects.count()

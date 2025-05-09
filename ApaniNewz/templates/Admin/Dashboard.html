@@ -140,14 +140,17 @@
     
     // Line Chart - All-Time Views
     
+    const lineLabels = JSON.parse('{{ line_labels|escapejs }}')
+    const lineData = JSON.parse('{{ line_data|escapejs }}')
+    
     new Chart(document.getElementById('lineChart').getContext('2d'), {
       type: 'line',
       data: {
-        labels: lineLabels, // List of dates like ["01 Jan 2024", "02 Jan 2024", ...]
+        labels: lineLabels,
         datasets: [
           {
             label: 'Total Views Per Day',
-            data: lineData, // Corresponding views like [120, 90, 50, ...]
+            data: lineData,
             fill: false,
             borderColor: '#36A2EB',
             backgroundColor: '#36A2EB',
